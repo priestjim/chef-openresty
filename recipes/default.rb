@@ -61,6 +61,7 @@ node.run_state['openresty_force_recompile'] = false
 node.run_state['openresty_configure_flags'] = node['openresty']['source']['default_configure_flags'] | node['openresty']['configure_flags']
 
 node.run_state['openresty_configure_flags'] |= [ '--with-file-aio', '--with-libatomic' ] if kernel_supports_aio
+node.run_state['openresty_configure_flags'] |= [ '--with-ipv6' ] if node['openresty']['ipv6']
 
 template '/etc/init.d/nginx' do
   source 'nginx.init.erb'

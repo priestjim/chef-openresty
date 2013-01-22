@@ -248,11 +248,11 @@ automatically installed and activated, providing the following
 attributes via ohai, no matter how nginx is installed (source or
 package):
 
-* `node['openresty']['version']` - version of nginx
-* `node['openresty']['configure_arguments']` - options passed to
+* `node['nginx']['version']` - version of nginx
+* `node['nginx']['configure_arguments']` - options passed to
   ./configure when nginx was built
-* `node['openresty']['prefix']` - installation prefix
-* `node['openresty']['conf_path']` - configuration file path
+* `node['ngix']['prefix']` - installation prefix
+* `node['nginx']['conf_path']` - configuration file path
 
 In the source recipe, it is used to determine whether control
 attributes for building nginx have changed.

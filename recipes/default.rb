@@ -60,7 +60,7 @@ end
 node.run_state['openresty_force_recompile'] = false
 node.run_state['openresty_configure_flags'] = node['openresty']['source']['default_configure_flags'] | node['openresty']['configure_flags']
 
-node.run_state['openresty_configure_flags'] |= [ '--with-file-aio' ] if kernel_supports_aio
+node.run_state['openresty_configure_flags'] |= [ '--with-file-aio', '--with-libatomic' ] if kernel_supports_aio
 
 template '/etc/init.d/nginx' do
   source 'nginx.init.erb'
@@ -105,6 +105,12 @@ end
 configure_flags = node.run_state['openresty_configure_flags']
 openresty_force_recompile = node.run_state['openresty_force_recompile']
 
+# OpenResty configure args massaging due to the configure script adding its own arguments along our custom ones
+canonical_configure_args = node.automatic_attrs['nginx']['configure_arguments'].
+  reject{ |f| f =~ /(--add-module=\.\.\/)/ }.
+  map{ |f| f =~ /luajit/ ? '--with-luajit' : f }.
+  sort
+
 bash 'compile_openresty_source' do
   cwd ::File.dirname(src_filepath)
   code <<-EOH
@@ -114,15 +120,19 @@ bash 'compile_openresty_source' do
     make -j#{node['cpu']['total']} && make install
   EOH
 
+  # The current OpenResty implementation does not properly expose the nginx prefix
   not_if do
     openresty_force_recompile == false &&
-      node.automatic_attrs['openresty'] &&
-      node.automatic_attrs['openresty']['version'] == node['openresty']['source']['version'] &&
-      node.automatic_attrs['openresty']['configure_arguments'].sort == configure_flags.sort
+      node.automatic_attrs['nginx'] &&
+      node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
+      (configure_flags & canonical_configure_args).size == configure_flags.size
   end
 
   notifies :restart, 'service[nginx]'
 end
+
+include_recipe "openresty::commons_cleanup"
+
 
 node.run_state.delete('openresty_configure_flags')
 node.run_state.delete('openresty_force_recompile')

@@ -20,12 +20,15 @@
 # limitations under the License.
 #
 
+kernel_supports_aio = Gem::Version.new(node['kernel']['release'].split('-').first) >= Gem::Version.new('2.6.22')
+
 template 'nginx.conf' do
   path "#{node['openresty']['dir']}/nginx.conf"
   source 'nginx.conf.erb'
   owner 'root'
   group 'root'
   mode 00644
+  variables :kernel_supports_aio => kernel_supports_aio
   notifies :reload, 'service[nginx]'
 end
 

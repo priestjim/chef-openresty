@@ -1,4 +1,7 @@
 #
+# Cookbook Name:: openresty
+# Recipe:: commons_cleanup
+#
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
@@ -16,23 +19,9 @@
 # limitations under the License.
 #
 
-require 'berkshelf/vagrant'
-
-Vagrant::Config.run do |config|
-  config.vm.box = 'ubuntu'
-  config.vm.host_name = "openresty"
-  config.vm.boot_mode = :gui
-  config.vm.network :hostonly, '172.16.6.2'
-  
-  config.ssh.max_tries = 40
-  config.ssh.timeout   = 120
-
-  config.vm.provision :chef_solo do |chef|
-    chef.json = {}
-
-    chef.run_list = [
-      'recipe[openresty::default]'
-    ]
-
+%w{ fastcgi.conf.default fastcgi_params.default mime.types.default scgi_params.default uwsgi_params.default nginx.conf.default }.each do |conf|
+  file "#{node['openresty']['dir']}/#{conf}" do
+    action :delete
+    backup false
   end
 end

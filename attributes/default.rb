@@ -40,7 +40,7 @@ default['openresty']['pid']                 = "#{node['openresty']['run_dir']}/n
 
 # Namespaced attributes in order not to clash with the OHAI plugin
 default['openresty']['source']['conf_path'] = "#{node['openresty']['dir']}/nginx.conf"
-default['openresty']['source']['prefix']    = '/usr'
+default['openresty']['source']['prefix']    = '/usr/share'
 
 # Configure flags
 default['openresty']['source']['default_configure_flags'] = [
@@ -51,11 +51,11 @@ default['openresty']['source']['default_configure_flags'] = [
   "--http-log-path=#{node['openresty']['log_dir']}/access.log",
   "--pid-path=#{node['openresty']['pid']}",
   "--lock-path=#{node['openresty']['run_dir']}/nginx.lock",
-  "--http-client-body-temp-path=#{node['nginx']['cache_dir']}/client_temp",
-  "--http-proxy-temp-path=#{node['nginx']['cache_dir']}/proxy_temp",
-  "--http-fastcgi-temp-path=#{node['nginx']['cache_dir']}/fastcgi_temp",
-  "--http-uwsgi-temp-path=#{node['nginx']['cache_dir']}/uwsgi_temp",
-  "--http-scgi-temp-path=#{node['nginx']['cache_dir']}/scgi_temp",
+  "--http-client-body-temp-path=#{node['openresty']['cache_dir']}/client_temp",
+  "--http-proxy-temp-path=#{node['openresty']['cache_dir']}/proxy_temp",
+  "--http-fastcgi-temp-path=#{node['openresty']['cache_dir']}/fastcgi_temp",
+  "--http-uwsgi-temp-path=#{node['openresty']['cache_dir']}/uwsgi_temp",
+  "--http-scgi-temp-path=#{node['openresty']['cache_dir']}/scgi_temp",
   '--with-md5-asm',
   '--with-sha1-asm',
   '--with-pcre-jit',

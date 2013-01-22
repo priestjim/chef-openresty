@@ -22,7 +22,7 @@
 module_path = "#{Chef::Config['file_cache_path']}/#{node['openresty']['fair']['name']}"
 
 git module_path do
-  repository node['openresty']['fair']['name']
+  repository node['openresty']['fair']['url']
   reference 'master'
   action :checkout
 end

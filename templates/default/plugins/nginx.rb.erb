@@ -29,7 +29,9 @@ def parse_flags(flags)
   flags.each do |flag|
     case flag
     when /^--prefix=(.+)$/
-      prefix = $1
+      # Fix for OpenResty 1.2: When defining prefix in the configure script, the binary produced adds the /nginx suffix
+      # to --prefix when running nginx -V. So with i.e. --prefix=/usr, you get --prefix=/usr/nginx.
+      prefix = $1.sub(/\/nginx$/, '')
     when /^--conf-path=(.+)$/
       conf_path = $1
     end
@@ -53,14 +55,16 @@ if status == 0
       # This could be better: I'm splitting on configure arguments which removes them and also 
       # adds a blank string at index 0 of the array. This is why we drop index 0 and map to 
       # add the '--' prefix back to the configure argument.
-      nginx[:configure_arguments] = $1.split(/\s--/).drop(1).map { |ca| "--#{ca}" }
+      # Fix for OpenResty 1.2: When defining prefix in the configure script, the binary produced adds the /nginx suffix
+      # to --prefix when running nginx -V. So with i.e. --prefix=/usr, you get --prefix=/usr/nginx.      
+      nginx[:configure_arguments] = $1.split(/\s--/).drop(1).map { |ca| ca =~ /^prefix=/ ? "--#{ca.sub(/\/nginx$/, '')}" : "--#{ca}" }
 
       prefix, conf_path = parse_flags(nginx[:configure_arguments])
 
       nginx[:prefix] = prefix
       nginx[:conf_path] = conf_path
-    when /^nginx version: nginx\/(.+)/
-      nginx[:version] = $1
+    when /^nginx version: (nginx|ngx_openresty)\/(.+)/
+      nginx[:version] = $2
     end
   end
 end

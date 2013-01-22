@@ -23,7 +23,7 @@
 # The status module can be included in any vhost needed, explicitly, using the include directive
 
 template 'openresty_status' do
-  path "#{node['nginx']['dir']}/conf.d/nginx_status.conf.inc"
+  path "#{node['openresty']['dir']}/conf.d/nginx_status.conf.inc"
   source 'modules/nginx_status.conf.inc.erb'
   owner 'root'
   group 'root'

@@ -106,10 +106,15 @@ configure_flags = node.run_state['openresty_configure_flags']
 openresty_force_recompile = node.run_state['openresty_force_recompile']
 
 # OpenResty configure args massaging due to the configure script adding its own arguments along our custom ones
-canonical_configure_args = node.automatic_attrs['nginx']['configure_arguments'].
-  reject{ |f| f =~ /(--add-module=\.\.\/)/ }.
-  map{ |f| f =~ /luajit/ ? '--with-luajit' : f }.
-  sort
+canonical_configure_args = Array.new
+ruby_block "update-openresty-configure-arguments" do
+  block do
+    canonical_configure_args = node.automatic_attrs['nginx']['configure_arguments'].
+      reject{ |f| f =~ /(--add-module=\.\.\/)/ }.
+      map{ |f| f =~ /luajit/ ? '--with-luajit' : f }.
+      sort
+  end
+end
 
 bash 'compile_openresty_source' do
   cwd ::File.dirname(src_filepath)

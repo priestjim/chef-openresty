@@ -27,5 +27,4 @@ git module_path do
   action :checkout
 end
 
-node.run_state['openresty_configure_flags'] =
-  node.run_state['openresty_configure_flags'] | ["--add-module=#{module_path}"]
+node.run_state['openresty_configure_flags'] |= ["--add-module=#{module_path}"]

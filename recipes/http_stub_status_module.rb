@@ -3,10 +3,9 @@
 # Recipe:: http_stub_status_module
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
-# Author:: Jamie Winsor (<jamie@vialstudios.com>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
-# Copyright 2012, Riot Games
+# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -21,7 +20,8 @@
 # limitations under the License.
 #
 
-# The status module can be included in any vhost needed, explicitly
+# The status module can be included in any vhost needed, explicitly, using the include directive
+
 template 'openresty_status' do
   path "#{node['nginx']['dir']}/conf.d/nginx_status.conf.inc"
   source 'modules/nginx_status.conf.inc.erb'
@@ -31,5 +31,4 @@ template 'openresty_status' do
   notifies :reload, 'service[nginx]'
 end
 
-node.run_state['openresty_configure_flags'] =
-  node.run_state['openresty_configure_flags'] | ['--with-http_stub_status_module']
+node.run_state['openresty_configure_flags'] |= ['--with-http_stub_status_module']

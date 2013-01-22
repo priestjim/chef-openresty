@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: nginx
-# Recipe:: http_gzip_static_module
+# Cookbook Name:: openresty
+# Recipe:: http_flv_module
 #
 # Copyright (C) 2012 Panagiotis Papadomitsos
 #
@@ -17,5 +17,4 @@
 # limitations under the License.
 #
 
-node.run_state['nginx_configure_flags'] =
-  node.run_state['nginx_configure_flags'] | ["--with-http_flv_module"]
+node.run_state['openresty_configure_flags'] |= ["--with-http_flv_module"]

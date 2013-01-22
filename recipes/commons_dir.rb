@@ -3,10 +3,9 @@
 # Recipe:: commons_dir
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
-# Author:: AJ Christensen <aj@junglist.gen.nz>
 #
 # Copyright 2012, Panagiotis Papadomitsos
-# Copyright 2008-2012, Opscode, Inc.
+# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -49,7 +48,8 @@ end
     action :create
     recursive true
   end
-end 
+end
+
 %w(sites-available sites-enabled conf.d ssl).each do |leaf|
   directory File.join(node['openresty']['dir'], leaf) do
     owner 'root'

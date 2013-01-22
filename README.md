@@ -15,11 +15,6 @@ for common "default" functionality.
 * build-essential
 * ohai (for openresty::ohai_plugin)
 
-The following cookbook is not a strict dependency because its use can
-be controlled by an attribute, so it may not be a common "default."
-
-* runit (for openresty::source)
-
 On RHEL family distros, the "yum" cookbook is required for "`recipe[yum::epel]`".
 
 Platform
@@ -27,8 +22,8 @@ Platform
 
 The following platforms are supported and tested under test kitchen:
 
-* Ubuntu 10.04, Ubuntu 12.04
-* CentOS 5.8, 6.3
+* Ubuntu 12.04
+* CentOS 6.3
 
 Other Debian and RHEL family distributions are assumed to work.
 
@@ -237,8 +232,8 @@ the node's run state is manipulated in a recipe, and the module as a
 recipe should be added to `node['openresty']['source']['modules']`. For
 example:
 
-    node.run_state['nginx_configure_flags'] =
-      node.run_state['nginx_configure_flags'] | ["--with-http_stub_status_module"]
+    node.run_state['openresty_configure_flags'] =
+      node.run_state['openresty_configure_flags'] | ["--with-http_stub_status_module"]
 
 The recipe will be included by `recipe[nginx::source]` automatically,
 adding the configure flags. Add any other configuration templates or
@@ -288,7 +283,7 @@ A whole lot of this cookbook was based on original work by:
 - Author:: AJ Christensen (<aj@opscode.com>)
 - Author:: Jamie Winsor (<jamie@vialstudios.com>)
 
-- Copyright 2012, Panagiotis Papadomitsos
+Copyright 2012, Panagiotis Papadomitsos
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

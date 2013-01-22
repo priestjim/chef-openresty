@@ -1,11 +1,11 @@
 #
 # Cookbook Name:: openresty
-# Attributes:: default
+# Attribute:: default
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
-# Heavily based on Opscode's original nginx cookbook
+# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ default['openresty']['source']['conf_path'] = "#{node['openresty']['dir']}/nginx
 default['openresty']['source']['prefix']    = '/usr'
 
 # Configure flags
-default['openresty']['default_configure_flags'] = [
+default['openresty']['source']['default_configure_flags'] = [
   "--prefix=#{node['openresty']['source']['prefix']}",
   "--conf-path=#{node['openresty']['source']['conf_path']}",
   "--sbin-path=#{node['openresty']['binary']}",
@@ -51,7 +51,11 @@ default['openresty']['default_configure_flags'] = [
   "--http-log-path=#{node['openresty']['log_dir']}/access.log",
   "--pid-path=#{node['openresty']['pid']}",
   "--lock-path=#{node['openresty']['run_dir']}/nginx.lock",
-  '--with-http_stub_status_module',
+  "--http-client-body-temp-path=#{node['nginx']['cache_dir']}/client_temp",
+  "--http-proxy-temp-path=#{node['nginx']['cache_dir']}/proxy_temp",
+  "--http-fastcgi-temp-path=#{node['nginx']['cache_dir']}/fastcgi_temp",
+  "--http-uwsgi-temp-path=#{node['nginx']['cache_dir']}/uwsgi_temp",
+  "--http-scgi-temp-path=#{node['nginx']['cache_dir']}/scgi_temp",
   '--with-md5-asm',
   '--with-sha1-asm',
   '--with-pcre-jit',
@@ -60,20 +64,20 @@ default['openresty']['default_configure_flags'] = [
   '--without-http_ssi_module',
   '--without-mail_smtp_module',
   '--without-mail_imap_module',
-  '--without-mail_pop3_module',
-  '--with-http_secure_link_module',
-  '--with-http_gunzip_module',
-  "--http-client-body-temp-path=#{node['nginx']['cache_dir']}/client_temp",
-  "--http-proxy-temp-path=#{node['nginx']['cache_dir']}/proxy_temp",
-  "--http-fastcgi-temp-path=#{node['nginx']['cache_dir']}/fastcgi_temp",
-  "--http-uwsgi-temp-path=#{node['nginx']['cache_dir']}/uwsgi_temp",
-  "--http-scgi-temp-path=#{node['nginx']['cache_dir']}/scgi_temp",
+  '--without-mail_pop3_module'
 ]
 
 default['openresty']['modules']         = [
   'http_ssl_module',
-  'http_gzip_static_module'
+  'http_gzip_static_module',
+  'http_stub_status_module',
+  'http_secure_link_module',
+  'http_realip_module',
+  'http_flv_module',
+  'http_mp4_module',
+  'fair_module'
 ]
+
 default['openresty']['extra_modules']   = []
 default['openresty']['configure_flags'] = Array.new
 
@@ -86,7 +90,6 @@ when 'rhel', 'scientific', 'amazon', 'oracle', 'fedora'
 else
   default['openresty']['user']        = 'www-data'
 end
-default['openresty']['init_style']    = 'init'
 
 default['openresty']['group']         = node['openresty']['user']
 
@@ -111,21 +114,42 @@ default['openresty']['gzip_types']        = [
   'application/xml+rss',
   'text/javascript',
   'application/javascript',
-  'application/json'
+  'application/json',
+  'font/truetype',
+  'font/opentype',
+  'application/vnd.ms-fontobject',
+  'image/svg+xml'
 ]
 
 default['openresty']['keepalive']                     = 'on'
-default['openresty']['keepalive_timeout']             = 65
+default['openresty']['keepalive_timeout']             = 5
 default['openresty']['worker_processes']              = node['cpu'] && node['cpu']['total'] ? node['cpu']['total'] : 1
 default['openresty']['worker_connections']            = 4096
 default['openresty']['worker_rlimit_nofile']          = nil
 default['openresty']['open_files']                    = 16384
 default['openresty']['multi_accept']                  = false
-default['openresty']['event']                         = nil
+if node['os'].eql?('linux') && node['kernel']['release'].to_f >= 2.6
+  default['openresty']['event']                       = 'epoll'
+else
+  default['openresty']['event']                       = nil
+end
+
 default['openresty']['server_names_hash_bucket_size'] = 64
+default['openresty']['client_max_body_size']          = '32M'
+default['openresty']['client_body_buffer_size']       = '8K'
+default['openresty']['large_client_header_buffers']   = '32 32k'
+
+# Open file cache
+default['openresty']['open_file_cache'] = {
+  'max' => 1000,
+  'inactive' => '20s',
+  'valid' => '30s',
+  'min_uses' => '8',
+  'errors' => 'on'
+}
 
 default['openresty']['logrotate']                     = true
-default['openresty']['disable_access_log']            = false
+default['openresty']['disable_access_log']            = true
 default['openresty']['default_site_enabled']          = false
 default['openresty']['types_hash_max_size']           = 2048
 default['openresty']['types_hash_bucket_size']        = 64

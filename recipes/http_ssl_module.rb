@@ -1,10 +1,11 @@
 #
-# Cookbook Name:: nginx
+# Cookbook Name:: openresty
 # Recipe:: http_ssl_module
 #
-# Author:: Jamie Winsor (<jamie@vialstudios.com>)
+# Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 #
-# Copyright 2012, Riot Games
+# Copyright 2012, Panagiotis Papadomitsos
+# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,5 +20,4 @@
 # limitations under the License.
 #
 
-node.run_state['nginx_configure_flags'] =
-  node.run_state['nginx_configure_flags'] | ["--with-http_ssl_module"]
+node.run_state['openresty_configure_flags'] |= ["--with-http_ssl_module"]

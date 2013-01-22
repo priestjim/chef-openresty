@@ -1,4 +1,4 @@
-location <%= node['openresty']['status']['url'] %> {
+location = <%= node['openresty']['status']['url'] %> {
   stub_status on;
   allow 127.0.0.1;
   <% if node['openresty']['ipv6'] %>

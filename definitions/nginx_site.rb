@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: nginx
+# Cookbook Name:: openresty
 # Definition:: nginx_site
 # Author:: AJ Christensen <aj@junglist.gen.nz>
 #

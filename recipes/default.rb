@@ -4,8 +4,8 @@
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 #
-# Heavily based on Opscode's original nginx cookbook
 # Copyright 2012, Panagiotis Papadomitsos
+# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 # limitations under the License.
 #
 
+kernel_supports_aio = Gem::Version.new(node['kernel']['release'].split('-').first) >= Gem::Version.new('2.6.22')
+
 user node['openresty']['user'] do
   system true
   shell '/bin/false'
@@ -31,34 +33,34 @@ include_recipe 'openresty::commons_dir'
 include_recipe 'openresty::commons_script'
 include_recipe 'build-essential'
 
-src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/nginx-#{node['openresty']['source']['version']}.tar.gz"
+src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
 
 packages = value_for_platform_family(
   ['rhel','fedora','amazon','scientific'] => [ 'pcre-devel', 'openssl-devel', 'readline-devel', 'ncurses-devel' ],
   'default' => ['libpcre3', 'libpcre3-dev', 'libperl-dev', 'libssl-dev', 'libreadline-dev', 'libncurses5-dev']
 )
 
-packages_aio = value_for_platform_family(
+# Enable AIO for newer kernels
+packages |= value_for_platform_family(
     ['rhel','fedora','amazon','scientific'] => [ 'libatomic_ops-devel' ],
     'default' => [ 'libatomic-ops-dev', 'libaio1', 'libaio-dev' ]
-)
-
-packages |= packages_aio unless node['kernel']['release'].split('-').first.to_f < 3.0
+) if kernel_supports_aio
 
 packages.each do |devpkg|
   package devpkg
 end
 
-remote_file node['openresty']['url'] do
-  source node['openresty']['url']
-  checksum node['openresty']['checksum']
+remote_file node['openresty']['source']['url'] do
+  source node['openresty']['source']['url']
+  checksum node['openresty']['source']['checksum']
   path src_filepath
   backup false
 end
 
 node.run_state['openresty_force_recompile'] = false
-node.run_state['openresty_configure_flags'] =
-node['openresty']['source']['default_configure_flags'] | node['openresty']['configure_flags']
+node.run_state['openresty_configure_flags'] = node['openresty']['source']['default_configure_flags'] | node['openresty']['configure_flags']
+
+node.run_state['openresty_configure_flags'] |= [ '--with-file-aio' ] if kernel_supports_aio
 
 template '/etc/init.d/nginx' do
   source 'nginx.init.erb'
@@ -107,7 +109,7 @@ bash 'compile_openresty_source' do
   cwd ::File.dirname(src_filepath)
   code <<-EOH
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)} &&
-    cd nginx-#{node['openresty']['source']['version']} &&
+    cd ngx_openresty-#{node['openresty']['source']['version']} &&
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&
     make && make install
   EOH

@@ -28,10 +28,11 @@ http {
   access_log	<%= node['openresty']['log_dir'] %>/access.log;
   <% end %>
 
-  <% unless node['kernel']['release'].split('-').first.to_f < 3.0 %>
+  <% if Gem::Version.new(node['kernel']['release'].split('-').first) >= Gem::Version.new('2.6.22') %>
   sendfile off;
   aio on;
   directio 512;
+  output_buffers 1 128k;
   <% else %>
   sendfile on;
   <% end %>
@@ -63,6 +64,15 @@ http {
   # Set the resolver for upstream proxies to the internal AWS Services offer
   resolver 172.16.0.23 valid=10s;
   <% end %>
+
+  open_file_cache max=<%= node['openresty']['open_file_cache']['max'] %> inactive=<%= node['openresty']['open_file_cache']['inactive'] %>;
+  open_file_cache_valid <%= node['openresty']['open_file_cache']['valid'] %>;
+  open_file_cache_min_uses <%= node['openresty']['open_file_cache']['min_uses'] %>;
+  open_file_cache_errors <%= node['openresty']['open_file_cache']['errors'] %>;
+
+  client_max_body_size <%= node['openresty']['client_max_body_size'] %>;
+  client_body_buffer_size <%= node['openresty']['client_body_buffer_size'] %>;
+  large_client_header_buffers <%= node['openresty']['large_client_header_buffers'] %>;
 
   server_names_hash_bucket_size <%= node['openresty']['server_names_hash_bucket_size'] %>;
   types_hash_max_size <%= node['openresty']['types_hash_max_size'] %>;

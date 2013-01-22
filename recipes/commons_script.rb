@@ -1,9 +1,11 @@
 #
 # Cookbook Name:: openresty
 # Recipe:: commons_script
-# Author:: AJ Christensen <aj@junglist.gen.nz>
 #
-# Copyright 2008-2012, Opscode, Inc.
+# Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
+#
+# Copyright 2012, Panagiotis Papadomitsos
+# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.

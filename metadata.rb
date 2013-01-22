@@ -6,21 +6,17 @@ description       'Installs and configures the OpenResty NGINX bundle'
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version           IO.read(File.join(File.dirname(__FILE__), 'VERSION')) rescue '0.1.0'
 
-recipe 'openresty', 'Installs openresty package and sets up configuration with Debian apache style with sites-enabled/sites-available'
+recipe 'openresty', 'Installs the OpenResty NGINX bundle and sets up configuration with Debian apache style with sites-enabled/sites-available'
 
 %w{ ubuntu debian centos redhat amazon scientific oracle fedora }.each do |os|
   supports os
 end
 
-%w{ build-essential logrotate }.each do |cb|
-  depends cb
-end
-
+depends 'build-essential'
+depends 'logrotate'
 depends 'ohai', '>= 1.1.4'
 
-%w{ runit bluepill yum }.each do |cb|
-  recommends cb
-end
+recommends 'yum'
 
 attribute 'openresty/dir',
   :display_name => 'OpenResty Directory',

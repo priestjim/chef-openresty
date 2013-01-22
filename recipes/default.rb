@@ -111,7 +111,7 @@ bash 'compile_openresty_source' do
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)} &&
     cd ngx_openresty-#{node['openresty']['source']['version']} &&
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&
-    make && make install
+    make -j#{node['cpu']['total']} && make install
   EOH
 
   not_if do

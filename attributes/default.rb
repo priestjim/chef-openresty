@@ -30,6 +30,10 @@ default['openresty']['source']['version']   = '1.2.6.1'
 default['openresty']['source']['url']       = "http://agentzh.org/misc/nginx/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
 default['openresty']['source']['checksum']  = '1675b33c9880dd1654cb0aa8604df0bb43de7d7092a5de9fc8e9a6cd774f7d32'
 
+# Apply the 503 -> 429 error code patch
+# Blows the "I rate limit" cover but some folks need it!
+default['openresty']['source']['limit_code_patch'] = true
+
 # Directories
 default['openresty']['dir']                 = '/etc/nginx'
 default['openresty']['log_dir']             = '/var/log/nginx'

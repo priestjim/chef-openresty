@@ -57,6 +57,14 @@ remote_file node['openresty']['source']['url'] do
   backup false
 end
 
+cookbook_file "#{Chef::Config['file_cache_path']}/nginx-rate-limit-correct-error-code.patch" do
+  source "nginx-rate-limit-correct-error-code.patch"
+  owner "root"
+  group "root"
+  mode 00644
+  only_if { node['openresty']['source']['limit_code_patch'] }
+end
+
 node.run_state['openresty_force_recompile'] = false
 node.run_state['openresty_configure_flags'] = node['openresty']['source']['default_configure_flags'] | node['openresty']['configure_flags']
 
@@ -106,12 +114,24 @@ end
 configure_flags = node.run_state['openresty_configure_flags']
 openresty_force_recompile = node.run_state['openresty_force_recompile']
 
+# The 3 first version numbers of OpenResty is the actual NGINX version. It's a bit ugly but it works...
+nginx_version = node['openresty']['source']['version'].split('.')[0...-1].join('.')
+if node['openresty']['source']['limit_code_patch']
+  patch = <<-EOT
+  cd bundle/nginx-#{nginx_version} &&
+  patch -p1 < #{Chef::Config['file_cache_path']}/nginx-rate-limit-correct-error-code.patch &&
+  cd ../../ &&
+  EOT
+else
+  patch = ''
+end
 
 bash 'compile_openresty_source' do
   cwd ::File.dirname(src_filepath)
   code <<-EOH
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)} &&
     cd ngx_openresty-#{node['openresty']['source']['version']} &&
+    #{patch}
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&
     make -j#{node['cpu']['total']} && make install
   EOH

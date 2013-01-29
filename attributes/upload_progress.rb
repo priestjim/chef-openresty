@@ -20,5 +20,6 @@
 # limitations under the License.
 #
 
+# For more information check out https://github.com/masterzen/nginx-upload-progress-module
 default['openresty']['upload_progress']['url']      = "https://github.com/masterzen/nginx-upload-progress-module/tarball/v0.8.4"
 default['openresty']['upload_progress']['checksum'] = "9a6acb984d81f5d7e04214d63ae94273"

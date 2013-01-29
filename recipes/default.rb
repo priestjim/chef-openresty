@@ -20,7 +20,9 @@
 # limitations under the License.
 #
 
-kernel_supports_aio = Gem::Version.new(node['kernel']['release'].split('-').first) >= Gem::Version.new('2.6.22')
+require 'chef/version_constraint'
+
+kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
 
 user node['openresty']['user'] do
   system true

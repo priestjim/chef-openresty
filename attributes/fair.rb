@@ -20,5 +20,6 @@
 # limitations under the License.
 #
 
+# For more information checkout https://github.com/gnosek/nginx-upstream-fair
 default['openresty']['fair']['url'] 			= 'git://github.com/gnosek/nginx-upstream-fair.git'
 default['openresty']['fair']['name'] 			= 'nginx-upstream-fair'

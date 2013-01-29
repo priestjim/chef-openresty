@@ -50,6 +50,6 @@ template "#{node['openresty']['dir']}/sites-available/default" do
   notifies :reload, 'service[nginx]'
 end
 
-nginx_site 'default' do
-  enable node['openresty']['default_site_enabled']
+openresty_site 'default' do
+  action(node['openresty']['default_site_enabled'] ? :enable : :disable)
 end

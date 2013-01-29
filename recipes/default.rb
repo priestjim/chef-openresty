@@ -154,7 +154,6 @@ end
 
 include_recipe "openresty::commons_cleanup"
 
-
 node.run_state.delete('openresty_configure_flags')
 node.run_state.delete('openresty_force_recompile')
 

@@ -25,6 +25,7 @@ git module_path do
   repository node['openresty']['fair']['url']
   reference 'master'
   action :checkout
+  not_if { ::File.exists?(module_path) }
 end
 
 node.run_state['openresty_configure_flags'] |= ["--add-module=#{module_path}"]

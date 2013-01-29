@@ -53,3 +53,20 @@ end
 openresty_site 'default' do
   action(node['openresty']['default_site_enabled'] ? :enable : :disable)
 end
+
+if node['openresty']['logrotate']
+
+  include_recipe 'logrotate'
+
+  # Log rotation
+  logrotate_app 'openresty' do
+    path "#{node['openresty']['log_dir']}/*.log"
+    enable true
+    frequency 'daily'
+    rotate 7
+    cookbook 'logrotate'
+    create "0644 #{node['openresty']['user']} adm"
+    options [ 'missingok', 'delaycompress', 'notifempty', 'compress', 'copytruncate' ]
+  end
+
+end

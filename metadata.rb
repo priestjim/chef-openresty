@@ -3,8 +3,8 @@ maintainer        'Panagiotis Papadomitsos'
 maintainer_email  'pj@ezgr.net'
 license           'Apache 2.0'
 description       'Installs and configures the OpenResty NGINX bundle'
-long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           IO.read(File.join(File.dirname(__FILE__), 'VERSION')) rescue '0.1.0'
+long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md')).chomp
+version           IO.read(File.join(File.dirname(__FILE__), 'VERSION')).chomp rescue '0.1.0'
 
 recipe 'openresty', 'Installs the OpenResty NGINX bundle and sets up configuration with Debian apache style with sites-enabled/sites-available'
 

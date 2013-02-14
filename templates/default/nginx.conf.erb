@@ -1,5 +1,9 @@
 user <%= node['openresty']['user'] %><% if node['openresty']['user'] != node['openresty']['group'] %> <%= node['openresty']['group'] %><% end %>;
 worker_processes  <%= node['openresty']['worker_processes'] %>;
+<% if node['openresty']['worker_auto_affinity'] %>
+worker_cpu_affinity <%= node['openresty']['worker_cpu_affinity'] %>;
+<% end %>
+
 <% if node['openresty']['daemon_disable'] -%>
 daemon off;
 <% end -%>

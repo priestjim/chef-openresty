@@ -3,6 +3,9 @@ Description
 
 Installs OpenResty from source and sets up configuration handling similar to Debian's Apache2 scripts.
 
+BIG FAT WARNING: CURRENT DOCUMENTATION IS OUTDATED. WILL UPDATE IN A JIFFIE!
+----------------------------------------------------------------------------
+
 Requirements
 ============
 

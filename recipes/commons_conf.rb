@@ -24,6 +24,21 @@ require 'chef/version_constraint'
 
 kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
 
+if node['openresty']['worker_auto_affinity']
+
+  affinity_mask = Array.new
+  cpupos = 0
+  (0...node['openresty']['worker_processes']).each do |worker|
+    bitmask = (1 << cpupos).to_s(2)
+    bitstring = '0' * (node['cpu']['total'] - bitmask.size) + bitmask.to_s
+    affinity_mask << bitstring
+    cpupos += 1
+    cpupos = 0 if (cpupos == node['cpu']['total'])
+  end
+
+  node.default['openresty']['worker_cpu_affinity'] = affinity_mask.join(' ')
+end
+
 template 'nginx.conf' do
   path "#{node['openresty']['dir']}/nginx.conf"
   source 'nginx.conf.erb'

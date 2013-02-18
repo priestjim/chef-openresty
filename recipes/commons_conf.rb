@@ -62,7 +62,9 @@ template "#{node['openresty']['dir']}/sites-available/default" do
   owner 'root'
   group 'root'
   mode 00644
-  notifies :reload, 'service[nginx]'
+  if ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/000-default")
+    notifies :reload, 'service[nginx]'
+  end
 end
 
 openresty_site 'default' do

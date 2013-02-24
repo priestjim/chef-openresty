@@ -39,11 +39,11 @@ Awesome stuff
 
 This cookbook includes automatic activation of some nice NGINX features such as:
 
-* By default LUAJIT-enabled build: The cookbook by default activates the LUAJIT
+* *By default LUAJIT-enabled build*: The cookbook by default activates the LUAJIT
   feature of OpenResty (since this is the main reason to use the bundle) and
   accounts for all the peculiarities this option may bring.
 
-* Automatic CPU affinity: Automatically sets the worker-to-core affinity for all
+* *Automatic CPU affinity*: Automatically sets the worker-to-core affinity for all
   of the NGINX worker processes. For a scenario of 8 workers and 8 cores, the
   following directive gets generated:
 
@@ -52,23 +52,22 @@ This cookbook includes automatic activation of some nice NGINX features such as:
   This feature can offer a nice performance boost, since it helps the CPUs maintain
   cache locality (especially when used in conjunction to the LUA module)
 
-* Automatic detection and activation of the AIO feature: The cookbook automatically
+* *Automatic detection and activation of the AIO feature*: The cookbook automatically
   detects support and enables the `aio` directive of NGINX.
 
-* Automatic IPv6 detection and activation: The cookbook automatically detects and
+* *Automatic IPv6 detection and activation*: The cookbook automatically detects and
   activates IPv6 support on NGINX.
 
-* Rate limit proper HTTP response: The cookbook contains a small patch that enables
+* *Rate limit proper HTTP response*: The cookbook contains a small patch that enables
   NGINX to respond to over-quota requests of the limit_req module with a 429 HTTP
   response that is more semantically correct than the default 503 one and aids in
-  separate and log such issues more granularly. It gives away though that you
-  are in fact rate limiting, hence there is an option to disable just that.
+  separate and log such issues more granularly. It gives away though the fact
+  that you are rate limiting, so there is an option to disable this patch.
 
 Attributes
 ==========
 
-Node attributes for this cookbook are logically separated into
-different files. Some attributes are set only via a specific recipe.
+Node attributes for this cookbook are logically separated into different files.
 
 ## default.rb
 
@@ -158,7 +157,7 @@ Generally used attributes. Some have platform specific values. See
 * `node['openresty']['multi_accept']` - used for config value of `events {
   multi_accept }`. Try to accept() as many connections as possible.
   Disable by default.
-  
+
 * `node['openresty']['event']` - used for config value of `events { use
   }`. Set the event-model. By default NGINX looks for the most
   suitable method for your OS. Automatically set to `epoll` for Linux >= 2.6 kernels

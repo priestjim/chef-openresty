@@ -4,9 +4,6 @@ worker_processes  <%= node['openresty']['worker_processes'] %>;
 worker_cpu_affinity <%= node['openresty']['worker_cpu_affinity'] %>;
 <% end %>
 
-<% if node['openresty']['daemon_disable'] -%>
-daemon off;
-<% end -%>
 <% if node['openresty']['worker_rlimit_nofile'] -%>
 worker_rlimit_nofile <%= node['openresty']['worker_rlimit_nofile'] %>;
 <% end -%>
@@ -43,6 +40,7 @@ http {
 
   # PCI compliance
   server_tokens off;
+  
   tcp_nopush on;
   tcp_nodelay on;
 

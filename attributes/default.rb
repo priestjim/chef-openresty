@@ -26,9 +26,9 @@
 # default['openresty']['source']['checksum']
 
 # Download data
-default['openresty']['source']['version']   = '1.2.6.5'
+default['openresty']['source']['version']   = '1.2.7.1'
 default['openresty']['source']['url']       = "http://agentzh.org/misc/nginx/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
-default['openresty']['source']['checksum']  = '14d984de27bce44808a775cc3277912b38e95cded0099d884705fb648b06a246'
+default['openresty']['source']['checksum']  = '6e96892831cccbf6ebeca69bcd6ee50a3de1c8790b17dc1449b3f11101d196c7'
 
 # Apply the 503 -> 429 error code patch
 # Blows the "I rate limit" cover but some folks need it!
@@ -134,7 +134,6 @@ default['openresty']['worker_processes']              = node['cpu'] && node['cpu
 default['openresty']['worker_auto_affinity']          = true
 default['openresty']['worker_connections']            = 4096
 default['openresty']['worker_rlimit_nofile']          = nil
-default['openresty']['open_files']                    = 16384
 default['openresty']['multi_accept']                  = false
 
 # epoll is available only on Linux kernels >= 2.6

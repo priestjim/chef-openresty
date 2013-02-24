@@ -1,10 +1,10 @@
 Description
 ===========
 
-Installs OpenResty from source and sets up configuration handling similar to Debian's Apache2 scripts.
-
-BIG FAT WARNING: CURRENT DOCUMENTATION IS OUTDATED. WILL UPDATE IN A JIFFIE!
-----------------------------------------------------------------------------
+Installs the OpenResty NGINX bundle (http://www.openresty.org) from source and 
+sets up configuration handling similar to Debian's Apache2 scripts. It also 
+provides an OHAI plugin for configuration detection and an LWRP for easy site
+activation and deactivation.
 
 Requirements
 ============
@@ -17,8 +17,7 @@ for common "default" functionality.
 
 * build-essential
 * ohai (for openresty::ohai_plugin)
-
-On RHEL family distros, the "yum" cookbook is required for "`recipe[yum::epel]`".
+* logrotate (for log file rotation)
 
 Platform
 --------
@@ -30,6 +29,11 @@ The following platforms are supported and tested under test kitchen:
 
 Other Debian and RHEL family distributions are assumed to work.
 
+Chef Server
+-----------
+
+The cookbook converges best on Chef installations >= 10.16.2
+
 Attributes
 ==========
 
@@ -39,74 +43,99 @@ different files. Some attributes are set only via a specific recipe.
 ## default.rb
 
 Generally used attributes. Some have platform specific values. See
-`attributes/default.rb`. "The Config" refers to "nginx.conf" the main
-config file.
+`attributes/default.rb`. "The Config" refers to "nginx.conf" the main config file.
 
-**v0.101.0 - Attribute Change**: `node['openresty']['url']` is now
-  `node['openresty']['source']['url']` as the URL was only used when
-  retrieving the source to build Nginx.
+* `node['openresty']['source']['version']` - The OpenResty version to be installed from source.
+* `node['openresty']['source']['url']` - The URL for downloading the selcted version.
+* `node['openresty']['source']['checksum']` - The SHA-256 checksum for the selected version.
+* `node['openresty']['source']['limit_code_patch']` - Enables application of a
+  patch that converts over-quota request limit HTTP 503 responses to proper 429 ones.
 
-* `node['openresty']['dir']` - Location for Nginx configuration.
-* `node['openresty']['log_dir']` - Location for Nginx logs.
-* `node['openresty']['user']` - User that Nginx will run as.
-* `node['openresty']['group]` - Group for Nginx.
-* `node['openresty']['binary']` - Path to the Nginx binary.
-* `node['openresty']['init_style']` - How to run Nginx as a service when
-  using `nginx::source`. Values can be "runit", "init" or "bluepill".
-  When using runit or bluepill, those recipes will be included as well
-  and are dependencies of this cookbook. Not used in the `nginx`
-  recipe because the package manager's init script style for the
-  platform is assumed.
-* `node['openresty']['pid']` - Location of the PID file.
-* `node['openresty']['keepalive']` - Whether to use `keepalive_timeout`,
-  any value besides "on" will leave that option out of the config.
-* `node['openresty']['keepalive_timeout']` - used for config value of
-  `keepalive_timeout`.
-* `node['openresty']['worker_processes']` - used for config value of
-  `worker_processes`.
-* `node['openresty']['worker_connections']` - used for config value of
-  `events { worker_connections }`
-* `node['openresty']['worker_rlimit_nofile']` - used for config value of
-  `worker_rlimit_nofile`. Can replace any "ulimit -n" command. The
-  value depend on your usage (cache or not) but must always be
-  superior than worker_connections.
-* `node['openresty']['multi_accept']` - used for config value of `events {
-  multi_accept }`. Try to accept() as many connections as possible.
-  Disable by default.
-* `node['openresty']['event']` - used for config value of `events { use
-  }`. Set the event-model. By default nginx looks for the most
-  suitable method for your OS.
-* `node['openresty']['server_names_hash_bucket_size']` - used for config
-  value of `server_names_hash_bucket_size`.
-* `node['openresty']['disable_access_log']` - set to true to disable the
-  general access log, may be useful on high traffic sites.
-* `node['openresty']['default_site_enabled']` - enable the default site
-* `node['openresty']['install_method']` - Whether nginx is installed from
-  packages or from source.
-* `node['openresty']['types_hash_max_size']` - Used for the
-  `types_hash_max_size` configuration directive.
-* `node['openresty']['types_hash_bucket_size']` - Used for the
-  `types_hash_bucket_size` configuration directive.
+* `node['openresty']['dir']` - Location for NGINX configuration.
+* `node['openresty']['log_dir']` - Location for NGINX logs.
+* `node['openresty']['cache_dir']` - Location for NGINX cache files.
+* `node['openresty']['run_dir']` - Location for NGINX state and pid files.
+* `node['openresty']['binary']` - Location for NGINX executable.
+* `node['openresty']['pid']` - The exact NGINX pid filename.
 
-### Attributes for configuring the gzip module
+* `node['openresty']['source']['conf_path']` - Exact filename for the NGINX configuration file
+* `node['openresty']['source']['prefix']` - Installation prefix for miscellaneous data
+* `['openresty']['source']['default_configure_flags']` - A set of default configuration
+  flags for the source compilation, generally best left untouched unless you
+  *really* know what you're doing.
+
+* `node['openresty']['modules']` - An array of recipe names that are included
+  from this cookbook and add additional features to the source compilation process.
+
+* `node['openresty']['extra_modules']` - An array of full recipe references (in the
+  form of cookbook::recipe), for you to include extra-cookbook modules in the same
+  manner as above.
+
+* `node['openresty']['configure_flags']` - An array of extra configure flags to
+  be included included along the default configure flags.
+
+* `node['openresty']['user']` - User that NGINX will run as.
+* `node['openresty']['group]` - Group for NGINX.
+
+* `node['openresty']['ipv6']` - Enables IPv6 support for NGINX. Automatically
+  detected and enabled.
 
 * `node['openresty']['gzip']` - Whether to use gzip, can be "on" or "off"
 * `node['openresty']['gzip_http_version']` - used for config value of `gzip_http_version`.
 * `node['openresty']['gzip_comp_level']` - used for config value of `gzip_comp_level`.
 * `node['openresty']['gzip_proxied']` - used for config value of `gzip_proxied`.
+* `node['openresty']['gzip_vary']` - used for config value of `gzip_vary`.
+* `node['openresty']['gzip_buffers']` - used for config value of `gzip_buffers`.
 * `node['openresty']['gzip_types']` - used for config value of `gzip_types` - must be an Array.
 
-### Attributes set in recipes
+* `node['openresty']['keepalive']` - Whether to use `keepalive_timeout`,
+  any value besides "on" will leave that option out of the config.
+* `node['openresty']['keepalive_timeout']` - used for config value of
+  `keepalive_timeout`.
 
-*nginx::source*
+* `node['openresty']['worker_processes']` - used for config value of
+  `worker_processes`.
+* `node['openresty']['worker_connections']` - used for config value of
+  `events { worker_connections }`  
+* `node['openresty']['worker_rlimit_nofile']` - used for config value of
+  `worker_rlimit_nofile`. Can replace any "ulimit -n" command. The
+  value depend on your usage (cache or not) but must always be
+  superior than worker_connections.
+* `node['openresty']['worker_auto_affinity']` - Automatically computes and creates
+  CPU affinity assignments (config value `worker_cpu_affinity`) based on the 
+  total number of workers and CPU cores. Can show a nice performance boost when 
+  used in high request volume scenarios.
 
-* `node['openresty']['daemon_disable']` - Whether the daemon should be
-  disabled which can be true or false; disable the daemon (run in the
-  foreground) when using a service supervisor such as runit or
-  bluepill for "init_style". This is automatically set in the
-  `nginx::source` recipe when the init style is not bluepill or runit.
+* `node['openresty']['multi_accept']` - used for config value of `events {
+  multi_accept }`. Try to accept() as many connections as possible.
+  Disable by default.
+* `node['openresty']['event']` - used for config value of `events { use
+  }`. Set the event-model. By default NGINX looks for the most
+  suitable method for your OS. Automatically set to `epoll` for Linux >= 2.6 kernels
 
-*nginx::http_realip_module*
+* `node['openresty']['server_names_hash_bucket_size']` - used for config
+  value of `server_names_hash_bucket_size`.
+* `node['openresty']['client_max_body_size']` - used for config
+  value of `client_max_body_size`.
+* `node['openresty']['client_body_buffer_size']` - used for config
+  value of `client_body_buffer_size`.
+* `node['openresty']['large_client_header_buffers']` - used for config
+  value of `large_client_header_buffers`.
+* `node['openresty']['types_hash_max_size']` - used for config
+  value of `types_hash_max_size`.
+* `node['openresty']['types_hash_bucket_size']` - used for config
+  value of `types_hash_bucket_size`.
+* `node['openresty']['open_file_cache']` - used for config
+  value of `open_file_cache`. Must be an array with values used in the 
+  `open_file_cache` directive of NGINX.
+
+* `node['openresty']['logrotate']` - set to true to use the `logrotate_app` of the
+  `logrotate` cookbook to enable automatic log rotation of NGINX logs
+* `node['openresty']['disable_access_log']` - set to true to disable the
+  general access log, may be useful on high traffic sites.
+* `node['openresty']['default_site_enabled']` - enable the default site
+
+## realip.rb
 
 From: http://wiki.nginx.org/HttpRealIpModule
 
@@ -115,164 +144,147 @@ From: http://wiki.nginx.org/HttpRealIpModule
 * `node['openresty']['realip']['addresses']` - Addresses to use for the
   `http_realip` configuration.
 
-## source.rb
+## fair.rb
 
-These attributes are used in the `nginx::source` recipe. Some of them
-are dynamically modified during the run. See `attributes/source.rb`
-for default values.
+From: http://wiki.nginx.org/HttpUpstreamFairModule
 
-* `node['openresty']['source']['url']` - (versioned) URL for the Nginx
-  source code. By default this will use the version specified as
-  `node['openresty']['version'].
-* `node['openresty']['source']['prefix']` - (versioned) prefix for
-  installing nginx from source
-* `node['openresty']['source']['conf_path']` - location of the main config
-  file, in `node['openresty']['dir']` by default.
-* `node['openresty']['source']['modules']` - Array of modules that should
-  be compiled into Nginx by including their recipes in
-  `nginx::source`.
-* `node['openresty']['source']['default_configure_flags']` - The default
-  flags passed to the configure script when building Nginx.
-* `node['openresty']['configure_flags']` - Preserved for compatibility and
-  dynamically generated from the
-  `node['openresty']['source']['default_configure_flags']` in the
-  `nginx::source` recipe.
+* `node['openresty']['fair']['url']` - GitHub URL to checkout the fair module from
+* `node['openresty']['fair']['name']` - Directory name to checkout the module to
 
 ## upload_progress.rb
 
-These attributes are used in the `nginx::upload_progress_module`
-recipe.
+From: http://wiki.nginx.org/HttpUploadProgressModule
 
-* `node['openresty']['upload_progress']['url']` - URL for the tarball.
-* `node['openresty']['upload_progress']['checksum']` - Checksum of the
-  tarball.
+* `node['openresty']['upload_progress']['url']` - GitHub URL to checkout the upload_progress
+  module from
+* `node['openresty']['upload_progress']['name']` - Directory name to checkout the 
+  module to
+
+## status.rb
+
+* `node['openresty']['status']['url']` - The URL that will be exposed as the NGINX
+  status URL
+* `node['openresty']['status']['name']` - An array of IPs allowed to view the
+  status URL
 
 Recipes
 =======
 
-This cookbook provides one main recipes for installing Nginx.
-
-* source.rb: *Use this recipe* if you do not have a native package for
-  Nginx, or if you want to install a newer version than is available,
-  or if you have custom module compilation needs.
-
-Several recipes are related to the `source` recipe specifically. See
-that recipe's section below for a description.
-
 ## default.rb
 
-The default recipe will install Nginx as a native package for the
-system through the package manager and sets up the configuration
-according to the Debian site enable/disable style with `sites-enabled`
-using the `nxensite` and `nxdissite` scripts. The nginx service will
-be managed with the normal init scripts that are presumably included
-in the native package.
+The default recipe will install the OpenResty NGINX bundle from source,
+automatically including your selected set of modules, extra-cookbook modules and
+set up the configuration according to the Debian site enable/disable style with 
+`sites-enabled` using the `nxensite` and `nxdissite` scripts provided by the
+`openresty_site` LWRP. 
 
-Includes the `ohai_plugin` recipe so the plugin is available.
-
-## ohai_plugin.rb
-
-This recipe provides an Ohai plugin as a template. It is included by
-both the `default` and `source` recipes.
-
-## authorized_ips.rb
-
-Sets up configuration for the `authorized_ip` nginx module.
-
-## source.rb
-
-This recipe is responsible for building Nginx from source. It ensures
-that the required packages to build Nginx are installed (pcre,
+The recipe ensures that the required packages to build NGINX are installed (pcre,
 openssl, compile tools). The source will be downloaded from the
 `node['openresty']['source']['url']`. The `node['openresty']['user']` will be
 created as a system user. The appropriate configuration and log
 directories and config files will be created as well according to the
-attributes `node['openresty']['dir']` and 'node['openresty']['log_dir']`.
+attributes `node['openresty']['dir']` and `'node['openresty']['log_dir']`.
 
 The recipe attempts to detect whether additional modules should be
 added to the configure command through recipe inclusion (see below),
 and whether the version or configuration flags have changed and should
 trigger a recompile.
 
-The nginx service will be set up according to
-`node['openresty']['init_style']`. Available options are:
+Many features are automatically detected and enabled into the NGINX default
+configuration file such as AIO support for Linux kernels >= 2.6.23, IPv6 support
+and CPU affinity separation.
 
-* runit: uses runit cookbook and sets up `runit_service`.
-* bluepill: uses bluepill cookbook and sets up `bluepill_service`.
-* anything else (e.g., "init") will use the nginx init script
-  template.
+The NGINX service will be managed with the init scripts that will be installed 
+by the cookbook.
 
-**RHEL/CentOS** This recipe should work on RHEL/CentOS with "init" as
-  the init style.
+Includes the `ohai_plugin` recipe so the plugin is available.
 
-The following recipes are used to build module support into Nginx. To
-use a module in the `nginx::source` recipe, add its recipe name to the
-attribute `node['openresty']['source']['modules']`.
+## ohai_plugin.rb
 
-* `ipv6.rb` - enables IPv6 support
-* `http_echo_module.rb` - downloads the `http_echo_module` module and
-  enables it as a module when compiling nginx.
-* `http_geoip_module.rb` - installs the GeoIP libraries and data files
-  and enables the module for compilation.
-* `http_gzip_static_module.rb` - enables the module for compilation.
-* `http_realip_module.rb` - enables the module for compilation and
-  creates the configuration.
-* `http_ssl_module.rb` - enables SSL for compilation.
-* `http_stub_status_module.rb` - provides `nginx_status` configuration
-  and enables the module for compilation.
-* `naxsi_module` - enables the naxsi module for the web application
-  firewall for nginx.
-* `passenger` - builds the passenger gem and configuration for
-  "`mod_passenger`".
-* `upload_progress_module.rb` - builds the `upload_progress` module
-  and enables it as a module when compiling nginx.
+This recipe provides an Ohai plugin as a template. It is automatically incldued
+by the `default.rb` recipe.
+
+## fair_module.rb, http_*_module.rb, upload_progress_module.rb
+
+These recipes are automatically included by the `default.rb` recipe according to
+the `node['openresty']['modules']` array and provide compiled-in additional
+features to the standard OpenResty NGINX compile. Check each recipe separately
+for more information.
+
+## http_stub_status_module.rb
+
+Special mention needs to be made for the stub status module. The approach followed
+here is to create an _include_ file with proper directives (set in the 
+`status_module.rb` attribute file) that can be included in any NGINX configuration 
+virtual host via the include directive:
+
+    include /etc/nginx/conf.d/nginx_status.conf.inc;
 
 Adding New Modules
 ------------------
 
-To add a new module to be compiled into nginx in the source recipe,
+To add a new module to be compiled into NGINX in the source recipe,
 the node's run state is manipulated in a recipe, and the module as a
-recipe should be added to `node['openresty']['source']['modules']`. For
+recipe should be added to `node['openresty']['modules']`. For
 example:
 
     node.run_state['openresty_configure_flags'] =
       node.run_state['openresty_configure_flags'] | ["--with-http_stub_status_module"]
 
-The recipe will be included by `recipe[nginx::source]` automatically,
+The recipe will be included by `recipe[nginx::default]` automatically,
 adding the configure flags. Add any other configuration templates or
 other resources as required. See the recipes described above for
 examples.
+
+In order to include extra-cookbook modules (most probably via an _application_ 
+cookbook), you can use the `node['openresty']['extra_modules']` array, 
+which takes as elements full recipe references like
+    
+    'recipe[my_openresty::module_42istheanswerforeveryhing]'
+
+The extra-cookbook modules will be included in the same manner as the standard 
+intra-cookbook modules.
+
+LWRP
+====
+
+The cookbook includes the `openresty_site` LWRP (in contrast to the original
+`nginx_site` cookbook definition script). The LWRP can be used in the same manner
+as `nginx_site` and offers resource notifications (an advantage LWRPs
+offer over simpler definitions). It also includes a `timing` parameter that can
+be used to notify the `nginx` process to restart immediately based on configuration
+file changes. The LWRP can be used like
+
+    openresty_site "site.example.com" do
+        action :enable
+        timing :immediately
+    end
 
 Ohai Plugin
 ===========
 
 The `ohai_plugin` recipe includes an Ohai plugin. It will be
 automatically installed and activated, providing the following
-attributes via ohai, no matter how nginx is installed (source or
+attributes via ohai, no matter how NGINX is installed (source or
 package):
 
-* `node['nginx']['version']` - version of nginx
+* `node['nginx']['version']` - version of NGINX
 * `node['nginx']['configure_arguments']` - options passed to
-  ./configure when nginx was built
-* `node['ngix']['prefix']` - installation prefix
+  ./configure when NGINX was built.
+* `node['nginx']['prefix']` - installation prefix
 * `node['nginx']['conf_path']` - configuration file path
 
-In the source recipe, it is used to determine whether control
-attributes for building nginx have changed.
+The Ohai plugin is generally used to determine whether control
+attributes for building NGINX have changed.
 
 Usage
 =====
 
-Include the recipe on your node or role that fits how you wish to
-install Nginx on your system per the recipes section above. Modify the
+Include the recipe on your node or role. Modify the
 attributes as required in your role to change how various
 configuration is applied per the attributes section above. In general,
 override attributes in the role should be used when changing
 attributes.
-
-There's some redundancy in that the config handling hasn't been
-separated from the installation method (yet), so use only one of the
-recipes, default or source.
 
 License and Author
 ==================

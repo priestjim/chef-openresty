@@ -39,11 +39,11 @@ Awesome stuff
 
 This cookbook includes automatic activation of some nice NGINX features such as:
 
-* *By default LUAJIT-enabled build*: The cookbook by default activates the LUAJIT
+* **By default LUAJIT-enabled build**: The cookbook by default activates the LUAJIT
   feature of OpenResty (since this is the main reason to use the bundle) and
   accounts for all the peculiarities this option may bring.
 
-* *Automatic CPU affinity*: Automatically sets the worker-to-core affinity for all
+* **Automatic CPU affinity**: Automatically sets the worker-to-core affinity for all
   of the NGINX worker processes. For a scenario of 8 workers and 8 cores, the
   following directive gets generated:
 
@@ -52,13 +52,13 @@ This cookbook includes automatic activation of some nice NGINX features such as:
   This feature can offer a nice performance boost, since it helps the CPUs maintain
   cache locality (especially when used in conjunction to the LUA module)
 
-* *Automatic detection and activation of the AIO feature*: The cookbook automatically
-  detects support and enables the `aio` directive of NGINX.
+* **Automatic detection and activation of the AIO feature**: The cookbook automatically
+  detects support (Linux kernel >= 2.6.22) and enables the `aio` directive of NGINX.
 
-* *Automatic IPv6 detection and activation*: The cookbook automatically detects and
+* **Automatic IPv6 detection and activation**: The cookbook automatically detects and
   activates IPv6 support on NGINX.
 
-* *Rate limit proper HTTP response*: The cookbook contains a small patch that enables
+* **Rate limit proper HTTP response**: The cookbook contains a small patch that enables
   NGINX to respond to over-quota requests of the limit_req module with a 429 HTTP
   response that is more semantically correct than the default 503 one and aids in
   separate and log such issues more granularly. It gives away though the fact
@@ -251,7 +251,7 @@ and whether the version or configuration flags have changed and should
 trigger a recompile.
 
 Many features are automatically detected and enabled into the NGINX default
-configuration file such as AIO support for Linux kernels >= 2.6.23, IPv6 support
+configuration file such as AIO support for Linux kernels >= 2.6.22, IPv6 support
 and CPU worker affinity.
 
 The NGINX service will be managed with the init scripts that will be installed 

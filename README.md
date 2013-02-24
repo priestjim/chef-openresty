@@ -34,6 +34,36 @@ Chef Server
 
 The cookbook converges best on Chef installations >= 10.16.2
 
+Awesome stuff
+=============
+
+This cookbook includes automatic activation of some nice NGINX features such as:
+
+* By default LUAJIT-enabled build: The cookbook by default activates the LUAJIT
+  feature of OpenResty (since this is the main reason to use the bundle) and
+  accounts for all the peculiarities this option may brin.
+
+* Automatic CPU affinity: Automatically sets the worker-to-core affinity for all
+  of the NGINX worker processes. For a scenario of 8 workers and 8 cores, the
+  following directive gets generated:
+
+      worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
+
+  This feature can offer a nice performance boost, since it helps the CPUs maintain
+  cache locality (especially when used in conjuction to the LUA module)
+
+* Automatic detection and activation of the AIO feature: The cookbook automatically
+  detects support and enables the `aio` directive of NGINX
+
+* Automatic IPv6 detection and activation: The coookbook automatically detects and
+  activates IPv6 support on NGINX
+
+* Rate limit proper HTTP response: The cookbook contains a small patch that enables
+  NGINX to respond to over-quota requests of the limit_req module with a 429 HTTP
+  response that is more semantically correct than the default 503 one and aids in
+  separate and log such issues more granularly. It gives away though that you
+  are in fact rate limiting, hence there is an option to disable just that.
+
 Attributes
 ==========
 
@@ -46,20 +76,30 @@ Generally used attributes. Some have platform specific values. See
 `attributes/default.rb`. "The Config" refers to "nginx.conf" the main config file.
 
 * `node['openresty']['source']['version']` - The OpenResty version to be installed from source.
+
 * `node['openresty']['source']['url']` - The URL for downloading the selcted version.
+
 * `node['openresty']['source']['checksum']` - The SHA-256 checksum for the selected version.
+
 * `node['openresty']['source']['limit_code_patch']` - Enables application of a
   patch that converts over-quota request limit HTTP 503 responses to proper 429 ones.
 
 * `node['openresty']['dir']` - Location for NGINX configuration.
+
 * `node['openresty']['log_dir']` - Location for NGINX logs.
+
 * `node['openresty']['cache_dir']` - Location for NGINX cache files.
+
 * `node['openresty']['run_dir']` - Location for NGINX state and pid files.
+
 * `node['openresty']['binary']` - Location for NGINX executable.
+
 * `node['openresty']['pid']` - The exact NGINX pid filename.
 
 * `node['openresty']['source']['conf_path']` - Exact filename for the NGINX configuration file
+
 * `node['openresty']['source']['prefix']` - Installation prefix for miscellaneous data
+
 * `node['openresty']['source']['default_configure_flags']` - A set of default configuration
   flags for the source compilation, generally best left untouched unless you
   *really* know what you're doing.
@@ -81,26 +121,35 @@ Generally used attributes. Some have platform specific values. See
   detected and enabled.
 
 * `node['openresty']['gzip']` - Whether to use gzip, can be "on" or "off"
+
 * `node['openresty']['gzip_http_version']` - used for config value of `gzip_http_version`.
+
 * `node['openresty']['gzip_comp_level']` - used for config value of `gzip_comp_level`.
 * `node['openresty']['gzip_proxied']` - used for config value of `gzip_proxied`.
+
 * `node['openresty']['gzip_vary']` - used for config value of `gzip_vary`.
+
 * `node['openresty']['gzip_buffers']` - used for config value of `gzip_buffers`.
+
 * `node['openresty']['gzip_types']` - used for config value of `gzip_types` - must be an Array.
 
 * `node['openresty']['keepalive']` - Whether to use `keepalive_timeout`,
   any value besides "on" will leave that option out of the config.
+
 * `node['openresty']['keepalive_timeout']` - used for config value of
   `keepalive_timeout`.
 
 * `node['openresty']['worker_processes']` - used for config value of
   `worker_processes`.
+
 * `node['openresty']['worker_connections']` - used for config value of
   `events { worker_connections }`  
+
 * `node['openresty']['worker_rlimit_nofile']` - used for config value of
   `worker_rlimit_nofile`. Can replace any "ulimit -n" command. The
   value depend on your usage (cache or not) but must always be
   superior than worker_connections.
+
 * `node['openresty']['worker_auto_affinity']` - Automatically computes and creates
   CPU affinity assignments (config value `worker_cpu_affinity`) based on the 
   total number of workers and CPU cores. Can show a nice performance boost when 
@@ -115,24 +164,32 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['server_names_hash_bucket_size']` - used for config
   value of `server_names_hash_bucket_size`.
+
 * `node['openresty']['client_max_body_size']` - used for config
   value of `client_max_body_size`.
+
 * `node['openresty']['client_body_buffer_size']` - used for config
   value of `client_body_buffer_size`.
+
 * `node['openresty']['large_client_header_buffers']` - used for config
   value of `large_client_header_buffers`.
+
 * `node['openresty']['types_hash_max_size']` - used for config
   value of `types_hash_max_size`.
+
 * `node['openresty']['types_hash_bucket_size']` - used for config
   value of `types_hash_bucket_size`.
+
 * `node['openresty']['open_file_cache']` - used for config
   value of `open_file_cache`. Must be an array with values used in the 
   `open_file_cache` directive of NGINX.
 
 * `node['openresty']['logrotate']` - set to true to use the `logrotate_app` of the
-  `logrotate` cookbook to enable automatic log rotation of NGINX logs
+  `logrotate` cookbook to enable automatic log rotation of NGINX logs.
+
 * `node['openresty']['disable_access_log']` - set to true to disable the
   general access log, may be useful on high traffic sites.
+
 * `node['openresty']['default_site_enabled']` - enable the default site
 
 ## realip.rb
@@ -141,6 +198,7 @@ From: http://wiki.nginx.org/HttpRealIpModule
 
 * `node['openresty']['realip']['header']` - Header to use for the RealIp
   Module; only accepts "X-Forwarded-For" or "X-Real-IP"
+
 * `node['openresty']['realip']['addresses']` - Addresses to use for the
   `http_realip` configuration.
 
@@ -149,6 +207,7 @@ From: http://wiki.nginx.org/HttpRealIpModule
 From: http://wiki.nginx.org/HttpUpstreamFairModule
 
 * `node['openresty']['fair']['url']` - GitHub URL to checkout the fair module from
+
 * `node['openresty']['fair']['name']` - Directory name to checkout the module to
 
 ## upload_progress.rb
@@ -157,6 +216,7 @@ From: http://wiki.nginx.org/HttpUploadProgressModule
 
 * `node['openresty']['upload_progress']['url']` - GitHub URL to checkout the upload_progress
   module from
+
 * `node['openresty']['upload_progress']['name']` - Directory name to checkout the 
   module to
 
@@ -192,7 +252,7 @@ trigger a recompile.
 
 Many features are automatically detected and enabled into the NGINX default
 configuration file such as AIO support for Linux kernels >= 2.6.23, IPv6 support
-and CPU affinity separation.
+and CPU worker affinity.
 
 The NGINX service will be managed with the init scripts that will be installed 
 by the cookbook.
@@ -276,32 +336,6 @@ package):
 
 The Ohai plugin is generally used to determine whether control
 attributes for building NGINX have changed.
-
-Awesome stuff
-=============
-
-This cookbook includes automatic activation of some nice NGINX features such as:
-
-* Automatic CPU affinity: Automatically sets the worker-to-core affinity for all
-  of the NGINX worker processes. For a scenario of 8 workers and 8 cores, the
-  following directive gets generated:
-
-    worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
-
-  This feature can offer a nice performance boost, since it helps the CPUs maintain
-  cache locality (especially when used in conjuction to the LUA module)
-
-* Automatic detection and activation of the AIO feature: The cookbook automatically
-  detects support and enables the `aio` directive of NGINX
-
-* Automatic IPv6 detection and activation: The coookbook automatically detects and
-  activates IPv6 support on NGINX
-  
-* Rate limit proper HTTP response: The cookbook contains a small patch that enables
-  NGINX to respond to over-quota requests of the limit_req module with a 429 HTTP
-  response that is more semantically correct than the default 503 one and aids in
-  separate and log such issues more granularly. It gives away though that you
-  are in fact rate limiting, hence there is an option to disable just that.
 
 Usage
 =====

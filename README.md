@@ -41,22 +41,22 @@ This cookbook includes automatic activation of some nice NGINX features such as:
 
 * By default LUAJIT-enabled build: The cookbook by default activates the LUAJIT
   feature of OpenResty (since this is the main reason to use the bundle) and
-  accounts for all the peculiarities this option may brin.
+  accounts for all the peculiarities this option may bring.
 
 * Automatic CPU affinity: Automatically sets the worker-to-core affinity for all
   of the NGINX worker processes. For a scenario of 8 workers and 8 cores, the
   following directive gets generated:
 
-      worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
+        worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
 
   This feature can offer a nice performance boost, since it helps the CPUs maintain
-  cache locality (especially when used in conjuction to the LUA module)
+  cache locality (especially when used in conjunction to the LUA module)
 
 * Automatic detection and activation of the AIO feature: The cookbook automatically
-  detects support and enables the `aio` directive of NGINX
+  detects support and enables the `aio` directive of NGINX.
 
-* Automatic IPv6 detection and activation: The coookbook automatically detects and
-  activates IPv6 support on NGINX
+* Automatic IPv6 detection and activation: The cookbook automatically detects and
+  activates IPv6 support on NGINX.
 
 * Rate limit proper HTTP response: The cookbook contains a small patch that enables
   NGINX to respond to over-quota requests of the limit_req module with a 429 HTTP
@@ -77,7 +77,7 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['source']['version']` - The OpenResty version to be installed from source.
 
-* `node['openresty']['source']['url']` - The URL for downloading the selcted version.
+* `node['openresty']['source']['url']` - The URL for downloading the selected version.
 
 * `node['openresty']['source']['checksum']` - The SHA-256 checksum for the selected version.
 
@@ -158,6 +158,7 @@ Generally used attributes. Some have platform specific values. See
 * `node['openresty']['multi_accept']` - used for config value of `events {
   multi_accept }`. Try to accept() as many connections as possible.
   Disable by default.
+  
 * `node['openresty']['event']` - used for config value of `events { use
   }`. Set the event-model. By default NGINX looks for the most
   suitable method for your OS. Automatically set to `epoll` for Linux >= 2.6 kernels
@@ -261,7 +262,7 @@ Includes the `ohai_plugin` recipe so the plugin is available.
 
 ## ohai_plugin.rb
 
-This recipe provides an Ohai plugin as a template. It is automatically incldued
+This recipe provides an Ohai plugin as a template. It is automatically included
 by the `default.rb` recipe.
 
 ## fair_module.rb, http_*_module.rb, upload_progress_module.rb

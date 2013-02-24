@@ -60,7 +60,7 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['source']['conf_path']` - Exact filename for the NGINX configuration file
 * `node['openresty']['source']['prefix']` - Installation prefix for miscellaneous data
-* `['openresty']['source']['default_configure_flags']` - A set of default configuration
+* `node['openresty']['source']['default_configure_flags']` - A set of default configuration
   flags for the source compilation, generally best left untouched unless you
   *really* know what you're doing.
 
@@ -276,6 +276,32 @@ package):
 
 The Ohai plugin is generally used to determine whether control
 attributes for building NGINX have changed.
+
+Awesome stuff
+=============
+
+This cookbook includes automatic activation of some nice NGINX features such as:
+
+* Automatic CPU affinity: Automatically sets the worker-to-core affinity for all
+  of the NGINX worker processes. For a scenario of 8 workers and 8 cores, the
+  following directive gets generated:
+
+    worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
+
+  This feature can offer a nice performance boost, since it helps the CPUs maintain
+  cache locality (especially when used in conjuction to the LUA module)
+
+* Automatic detection and activation of the AIO feature: The cookbook automatically
+  detects support and enables the `aio` directive of NGINX
+
+* Automatic IPv6 detection and activation: The coookbook automatically detects and
+  activates IPv6 support on NGINX
+  
+* Rate limit proper HTTP response: The cookbook contains a small patch that enables
+  NGINX to respond to over-quota requests of the limit_req module with a 429 HTTP
+  response that is more semantically correct than the default 503 one and aids in
+  separate and log such issues more granularly. It gives away though that you
+  are in fact rate limiting, hence there is an option to disable just that.
 
 Usage
 =====

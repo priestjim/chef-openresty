@@ -21,3 +21,4 @@ Berksfile.lock
 .rake_test_cache
 .vagrant
 .idea
+metadata.json

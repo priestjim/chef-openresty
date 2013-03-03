@@ -57,6 +57,13 @@ cookbook_file "#{node['openresty']['dir']}/mime.types" do
   notifies :reload, 'service[nginx]'
 end
 
+cookbook_file "#{node['openresty']['dir']}/conf.d/general_security.inc" do
+  source 'general_security.inc'
+  owner 'root'
+  group 'root'
+  mode 00644
+end
+
 template "#{node['openresty']['dir']}/sites-available/default" do
   source 'default-site.erb'
   owner 'root'

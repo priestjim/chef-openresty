@@ -254,8 +254,11 @@ Many features are automatically detected and enabled into the NGINX default
 configuration file such as AIO support for Linux kernels >= 2.6.22, IPv6 support
 and CPU worker affinity.
 
-The NGINX service will be managed with the init scripts that will be installed 
-by the cookbook.
+The NGINX service will be managed with init scripts installed by the cookbook.
+
+The cookbook generates various include files (.inc) that are available for inclusion
+in standard NGINX site definition files via the `#include` directive. Look in the
+`conf.d` directory of `node['openresty']['dir']` location for them!
 
 Includes the `ohai_plugin` recipe so the plugin is available.
 

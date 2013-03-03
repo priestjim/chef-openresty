@@ -20,5 +20,5 @@
 #
 
 # Stub status module URL and default IP ACL - localhost IPs are already included
-default['openresty']['status']['url']           = "/nginx-status"
+default['openresty']['status']['url']           = '/nginx-status'
 default['openresty']['status']['allowed_ips']   = Array.new

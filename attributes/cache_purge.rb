@@ -1,11 +1,10 @@
 #
 # Cookbook Name:: openresty
-# Attribute:: upload_progress
+# Attribute:: cache_purge
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 #
-# Copyright 2012, Panagiotis Papadomitsos
-# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
+# Copyright 2013, Panagiotis Papadomitsos
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +19,7 @@
 # limitations under the License.
 #
 
-# For more information check out https://github.com/masterzen/nginx-upload-progress-module
-default['openresty']['upload_progress']['url']      = 'https://github.com/masterzen/nginx-upload-progress-module/tarball/v0.8.4'
-default['openresty']['upload_progress']['checksum'] = '9a6acb984d81f5d7e04214d63ae94273'
+# For more information check out https://github.com/FRiCKLE/ngx_cache_purge
+default['openresty']['cache_purge']['version']  = '2.0'
+default['openresty']['cache_purge']['url']      = "https://github.com/FRiCKLE/ngx_cache_purge/archive/#{node['openresty']['cache_purge']['version']}.tar.gz"
+default['openresty']['cache_purge']['checksum'] = '81f5fd92823752b4037a309928506d426d11f0471f02ee6d6ea9a64f242ec06e'

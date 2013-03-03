@@ -80,6 +80,7 @@ default['openresty']['modules']         = [
   'http_realip_module',
   'http_flv_module',
   'http_mp4_module',
+  'cache_purge_module',
   'fair_module'
 ]
 

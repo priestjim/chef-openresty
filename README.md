@@ -227,6 +227,14 @@ From: http://wiki.nginx.org/HttpUploadProgressModule
 * `node['openresty']['status']['name']` - An array of IPs allowed to view the
   status URL
 
+## cache_purge.rb
+
+From: https://github.com/FRiCKLE/ngx_cache_purge and http://labs.frickle.com/nginx_ngx_cache_purge
+
+* `node['openresty']['cache_purge']['version']` - The version of the cache_purge module
+* `node['openresty']['cache_purge']['url']` - URL to download the cache purge module from
+* `node['openresty']['cache_purge']['checksum']` - The SHA-256 sum of the cache_purge module archive
+
 Recipes
 =======
 
@@ -267,7 +275,7 @@ Includes the `ohai_plugin` recipe so the plugin is available.
 This recipe provides an Ohai plugin as a template. It is automatically included
 by the `default.rb` recipe.
 
-## fair_module.rb, http_*_module.rb, upload_progress_module.rb
+## http_*_module.rb, fair_module.rb, upload_progress_module.rb, cache_purge_module.rb
 
 These recipes are automatically included by the `default.rb` recipe according to
 the `node['openresty']['modules']` array and provide compiled-in additional

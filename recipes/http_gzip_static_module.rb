@@ -20,4 +20,4 @@
 # limitations under the License.
 #
 
-node.run_state['openresty_configure_flags'] |= ["--with-http_gzip_static_module"]
+node.run_state['openresty_configure_flags'] |= ['--with-http_gzip_static_module']

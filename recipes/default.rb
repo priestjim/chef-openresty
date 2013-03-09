@@ -60,9 +60,9 @@ remote_file node['openresty']['source']['url'] do
 end
 
 cookbook_file "#{Chef::Config['file_cache_path']}/nginx-rate-limit-correct-error-code.patch" do
-  source "nginx-rate-limit-correct-error-code.patch"
-  owner "root"
-  group "root"
+  source 'nginx-rate-limit-correct-error-code.patch'
+  owner 'root'
+  group 'root'
   mode 00644
   only_if { node['openresty']['source']['limit_code_patch'] }
 end
@@ -152,7 +152,7 @@ bash 'compile_openresty_source' do
   notifies :restart, 'service[nginx]'
 end
 
-include_recipe "openresty::commons_cleanup"
+include_recipe 'openresty::commons_cleanup'
 
 node.run_state.delete('openresty_configure_flags')
 node.run_state.delete('openresty_force_recompile')

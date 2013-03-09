@@ -19,4 +19,4 @@
 # limitations under the License.
 #
 
-node.run_state['openresty_configure_flags'] |= ["--with-http_secure_link_module"]
+node.run_state['openresty_configure_flags'] |= ['--with-http_secure_link_module']

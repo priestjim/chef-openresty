@@ -23,6 +23,7 @@
 require 'chef/version_constraint'
 
 kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
+restart_after_update = node['openresty']['restart_after_update'] ? ' && kill -QUIT $(pgrep -u root nginx)' : ''
 
 user node['openresty']['user'] do
   system true
@@ -135,7 +136,7 @@ bash 'compile_openresty_source' do
     cd ngx_openresty-#{node['openresty']['source']['version']} &&
     #{patch}
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&
-    make -j#{node['cpu']['total']} && make install
+    make -j#{node['cpu']['total']} && make install #{restart_after_update}
   EOH
 
   # OpenResty configure args massaging due to the configure script adding its own arguments along our custom ones
@@ -148,8 +149,6 @@ bash 'compile_openresty_source' do
       map{ |f| f =~ /luajit/ ? '--with-luajit' : f }.
       sort).size == configure_flags.size
   end
-
-  notifies :restart, 'service[nginx]'
 end
 
 include_recipe 'openresty::commons_cleanup'

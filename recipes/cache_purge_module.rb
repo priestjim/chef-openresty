@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-cpm_src_filename = ::File.basename(node['openresty']['cache_purge']['url'])
+cpm_src_filename = "ngx_cache_purge-#{::File.basename(node['openresty']['cache_purge']['url'])}"
 cpm_src_filepath = "#{Chef::Config['file_cache_path']}/#{cpm_src_filename}"
 cpm_extract_path = "#{Chef::Config['file_cache_path']}/ngx_cache_purge/#{node['openresty']['cache_purge']['checksum']}"
 

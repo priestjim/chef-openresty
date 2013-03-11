@@ -167,3 +167,5 @@ default['openresty']['logrotate']                     = true
 default['openresty']['disable_access_log']            = true
 # Enable the default sample vhost config
 default['openresty']['default_site_enabled']          = false
+# Restart automatically after version update
+default['openresty']['restart_after_update']          = true

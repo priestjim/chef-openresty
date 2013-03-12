@@ -23,7 +23,7 @@
 require 'chef/version_constraint'
 
 kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
-restart_after_update = node['openresty']['restart_after_update'] ? ' && kill -QUIT $(pgrep -u root nginx)' : ''
+restart_after_update = node['openresty']['restart_after_update'] ? ' && $( kill -QUIT `pgrep -U root nginx` || true )' : ''
 
 user node['openresty']['user'] do
   system true

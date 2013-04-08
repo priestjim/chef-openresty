@@ -26,9 +26,9 @@
 # default['openresty']['source']['checksum']
 
 # Download data
-default['openresty']['source']['version']   = '1.2.7.1'
+default['openresty']['source']['version']   = '1.2.7.3'
 default['openresty']['source']['url']       = "http://agentzh.org/misc/nginx/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
-default['openresty']['source']['checksum']  = '6e96892831cccbf6ebeca69bcd6ee50a3de1c8790b17dc1449b3f11101d196c7'
+default['openresty']['source']['checksum']  = 'c34efa88fbee51f578b9222233284e31b7aaf9e1ece195eaca2868daf2506d59'
 
 # Apply the 503 -> 429 error code patch
 # Blows the "I rate limit" cover but some folks need it!
@@ -63,7 +63,6 @@ default['openresty']['source']['default_configure_flags'] = [
   '--with-md5-asm',
   '--with-sha1-asm',
   '--with-pcre-jit',
-  '--with-pcre',
   '--with-luajit',
   '--without-http_ssi_module',
   '--without-mail_smtp_module',
@@ -169,3 +168,5 @@ default['openresty']['disable_access_log']            = true
 default['openresty']['default_site_enabled']          = false
 # Restart automatically after version update
 default['openresty']['restart_after_update']          = true
+# Enable custom PCRE installation - useful for JIT. Requirs the pcre cookbook
+default['openresty']['custom_pcre']                   = false

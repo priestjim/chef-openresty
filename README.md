@@ -64,6 +64,10 @@ This cookbook includes automatic activation of some nice NGINX features such as:
   separate and log such issues more granularly. It gives away though the fact
   that you are rate limiting, so there is an option to disable this patch.
 
+* **Support for custom PCRE runtime**: The cookbook can use custom PCRE sources in order
+  to statically link to a custom-compiled PCRE runtime that supports JIT regular expression
+  compilation which will significantly speed up RE execution in the NGINX and Lua environments.
+
 Attributes
 ==========
 
@@ -191,6 +195,9 @@ Generally used attributes. Some have platform specific values. See
   general access log, may be useful on high traffic sites.
 
 * `node['openresty']['default_site_enabled']` - enable the default site
+
+* `node['openresty']['custom_pcre']` - Se to true to download and use a custom
+  PCRE source tree in order to enable RE JIT support.
 
 ## realip.rb
 

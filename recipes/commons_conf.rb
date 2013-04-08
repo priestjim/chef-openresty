@@ -90,7 +90,8 @@ if node['openresty']['logrotate']
     rotate 7
     cookbook 'logrotate'
     create "0644 #{node['openresty']['user']} adm"
-    options [ 'missingok', 'delaycompress', 'notifempty', 'compress', 'copytruncate' ]
+    options [ 'missingok', 'delaycompress', 'notifempty', 'compress', 'sharedscripts' ]
+    postrotate "[[ ! -f #{node['openresty']['pid']} ]] || kill -USR1 $(cat #{node['openresty']['pid']})"
   end
 
 end

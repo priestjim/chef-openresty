@@ -1,10 +1,11 @@
-# encoding: utf-8
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
+#
+# Cookbook Name:: openresty
+# Attribute:: pcre
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
+# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -18,26 +19,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-  
-Vagrant.configure('2') do |config|
 
-  config.ssh.max_tries = 40
-  config.ssh.timeout   = 120
-
-  config.vm.provider :virtualbox do |v|
-    v.gui = true
-  end
-
-  config.vm.box = 'ubuntu'
-  config.vm.hostname = 'openresty'
-  config.vm.network :private_network, ip: '172.16.6.2'
-
-  config.vm.provision :chef_solo do |chef|
-    chef.json = { 'openresty' => { 'custom_pcre' => true } }
-
-    chef.run_list = [
-      'recipe[openresty::default]'
-    ]
-
-  end
-end
+default['openresty']['pcre']['version']  = '8.32'
+default['openresty']['pcre']['url']      = "http://sourceforge.net/projects/pcre/files/pcre/#{node['openresty']['pcre']['version']}/pcre-#{node['openresty']['pcre']['version']}.tar.bz2/download"
+default['openresty']['pcre']['checksum'] = 'a913fb9bd058ef380a2d91847c3c23fcf98e92dc3b47cd08a53c021c5cde0f55'

@@ -1,3 +1,15 @@
+## 0.1.8:
+
+* Version bump
+* Removed copytruncate from logrotate and used USR1 signaling
+  after rotation in order to notify nginx that logs have been rotated. Thanks to @dim
+* Added custom PCRE installation support (useful for includeing JIT-enabled PCRE installations)
+* Updated Vagrantfile (supports Vagrant 1.1)
+
+## 0.1.7:
+
+* Added a manual restart command upon recompile
+
 ## 0.1.6:
 
 * Added support for the cache_purge module

@@ -39,8 +39,8 @@ include_recipe 'build-essential'
 src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
 
 packages = value_for_platform_family(
-  ['rhel','fedora','amazon','scientific'] => [ 'pcre-devel', 'openssl-devel', 'readline-devel', 'ncurses-devel' ],
-  'default' => ['libpcre3', 'libpcre3-dev', 'libperl-dev', 'libssl-dev', 'libreadline-dev', 'libncurses5-dev']
+  ['rhel','fedora','amazon','scientific'] => [ 'openssl-devel', 'readline-devel', 'ncurses-devel' ],
+  'default' => [ 'libperl-dev', 'libssl-dev', 'libreadline-dev', 'libncurses5-dev']
 )
 
 # Enable AIO for newer kernels
@@ -73,6 +73,43 @@ node.run_state['openresty_configure_flags'] = node['openresty']['source']['defau
 
 node.run_state['openresty_configure_flags'] |= [ '--with-file-aio', '--with-libatomic' ] if kernel_supports_aio
 node.run_state['openresty_configure_flags'] |= [ '--with-ipv6' ] if node['openresty']['ipv6']
+
+if node['openresty']['custom_pcre']
+
+  pcre_path = "#{Chef::Config['file_cache_path'] || '/tmp'}/pcre-#{node['openresty']['pcre']['version']}"
+  pcre_opts = 'export PCRE_CONF_OPT="--enable-utf8 --enable-unicode-properties" && '
+
+  remote_file "#{pcre_path}.tar.bz2" do
+    owner 'root'
+    group 'root'
+    mode 00644
+    source node['openresty']['pcre']['url']
+    checksum node['openresty']['pcre']['checksum']
+    action :create_if_missing
+  end
+
+  execute 'openresty-extract-pcre' do
+    user 'root'
+    cwd(Chef::Config['file_cache_path'] || '/tmp')
+    command "tar xjf #{pcre_path}.tar.bz2"
+    not_if { ::File.directory?(pcre_path) }
+  end
+
+  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}" ]
+
+else
+
+  pcre_opts = ''
+  value_for_platform_family(
+    ['rhel','fedora','amazon','scientific'] => [ 'pcre', 'pcre-devel' ],
+    'default' => ['libpcre3', 'libpcre3-dev' ]
+  ).each do |pkg|
+    package pkg
+  end
+
+  node.run_state['openresty_configure_flags'] |= [ '--with-pcre' ]
+
+end
 
 template '/etc/init.d/nginx' do
   source 'nginx.init.erb'
@@ -120,7 +157,7 @@ openresty_force_recompile = node.run_state['openresty_force_recompile']
 # The 3 first version numbers of OpenResty is the actual NGINX version. It's a bit ugly but it works...
 nginx_version = node['openresty']['source']['version'].split('.')[0...-1].join('.')
 if node['openresty']['source']['limit_code_patch']
-  patch = <<-EOT
+  limit_code_patch = <<-EOT
   cd bundle/nginx-#{nginx_version} &&
   patch -p1 < #{Chef::Config['file_cache_path']}/nginx-rate-limit-correct-error-code.patch &&
   cd ../../ &&
@@ -134,7 +171,8 @@ bash 'compile_openresty_source' do
   code <<-EOH
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)} &&
     cd ngx_openresty-#{node['openresty']['source']['version']} &&
-    #{patch}
+    #{limit_code_patch}
+    #{pcre_opts}
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&
     make -j#{node['cpu']['total']} && make install #{restart_after_update}
   EOH

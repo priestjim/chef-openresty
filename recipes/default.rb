@@ -20,13 +20,8 @@
 # limitations under the License.
 #
 
-user node['openresty']['user'] do
-  system true
-  shell '/bin/false'
-  home '/var/www'
-end
-
 include_recipe 'openresty::ohai_plugin'
+include_recipe 'openresty::commons_user'
 include_recipe 'openresty::commons_dir'
 include_recipe 'openresty::commons_script'
 include_recipe 'openresty::commons_build'

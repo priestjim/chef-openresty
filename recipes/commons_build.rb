@@ -126,6 +126,13 @@ else
   patch = ''
 end
 
+ruby_block 'persist-openresty-configure-flags' do
+  block do
+    node.set['openresty']['persisted_configure_flags'] = configure_flags
+  end
+  action :nothing
+end
+
 bash 'compile_openresty_source' do
   cwd ::File.dirname(src_filepath)
   code <<-EOH
@@ -140,13 +147,12 @@ bash 'compile_openresty_source' do
   # OpenResty configure args massaging due to the configure script adding its own arguments along our custom ones
   not_if do
     openresty_force_recompile == false &&
-      node.automatic_attrs['nginx'] &&
-      node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
-      (configure_flags & node.automatic_attrs['nginx']['configure_arguments'].
-      reject{ |f| f =~ /(--add-module=\.\.\/)/ }.
-      map{ |f| f =~ /luajit/ ? '--with-luajit' : f }.
-      sort).size == configure_flags.size
+      node['openresty'] &&
+      node['openresty']['persisted_configure_flags'] &&
+      node['openresty']['persisted_configure_flags'].sort == configure_flags.sort
   end
+
+  notifies :create, 'ruby_block[persist-openresty-configure-flags]'
 end
 
 node.run_state.delete('openresty_configure_flags')

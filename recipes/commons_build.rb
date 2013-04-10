@@ -147,7 +147,8 @@ bash 'compile_openresty_source' do
   # OpenResty configure args massaging due to the configure script adding its own arguments along our custom ones
   not_if do
     openresty_force_recompile == false &&
-      node['openresty'] &&
+      node.automatic_attrs['nginx'] &&
+      node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
       node['openresty']['persisted_configure_flags'] &&
       node['openresty']['persisted_configure_flags'].sort == configure_flags.sort
   end

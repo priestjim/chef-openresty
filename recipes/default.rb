@@ -136,11 +136,6 @@ template defaults_path do
   mode 00644
 end
 
-service 'nginx' do
-  supports :status => true, :restart => true, :reload => true
-  action :enable
-end
-
 include_recipe 'openresty::commons_conf'
 
 node['openresty']['modules'].each do |ngx_module|
@@ -196,5 +191,5 @@ node.run_state.delete('openresty_force_recompile')
 
 service 'nginx' do
   supports :status => true, :restart => true, :reload => true
-  action :start
+  action [ :enable, :start ]
 end

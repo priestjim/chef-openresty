@@ -6,6 +6,8 @@ sets up configuration handling similar to Debian's Apache2 scripts. It also
 provides an OHAI plugin for configuration detection and an LWRP for easy site
 activation and deactivation.
 
+The latest and greatest revision of this cookbook can be found at https://github.com/priestjim/chef-openresty
+
 Requirements
 ============
 

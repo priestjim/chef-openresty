@@ -1,3 +1,7 @@
+## 0.1.9:
+
+* Fixed service restart
+
 ## 0.1.8:
 
 * Version bump

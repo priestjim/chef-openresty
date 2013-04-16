@@ -20,11 +20,6 @@
 # limitations under the License.
 #
 
-# In order to update the version, the checksum attribute should be
-# changed too. It is in the source.rb file, though we recommend
-# overriding attributes by modifying a role, or the node itself.
-# default['openresty']['source']['checksum']
-
 # Download data
 default['openresty']['source']['version']   = '1.2.7.5'
 default['openresty']['source']['url']       = "http://agentzh.org/misc/nginx/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"

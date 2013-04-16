@@ -64,18 +64,20 @@ cookbook_file "#{node['openresty']['dir']}/conf.d/general_security.inc" do
   mode 00644
 end
 
-template "#{node['openresty']['dir']}/sites-available/default" do
-  source 'default-site.erb'
-  owner 'root'
-  group 'root'
-  mode 00644
-  if ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/000-default")
-    notifies :reload, 'service[nginx]'
+if node['openresty']['default_site_enabled']
+  template "#{node['openresty']['dir']}/sites-available/default" do
+    source 'default-site.erb'
+    owner 'root'
+    group 'root'
+    mode 00644
+    if ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/000-default")
+      notifies :reload, 'service[nginx]'
+    end
   end
-end
 
-openresty_site 'default' do
-  action(node['openresty']['default_site_enabled'] ? :enable : :disable)
+  openresty_site 'default' do
+    action :enable
+  end
 end
 
 if node['openresty']['logrotate']

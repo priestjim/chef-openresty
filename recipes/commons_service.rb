@@ -3,6 +3,7 @@
 # Recipe:: default
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
+# Author:: Stephen Delano (<stephen@opscode.com>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
 # Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
@@ -20,11 +21,32 @@
 # limitations under the License.
 #
 
-include_recipe 'openresty::ohai_plugin'
-include_recipe 'openresty::commons_user'
-include_recipe 'openresty::commons_dir'
-include_recipe 'openresty::commons_script'
-include_recipe 'openresty::commons_build'
-include_recipe 'openresty::commons_conf'
-include_recipe 'openresty::commons_cleanup'
-include_recipe 'openresty::commons_service'
+template '/etc/init.d/nginx' do
+  source 'nginx.init.erb'
+  owner 'root'
+  group 'root'
+  mode 00755
+  variables(
+    :src_binary => node['openresty']['binary'],
+    :pid => node['openresty']['pid']
+  )
+end
+
+defaults_path = case node['platform_family']
+  when 'debian'
+    '/etc/default/nginx'
+  else
+    '/etc/sysconfig/nginx'
+end
+
+template defaults_path do
+  source 'nginx.sysconfig.erb'
+  owner 'root'
+  group 'root'
+  mode 00644
+end
+
+service 'nginx' do
+  supports :status => true, :restart => true, :reload => true
+  action [ :enable, :start ]
+end

@@ -3,6 +3,7 @@
 # Recipe:: default
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
+# Author:: Stephen Delano (<stephen@opscode.com>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
 # Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
@@ -20,11 +21,8 @@
 # limitations under the License.
 #
 
-include_recipe 'openresty::ohai_plugin'
-include_recipe 'openresty::commons_user'
-include_recipe 'openresty::commons_dir'
-include_recipe 'openresty::commons_script'
-include_recipe 'openresty::commons_build'
-include_recipe 'openresty::commons_conf'
-include_recipe 'openresty::commons_cleanup'
-include_recipe 'openresty::commons_service'
+user node['openresty']['user'] do
+  system true
+  shell '/bin/false'
+  home '/var/www'
+end

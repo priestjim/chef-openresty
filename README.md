@@ -70,6 +70,10 @@ This cookbook includes automatic activation of some nice NGINX features such as:
   to statically link to a custom-compiled PCRE runtime that supports JIT regular expression
   compilation which will significantly speed up RE execution in the NGINX and Lua environments.
 
+* **Support for LUA Rocks**: The cookbook installs support for LUA Rocks embedded in the LUAJIT
+  installation, allowing you to install any rock you want, right from the official Rocks site. It
+  also provides an LWRP for installing rocks via your recipes.
+
 Attributes
 ==========
 
@@ -200,6 +204,9 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['custom_pcre']` - Se to true to download and use a custom
   PCRE source tree in order to enable RE JIT support.
+
+* `node['openresty']['auto_enable_start']` - Se to true to enable automatic service
+  activation and startup of the bundled init service.
 
 ## realip.rb
 

@@ -148,11 +148,11 @@ default['openresty']['types_hash_bucket_size']        = 64
 
 # Open file cache - for metadata operations only
 default['openresty']['open_file_cache'] = {
-  'max' => 1000,
-  'inactive' => '20s',
-  'valid' => '30s',
-  'min_uses' => '8',
-  'errors' => 'on'
+  'max'       => 1000,
+  'inactive'  => '20s',
+  'valid'     => '30s',
+  'min_uses'  => '8',
+  'errors'    => 'on'
 }
 
 # Enable default logrotation - disable if you are using something else like AWStats
@@ -163,5 +163,8 @@ default['openresty']['disable_access_log']            = true
 default['openresty']['default_site_enabled']          = false
 # Restart automatically after version update
 default['openresty']['restart_after_update']          = true
-# Enable custom PCRE installation - useful for JIT. Requirs the pcre cookbook
+# Enable custom PCRE installation - useful for JIT.
 default['openresty']['custom_pcre']                   = false
+# Disable automatic activation of the bundled init service - useful if you are using alternative
+# service monitoring daemons (runit, upstart etc)
+default['openresty']['auto_enable_start']             = true

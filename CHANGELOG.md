@@ -1,6 +1,14 @@
 ## 0.1.9:
 
 * Fixed service restart
+* Added flag for the control of the automatic activation of the bundled init script
+* Refactored the build+install recipes (thanks @sdelano!)
+* Altered the configure flags detection algorithm from consulting the OHAI plugin to 
+  consulting a set node attribute, which is more consistent and less error prone (thanks @sdelano!)
+* Various fixes to the nxensite/nxdissite scripts (thanks @sdelano!)
+* Fixed a bug where disabling the default site would not skip installing the `default` file in sites-enabled
+  hence overwriting a potential `default` file installed from the administrator (thanks @sdelano!)
+* Added support for LUA Rocks
 
 ## 0.1.8:
 

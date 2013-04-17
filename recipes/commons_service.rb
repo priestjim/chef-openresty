@@ -32,12 +32,10 @@ template '/etc/init.d/nginx' do
   )
 end
 
-defaults_path = case node['platform_family']
-  when 'debian'
-    '/etc/default/nginx'
-  else
-    '/etc/sysconfig/nginx'
-end
+defaults_path = value_for_platform_family(
+  ['rhel','fedora','amazon','scientific'] => '/etc/sysconfig/nginx',
+  'debian' => '/etc/default/nginx'
+)
 
 template defaults_path do
   source 'nginx.sysconfig.erb'
@@ -48,5 +46,7 @@ end
 
 service 'nginx' do
   supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+  if node['openresty']['auto_enable_start']
+    action [ :enable, :start ]
+  end
 end

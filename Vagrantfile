@@ -21,6 +21,7 @@
   
 Vagrant.configure('2') do |config|
 
+  config.berkshelf.enabled = true
   config.ssh.max_tries = 40
   config.ssh.timeout   = 120
 
@@ -33,10 +34,11 @@ Vagrant.configure('2') do |config|
   config.vm.network :private_network, ip: '172.16.6.2'
 
   config.vm.provision :chef_solo do |chef|
-    chef.json = { 'openresty' => { 'custom_pcre' => true } }
-
+    chef.arguments = '-Fdoc'
+    chef.json = { 'openresty' => { 'luarocks' => { 'default_rocks' => { 'md5' => '1.1.1' }}}}
     chef.run_list = [
-      'recipe[openresty::default]'
+      'recipe[openresty::default]',
+      'recipe[openresty::luarocks]'
     ]
 
   end

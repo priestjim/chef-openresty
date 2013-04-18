@@ -57,8 +57,6 @@ default['openresty']['source']['default_configure_flags'] = [
   "--http-scgi-temp-path=#{node['openresty']['cache_dir']}/scgi_temp",
   '--with-md5-asm',
   '--with-sha1-asm',
-  '--with-pcre-jit',
-  '--with-luajit',
   '--without-http_ssi_module',
   '--without-mail_smtp_module',
   '--without-mail_imap_module',
@@ -164,7 +162,7 @@ default['openresty']['default_site_enabled']          = false
 # Restart automatically after version update
 default['openresty']['restart_after_update']          = true
 # Enable custom PCRE installation - useful for JIT.
-default['openresty']['custom_pcre']                   = false
+default['openresty']['custom_pcre']                   = true
 # Disable automatic activation of the bundled init service - useful if you are using alternative
 # service monitoring daemons (runit, upstart etc)
 default['openresty']['auto_enable_start']             = true

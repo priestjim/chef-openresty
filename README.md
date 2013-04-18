@@ -6,7 +6,8 @@ sets up configuration handling similar to Debian's Apache2 scripts. It also
 provides an OHAI plugin for configuration detection and an LWRP for easy site
 activation and deactivation.
 
-The latest and greatest revision of this cookbook can be found at https://github.com/priestjim/chef-openresty
+The latest and greatest revision of this cookbook will always be available
+at https://github.com/priestjim/chef-openresty
 
 Requirements
 ============
@@ -20,11 +21,18 @@ for common "default" functionality.
 * build-essential
 * ohai (for openresty::ohai_plugin)
 * logrotate (for log file rotation)
+* apt
+* yum
+
+In order to install the OpenResty `postgresql` module you'll also need 
+this cookbook:
+
+* postgresql
 
 Platform
 --------
 
-The following platforms are supported and tested under test kitchen:
+The following platforms are supported and tested using Vagrant 1.2: 
 
 * Ubuntu 12.04
 * CentOS 6.3
@@ -205,8 +213,9 @@ Generally used attributes. Some have platform specific values. See
 * `node['openresty']['custom_pcre']` - Se to true to download and use a custom
   PCRE source tree in order to enable RE JIT support.
 
-* `node['openresty']['auto_enable_start']` - Se to true to enable automatic service
-  activation and startup of the bundled init service.
+* `node['openresty']['auto_enable_start']` - Set it to `true` to enable automatic service
+  activation and startup of the bundled init service. Set it to `false` if you are using
+  another program for process supervision (i.e. runit/god/monit/upstart etc).
 
 ## realip.rb
 
@@ -243,6 +252,15 @@ From: http://wiki.nginx.org/HttpUploadProgressModule
 * `node['openresty']['status']['name']` - An array of IPs allowed to view the
   status URL
 
+## or_modules.rb
+
+Explicitely activate not-automatically-activated OpenResty modules
+
+* `node['openresty']['or_modules']['luajit']` - Enables LUAJIT module compilation
+* `node['openresty']['or_modules']['iconv']` - Enables iconv module compilation
+* `node['openresty']['or_modules']['postgres']` - Enables PostgreSQL module compilation
+* `node['openresty']['or_modules']['drizzle']` - Enables Drizzle module compilation
+
 ## cache_purge.rb
 
 From: https://github.com/FRiCKLE/ngx_cache_purge and http://labs.frickle.com/nginx_ngx_cache_purge
@@ -250,6 +268,14 @@ From: https://github.com/FRiCKLE/ngx_cache_purge and http://labs.frickle.com/ngi
 * `node['openresty']['cache_purge']['version']` - The version of the cache_purge module
 * `node['openresty']['cache_purge']['url']` - URL to download the cache purge module from
 * `node['openresty']['cache_purge']['checksum']` - The SHA-256 sum of the cache_purge module archive
+
+## luarocks.rb
+
+* `node['openresty']['luarocks']['version']` - The version of the luarocks pacakge to download
+* `node['openresty']['luarocks']['url']` - URL to download the luarocks package from
+* `node['openresty']['luarocks']['checksum']` - The SHA-256 sum of the luarocks archive
+* `node['openresty']['luarocks']['default_rocks']` - A hash with the names and versions of Lua rocks
+  to install by default.
 
 Recipes
 =======
@@ -307,6 +333,14 @@ virtual host via the include directive:
 
     include /etc/nginx/conf.d/nginx_status.conf.inc;
 
+## luarocks.rb
+
+The `luarocks` recipe installs the LUA rocks package management system for the 
+LUAJIT bundle that comes with OpenResty. You can define a set of rocks to install by
+default using the `node['openresty']['luarocks']['default_rocks']` hash.
+
+For more information on using LUA rocks with OpenResty check out http://openresty.org/#UsingLuaRocks
+
 Adding New Modules
 ------------------
 
@@ -335,6 +369,8 @@ intra-cookbook modules.
 LWRP
 ====
 
+## site
+
 The cookbook includes the `openresty_site` LWRP (in contrast to the original
 `nginx_site` cookbook definition script). The LWRP can be used in the same manner
 as `nginx_site` and offers resource notifications (an advantage LWRPs
@@ -342,9 +378,24 @@ offer over simpler definitions). It also includes a `timing` parameter that can
 be used to notify the `nginx` process to restart immediately based on configuration
 file changes. The LWRP can be used like
 
-    openresty_site "site.example.com" do
+    openresty_site 'site.example.com' do
         action :enable
         timing :immediately
+    end
+
+## luarock
+
+The cookbook includes a LUA rock LWRP that allows for easy installation of LUA rocks,
+available to use with the LUAJIT system bundled with OpenResty. You can install and remove
+LUA rocks using the `install` and `remove` actions of the LWRP. A sample follows:
+
+    openresty_luarock 'md5' do
+        action :install
+        version '1.1.2'
+    end
+
+    openresty_luarock 'luafilesystem' do
+        action :remove # Removes all versions installed
     end
 
 Ohai Plugin

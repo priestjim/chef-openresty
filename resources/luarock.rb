@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: openresty
-# Attribute:: luarocks
+# Resource:: luarock
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 #
@@ -19,7 +19,9 @@
 # limitations under the License.
 #
 
-default['openresty']['luarocks']['version']       = '2.0.13'
-default['openresty']['luarocks']['url']           = "http://luarocks.org/releases/luarocks-#{node['openresty']['luarocks']['version']}.tar.gz"
-default['openresty']['luarocks']['checksum']      = '5eac098dcde65ca417930be42ccbd1a1cd151d5aebd8cc17898231de8289edb2'
-default['openresty']['luarocks']['default_rocks'] = Hash.new
+actions :install, :remove
+
+default_action :install
+
+attribute :name,      :kind_of => String, :name_attribute => true
+attribute :version,   :kind_of => String, :default => nil

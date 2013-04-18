@@ -1,10 +1,11 @@
 #
 # Cookbook Name:: openresty
-# Attribute:: luarocks
+# Attribute:: or_modules
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
+# Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
 #
 # Licensed under the Apache License, Version 2.0 (the 'License');
 # you may not use this file except in compliance with the License.
@@ -19,7 +20,11 @@
 # limitations under the License.
 #
 
-default['openresty']['luarocks']['version']       = '2.0.13'
-default['openresty']['luarocks']['url']           = "http://luarocks.org/releases/luarocks-#{node['openresty']['luarocks']['version']}.tar.gz"
-default['openresty']['luarocks']['checksum']      = '5eac098dcde65ca417930be42ccbd1a1cd151d5aebd8cc17898231de8289edb2'
-default['openresty']['luarocks']['default_rocks'] = Hash.new
+# LUAJIT Module
+default['openresty']['or_modules']['luajit']             = true
+# Iconv Module
+default['openresty']['or_modules']['iconv']              = true
+# Drizzle module
+default['openresty']['or_modules']['drizzle']            = false
+# PostgreSQL module
+default['openresty']['or_modules']['postgres']           = false

@@ -32,13 +32,13 @@ src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/ngx_openresty-#{no
 
 packages = value_for_platform_family(
   ['rhel','fedora','amazon','scientific'] => [ 'openssl-devel', 'readline-devel', 'ncurses-devel' ],
-  'default' => [ 'libperl-dev', 'libssl-dev', 'libreadline-dev', 'libncurses5-dev']
+  'debian' => [ 'libperl-dev', 'libssl-dev', 'libreadline-dev', 'libncurses5-dev']
 )
 
 # Enable AIO for newer kernels
 packages |= value_for_platform_family(
     ['rhel','fedora','amazon','scientific'] => [ 'libatomic_ops-devel' ],
-    'default' => [ 'libatomic-ops-dev', 'libaio1', 'libaio-dev' ]
+    'debian' => [ 'libatomic-ops-dev', 'libaio1', 'libaio-dev' ]
 ) if kernel_supports_aio
 
 packages.each do |devpkg|
@@ -63,14 +63,10 @@ end
 node.run_state['openresty_force_recompile'] = false
 node.run_state['openresty_configure_flags'] = node['openresty']['source']['default_configure_flags'] | node['openresty']['configure_flags']
 
-node.run_state['openresty_configure_flags'] |= [ '--with-file-aio', '--with-libatomic' ] if kernel_supports_aio
-node.run_state['openresty_configure_flags'] |= [ '--with-ipv6' ] if node['openresty']['ipv6']
-
+# Custom PCRE
 if node['openresty']['custom_pcre']
-
   pcre_path = "#{Chef::Config['file_cache_path'] || '/tmp'}/pcre-#{node['openresty']['pcre']['version']}"
   pcre_opts = 'export PCRE_CONF_OPT="--enable-utf8 --enable-unicode-properties" && '
-
   remote_file "#{pcre_path}.tar.bz2" do
     owner 'root'
     group 'root'
@@ -79,28 +75,44 @@ if node['openresty']['custom_pcre']
     checksum node['openresty']['pcre']['checksum']
     action :create_if_missing
   end
-
   execute 'openresty-extract-pcre' do
     user 'root'
     cwd(Chef::Config['file_cache_path'] || '/tmp')
     command "tar xjf #{pcre_path}.tar.bz2"
     not_if { ::File.directory?(pcre_path) }
   end
-
-  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}" ]
-
+  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}", '--with-pcre-jit' ]
 else
-
   pcre_opts = ''
   value_for_platform_family(
     ['rhel','fedora','amazon','scientific'] => [ 'pcre', 'pcre-devel' ],
-    'default' => ['libpcre3', 'libpcre3-dev' ]
+    'debian' => ['libpcre3', 'libpcre3-dev' ]
   ).each do |pkg|
     package pkg
   end
-
   node.run_state['openresty_configure_flags'] |= [ '--with-pcre' ]
+end
 
+# System flags
+node.run_state['openresty_configure_flags'] |= [ '--with-file-aio', '--with-libatomic' ]  if kernel_supports_aio
+node.run_state['openresty_configure_flags'] |= [ '--with-ipv6' ]                          if node['openresty']['ipv6']
+
+# OpenResty extra modules
+node.run_state['openresty_configure_flags'] |= [ '--with-luajit' ]                        if node['openresty']['or_modules']['luajit']
+node.run_state['openresty_configure_flags'] |= [ '--with-http_iconv_module' ]             if node['openresty']['or_modules']['iconv']
+
+if node['openresty']['or_modules']['postgres']
+  include_recipe 'postgresql::client'
+  node.run_state['openresty_configure_flags'] |= [ '--with-http_postgres_module' ]
+end
+
+if node['openresty']['or_modules']['drizzle']
+  drizzle = value_for_platform_family(
+    ['rhel','fedora','amazon','scientific'] => 'libdrizzle-devel',
+    'debian' => 'libdrizzle-dev'
+  )
+  package drizzle
+  node.run_state['openresty_configure_flags'] |= [ '--with-http_drizzle_module' ]
 end
 
 node['openresty']['modules'].each do |ngx_module|
@@ -127,9 +139,7 @@ else
 end
 
 ruby_block 'persist-openresty-configure-flags' do
-  block do
-    node.set['openresty']['persisted_configure_flags'] = configure_flags
-  end
+  block { node.set['openresty']['persisted_configure_flags'] = configure_flags }
   action :nothing
 end
 
@@ -145,12 +155,25 @@ bash 'compile_openresty_source' do
   EOH
 
   # OpenResty configure args massaging due to the configure script adding its own arguments along our custom ones
-  not_if do
-    openresty_force_recompile == false &&
-      node.automatic_attrs['nginx'] &&
-      node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
-      node['openresty']['persisted_configure_flags'] &&
-      node['openresty']['persisted_configure_flags'].sort == configure_flags.sort
+  if Chef::Config[:solo]
+    not_if do
+      openresty_force_recompile == false &&
+        node.automatic_attrs['nginx'] &&
+        node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
+        (configure_flags.reject{ |f| f =~ /with-http_(drizzle|iconv|postgres)_module/ } &
+          node.automatic_attrs['nginx']['configure_arguments'].
+          reject{ |f| f =~ /(--add-module=\.\.\/)/ }.
+          map{ |f| f =~ /luajit/ ? '--with-luajit' : f }.
+          sort).size == configure_flags.reject{ |f| f =~ /with-http_(drizzle|iconv|postgres)_module/ }.size
+    end
+  else
+    not_if do
+      openresty_force_recompile == false &&
+        node.automatic_attrs['nginx'] &&
+        node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
+        node['openresty']['persisted_configure_flags'] &&
+        node['openresty']['persisted_configure_flags'].sort == configure_flags.sort
+    end
   end
 
   notifies :create, 'ruby_block[persist-openresty-configure-flags]'

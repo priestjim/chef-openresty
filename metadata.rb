@@ -18,4 +18,4 @@ depends 'ohai', '>= 1.1.4'
 depends 'yum'
 depends 'apt'
 
-recommends 'logrotate'
+recommends 'postgresql'

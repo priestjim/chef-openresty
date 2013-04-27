@@ -107,7 +107,6 @@ default['openresty']['gzip_vary']         = 'off'
 default['openresty']['gzip_buffers']      = nil
 default['openresty']['gzip_types']        = [
   'text/plain',
-  'text/html',
   'text/css',
   'application/x-javascript',
   'text/xml',

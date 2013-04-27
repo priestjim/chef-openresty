@@ -1,3 +1,7 @@
+## 0.1.10:
+
+- OpenResty version bump
+
 ## 0.1.9:
 
 * Fixed a bug in service restart

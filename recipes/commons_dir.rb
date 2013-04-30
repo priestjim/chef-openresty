@@ -51,7 +51,7 @@ directory '/var/www' do
 end
 
 
-%w(client_temp proxy_temp fastcgi_temp uwsgi_temp scgi_temp).each do |leaf|
+%w(client_temp proxy_temp proxy_cache fastcgi_temp fastcgi_cache uwsgi_temp uwsgi_cache scgi_temp scgi_cache).each do |leaf|
   directory File.join(node['openresty']['cache_dir'], leaf) do
     owner node['openresty']['user']
     group node['openresty']['group']

@@ -1,6 +1,7 @@
 ## 0.1.10:
 
 - OpenResty version bump
+- Added automatic creation of /var/cache/nginx/{fastcgi,scgi,uwsgi,proxy}_cache
 
 ## 0.1.9:
 

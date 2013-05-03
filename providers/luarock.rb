@@ -43,7 +43,7 @@ def install_rock(rock, version = nil)
   cmd = Mixlib::ShellOut.new("#{luarocks} install #{rock} #{version if version}")
   cmd.run_command
   if (cmd.exitstatus != 0) || (! cmd.exitstatus)
-    Chef::Log.fatal("Installation of OpenResty LUA rock [#{rock}] #{('version [' + version + ']') if version} failed")
+    Chef::Log.fatal!("Installation of OpenResty LUA rock [#{rock}] #{('version [' + version + ']') if version} failed")
     nil
   else
     true

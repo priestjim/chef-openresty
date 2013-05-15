@@ -21,9 +21,9 @@
 #
 
 # Download data
-default['openresty']['source']['version']   = '1.2.8.1'
+default['openresty']['source']['version']   = '1.2.8.3'
 default['openresty']['source']['url']       = "http://agentzh.org/misc/nginx/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
-default['openresty']['source']['checksum']  = '741b64ebd108938a2265a9df8c93c9e1be6a790c4f70290fca4560a90f51c44d'
+default['openresty']['source']['checksum']  = '5b6df14cd60ede8d3e4fb08b1adc02fb88cb855cd712023a6d0479934a9e8214'
 
 # Apply the 503 -> 429 error code patch
 # Blows the "I rate limit" cover but some folks need it!

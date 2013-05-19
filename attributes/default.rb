@@ -167,4 +167,4 @@ default['openresty']['custom_pcre']                   = true
 # service monitoring daemons (runit, upstart etc)
 default['openresty']['auto_enable_start']             = true
 # Enable jemalloc linking
-default['openresty']['link_to_jemalloc']              = true
+default['openresty']['link_to_jemalloc']              = false

@@ -25,9 +25,10 @@ for common "default" functionality.
 * yum
 
 In order to install the OpenResty `postgresql` module you'll also need 
-this cookbook:
+the `postgresql` cookbook.
 
-* postgresql
+If you want to link NGINX to the very performant jemalloc library, you'll
+need the `jemalloc` cookbook.
 
 Platform
 --------
@@ -216,6 +217,9 @@ Generally used attributes. Some have platform specific values. See
 * `node['openresty']['auto_enable_start']` - Set it to `true` to enable automatic service
   activation and startup of the bundled init service. Set it to `false` if you are using
   another program for process supervision (i.e. runit/god/monit/upstart etc).
+
+* `node['openresty']['link_to_jemalloc']` - Se to true to link the NGINX executable to the
+  jemalloc library. Requires the `jemalloc` cookbook.
 
 ## realip.rb
 

@@ -2,6 +2,7 @@
 
 - OpenResty version bump
 - Added automatic creation of /var/cache/nginx/{fastcgi,scgi,uwsgi,proxy}_cache
+- Added support for linking with jemalloc. May provide some benefits when used in serving LUA
 
 ## 0.1.9:
 

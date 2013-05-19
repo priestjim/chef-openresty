@@ -19,3 +19,4 @@ depends 'yum'
 depends 'apt'
 
 recommends 'postgresql'
+recommends 'jemalloc'

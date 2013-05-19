@@ -166,3 +166,5 @@ default['openresty']['custom_pcre']                   = true
 # Disable automatic activation of the bundled init service - useful if you are using alternative
 # service monitoring daemons (runit, upstart etc)
 default['openresty']['auto_enable_start']             = true
+# Enable jemalloc linking
+default['openresty']['link_to_jemalloc']              = true

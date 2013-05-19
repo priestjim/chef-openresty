@@ -101,6 +101,12 @@ node.run_state['openresty_configure_flags'] |= [ '--with-ipv6' ]                
 node.run_state['openresty_configure_flags'] |= [ '--with-luajit' ]                        if node['openresty']['or_modules']['luajit']
 node.run_state['openresty_configure_flags'] |= [ '--with-http_iconv_module' ]             if node['openresty']['or_modules']['iconv']
 
+# Jemalloc
+if node['openresty']['link_to_jemalloc']
+  include_recipe 'jemalloc'
+  node.run_state['openresty_configure_flags'] |= [ '--with-ld-opt="-ljemalloc"' ]
+end
+
 if node['openresty']['or_modules']['postgres']
   include_recipe 'postgresql::client'
   node.run_state['openresty_configure_flags'] |= [ '--with-http_postgres_module' ]
@@ -139,7 +145,7 @@ else
 end
 
 ruby_block 'persist-openresty-configure-flags' do
-  block { node.set['openresty']['persisted_configure_flags'] = configure_flags }
+  block { node.set['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq }
   action :nothing
 end
 
@@ -164,6 +170,7 @@ bash 'compile_openresty_source' do
           node.automatic_attrs['nginx']['configure_arguments'].
           reject{ |f| f =~ /(--add-module=\.\.\/)/ }.
           map{ |f| f =~ /luajit/ ? '--with-luajit' : f }.
+          map{ |f| f =~ /jemalloc/ ? '--with-ld-opt="-ljemalloc"' : f }.
           sort).size == configure_flags.reject{ |f| f =~ /with-http_(drizzle|iconv|postgres)_module/ }.size
     end
   else
@@ -172,7 +179,7 @@ bash 'compile_openresty_source' do
         node.automatic_attrs['nginx'] &&
         node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
         node['openresty']['persisted_configure_flags'] &&
-        node['openresty']['persisted_configure_flags'].sort == configure_flags.sort
+        node['openresty']['persisted_configure_flags'] == configure_flags.sort.uniq
     end
   end
 

@@ -145,7 +145,13 @@ else
 end
 
 ruby_block 'persist-openresty-configure-flags' do
-  block { node.set['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq }
+  block do
+    if Chef::Config[:solo]
+      ::File.write(::File.join(::File.dirname(src_filepath), 'openresty.configure-opts'), configure_flags.sort.uniq.join("\n"))
+    else
+      node.set['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq 
+    end
+  end
   action :nothing
 end
 
@@ -166,12 +172,8 @@ bash 'compile_openresty_source' do
       openresty_force_recompile == false &&
         node.automatic_attrs['nginx'] &&
         node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
-        (configure_flags.reject{ |f| f =~ /with-http_(drizzle|iconv|postgres)_module/ } &
-          node.automatic_attrs['nginx']['configure_arguments'].
-          reject{ |f| f =~ /(--add-module=\.\.\/)/ }.
-          map{ |f| f =~ /luajit/ ? '--with-luajit' : f }.
-          map{ |f| f =~ /jemalloc/ ? '--with-ld-opt="-ljemalloc"' : f }.
-          sort).size == configure_flags.reject{ |f| f =~ /with-http_(drizzle|iconv|postgres)_module/ }.size
+        (::File.read(::File.join(:: File.dirname(src_filepath), 'openresty.configure-opts')) || '' rescue '') ==
+        configure_flags.sort.uniq.join("\n")
     end
   else
     not_if do
@@ -184,6 +186,9 @@ bash 'compile_openresty_source' do
   end
 
   notifies :create, 'ruby_block[persist-openresty-configure-flags]'
+  if node['openresty']['auto_enable_start']
+    notifies :restart, 'service[nginx]'
+  end
 end
 
 node.run_state.delete('openresty_configure_flags')

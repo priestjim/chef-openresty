@@ -35,8 +35,9 @@ Vagrant.configure('2') do |config|
 
   config.vm.provision :chef_solo do |chef|
     chef.arguments = '-Fdoc'
-    chef.json = { 'openresty' => { 'luarocks' => { 'default_rocks' => { 'md5' => '1.1.1' }}}}
+    chef.json = { 'openresty' => { 'link_to_jemalloc' => true, 'luarocks' => { 'default_rocks' => { 'md5' => '1.1.1' }}}}
     chef.run_list = [
+      'recipe[jemalloc::default]',
       'recipe[openresty::default]',
       'recipe[openresty::luarocks]'
     ]

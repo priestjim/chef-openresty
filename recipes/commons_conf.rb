@@ -46,7 +46,7 @@ template 'nginx.conf' do
   group 'root'
   mode 00644
   variables :kernel_supports_aio => kernel_supports_aio
-  notifies :reload, 'service[nginx]'
+  notifies :reload, node['openresty']['service']['resource']
 end
 
 cookbook_file "#{node['openresty']['dir']}/mime.types" do
@@ -54,7 +54,7 @@ cookbook_file "#{node['openresty']['dir']}/mime.types" do
   owner 'root'
   group 'root'
   mode 00644
-  notifies :reload, 'service[nginx]'
+  notifies :reload, node['openresty']['service']['resource']
 end
 
 cookbook_file "#{node['openresty']['dir']}/conf.d/general_security.conf.inc" do
@@ -71,7 +71,7 @@ if node['openresty']['default_site_enabled']
     group 'root'
     mode 00644
     if ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/000-default")
-      notifies :reload, 'service[nginx]'
+      notifies :reload, node['openresty']['service']['resource']
     end
   end
 

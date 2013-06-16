@@ -27,4 +27,6 @@ include_recipe 'openresty::commons_script'
 include_recipe 'openresty::commons_build'
 include_recipe 'openresty::commons_conf'
 include_recipe 'openresty::commons_cleanup'
-include_recipe 'openresty::commons_service'
+if node['openresty']['service']['recipe']
+  include_recipe(node['openresty']['service']['recipe'])
+end

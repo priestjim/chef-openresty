@@ -159,12 +159,7 @@ default['openresty']['logrotate']                     = true
 default['openresty']['disable_access_log']            = true
 # Enable the default sample vhost config
 default['openresty']['default_site_enabled']          = false
-# Restart automatically after version update
-default['openresty']['restart_after_update']          = true
 # Enable custom PCRE installation - useful for JIT.
 default['openresty']['custom_pcre']                   = true
-# Disable automatic activation of the bundled init service - useful if you are using alternative
-# service monitoring daemons (runit, upstart etc)
-default['openresty']['auto_enable_start']             = true
 # Enable jemalloc linking
 default['openresty']['link_to_jemalloc']              = false

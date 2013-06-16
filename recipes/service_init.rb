@@ -1,8 +1,9 @@
 #
 # Cookbook Name:: openresty
-# Recipe:: http_realip_module
+# Recipe:: default
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
+# Author:: Stephen Delano (<stephen@opscode.com>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
 # Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
@@ -20,19 +21,32 @@
 # limitations under the License.
 #
 
-# Documentation: http://wiki.nginx.org/HttpRealIpModule
+template '/etc/init.d/nginx' do
+  source 'nginx.init.erb'
+  owner 'root'
+  group 'root'
+  mode 00755
+  variables(
+    :src_binary => node['openresty']['binary'],
+    :pid => node['openresty']['pid']
+  )
+end
 
-template "#{node['openresty']['dir']}/conf.d/http_realip.conf" do
-  source 'modules/http_realip.conf.erb'
+defaults_path = value_for_platform_family(
+  ['rhel','fedora','amazon','scientific'] => '/etc/sysconfig/nginx',
+  'debian' => '/etc/default/nginx'
+)
+
+template defaults_path do
+  source 'nginx.sysconfig.erb'
   owner 'root'
   group 'root'
   mode 00644
-  variables(
-    :addresses => node['openresty']['realip']['addresses'],
-    :header => node['openresty']['realip']['header']
-  )
-
-  notifies :reload, node['openresty']['service']['resource']
 end
 
-node.run_state['openresty_configure_flags'] |= ['--with-http_realip_module']
+service 'nginx' do
+  supports :status => true, :restart => true, :reload => true
+  if node['openresty']['service']['start_on_boot']
+    action [ :enable, :start ]
+  end
+end

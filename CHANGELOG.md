@@ -1,5 +1,6 @@
-## 0.1.10:
+## 0.2.0:
 
+- Added support for dynamic service definitions (i.e. runit, monit etc)
 - OpenResty version bump
 - Added automatic creation of /var/cache/nginx/{fastcgi,scgi,uwsgi,proxy}_cache
 - Added support for linking with jemalloc. May provide some benefits when used in serving LUA

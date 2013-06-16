@@ -214,12 +214,27 @@ Generally used attributes. Some have platform specific values. See
 * `node['openresty']['custom_pcre']` - Se to true to download and use a custom
   PCRE source tree in order to enable RE JIT support.
 
-* `node['openresty']['auto_enable_start']` - Set it to `true` to enable automatic service
-  activation and startup of the bundled init service. Set it to `false` if you are using
-  another program for process supervision (i.e. runit/god/monit/upstart etc).
-
 * `node['openresty']['link_to_jemalloc']` - Se to true to link the NGINX executable to the
   jemalloc library. Requires the `jemalloc` cookbook.
+
+## service.rb
+
+Define service-specific attributes
+
+* `node['openresty']['service']['recipe']` - Set it to a fully qualified Chef recipe definition
+  like `openresty::service_init`. The recipe should initialize the service definition and maybe
+  start OpenResty. The default installs and initializes a SYSV-init-style service.
+
+* `node['openresty']['service']['resource']` - Set it to the resource string, i.e. `service[nginx]`
+  that will be notified on configuration file changes.
+
+* `node['openresty']['service']['restart_on_update']` - Set it to `true` to enable automatic service
+  restart after updating the OpenResty binary.
+
+* `node['openresty']['service']['start_on_boot']` - Set it to `true` to enable automatic service
+  activation and startup via the selected init service. Currently used by the default `init`
+  service handler.
+
 
 ## realip.rb
 
@@ -308,7 +323,10 @@ Many features are automatically detected and enabled into the NGINX default
 configuration file such as AIO support for Linux kernels >= 2.6.22, IPv6 support
 and CPU worker affinity.
 
-The NGINX service will be managed with init scripts installed by the cookbook.
+The NGINX service can be either managed with SYSV init style scripts that are already included in
+the cookbook or you can define your own. You only have to define the service resource used for
+notifications (like `runit_service[nginx]` or `service[nginx]`) and optionally a recipe to be included
+in the convergence flow (like `openresty::service_init` or `my_openresty:::service_runit`).
 
 The cookbook generates various include files (.inc) that are available for inclusion
 in standard NGINX site definition files via the `#include` directive. Look in the

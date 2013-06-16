@@ -1,9 +1,8 @@
 #
 # Cookbook Name:: openresty
-# Recipe:: default
+# Attribute:: service
 #
 # Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
-# Author:: Stephen Delano (<stephen@opscode.com>)
 #
 # Copyright 2012, Panagiotis Papadomitsos
 # Based heavily on Opscode's original nginx cookbook (https://github.com/opscode-cookbooks/nginx)
@@ -21,32 +20,11 @@
 # limitations under the License.
 #
 
-template '/etc/init.d/nginx' do
-  source 'nginx.init.erb'
-  owner 'root'
-  group 'root'
-  mode 00755
-  variables(
-    :src_binary => node['openresty']['binary'],
-    :pid => node['openresty']['pid']
-  )
-end
-
-defaults_path = value_for_platform_family(
-  ['rhel','fedora','amazon','scientific'] => '/etc/sysconfig/nginx',
-  'debian' => '/etc/default/nginx'
-)
-
-template defaults_path do
-  source 'nginx.sysconfig.erb'
-  owner 'root'
-  group 'root'
-  mode 00644
-end
-
-service 'nginx' do
-  supports :status => true, :restart => true, :reload => true
-  if node['openresty']['auto_enable_start']
-    action [ :enable, :start ]
-  end
-end
+# Service recipe for inclusion (can be extra-cookbook)
+default['openresty']['service']['recipe']             = 'openresty::service_init'
+# Service resource handler - used for notifications
+default['openresty']['service']['resource']           = 'service[nginx]'
+# Restart automatically after version update
+default['openresty']['service']['restart_on_update']  = true
+# Start on system boot
+default['openresty']['service']['start_on_boot']      = true

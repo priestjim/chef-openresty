@@ -1,10 +1,15 @@
+## 0.3.0:
+
+* OpenResty major version bump to 1.4-based NGINX
+* Removed rate limit response code patch (since this is supported natively now)
+
 ## 0.2.0:
 
-- Added support for dynamic service definitions (i.e. runit, monit etc)
-- OpenResty version bump
-- Added automatic creation of /var/cache/nginx/{fastcgi,scgi,uwsgi,proxy}_cache
-- Added support for linking with jemalloc. May provide some benefits when used in serving LUA
-- Minor file naming fix
+* Added support for dynamic service definitions (i.e. runit, monit etc)
+* OpenResty version bump
+* Added automatic creation of /var/cache/nginx/{fastcgi,scgi,uwsgi,proxy}_cache
+* Added support for linking with jemalloc. May provide some benefits when used in serving LUA
+* Minor file naming fix
 
 ## 0.1.9:
 

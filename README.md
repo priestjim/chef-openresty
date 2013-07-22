@@ -69,12 +69,6 @@ This cookbook includes automatic activation of some nice NGINX features such as:
 * **Automatic IPv6 detection and activation**: The cookbook automatically detects and
   activates IPv6 support on NGINX.
 
-* **Rate limit proper HTTP response**: The cookbook contains a small patch that enables
-  NGINX to respond to over-quota requests of the limit_req module with a 429 HTTP
-  response that is more semantically correct than the default 503 one and aids in
-  separate and log such issues more granularly. It gives away though the fact
-  that you are rate limiting, so there is an option to disable this patch.
-
 * **Support for custom PCRE runtime**: The cookbook can use custom PCRE sources in order
   to statically link to a custom-compiled PCRE runtime that supports JIT regular expression
   compilation which will significantly speed up RE execution in the NGINX and Lua environments.
@@ -98,9 +92,6 @@ Generally used attributes. Some have platform specific values. See
 * `node['openresty']['source']['url']` - The URL for downloading the selected version.
 
 * `node['openresty']['source']['checksum']` - The SHA-256 checksum for the selected version.
-
-* `node['openresty']['source']['limit_code_patch']` - Enables application of a
-  patch that converts over-quota request limit HTTP 503 responses to proper 429 ones.
 
 * `node['openresty']['dir']` - Location for NGINX configuration.
 
@@ -441,10 +432,11 @@ Usage
 =====
 
 Include the recipe on your node or role. Modify the
-attributes as required in your role to change how various
-configuration is applied per the attributes section above. In general,
-override attributes in the role should be used when changing
-attributes.
+attributes as required in a role cookbook to change how various
+configuration is applied per the attributes section above.
+
+If you need to alter the location of various cookbook_file
+directives, use `chef_rewind`.
 
 License and Author
 ==================

@@ -24,7 +24,7 @@ require 'chef/version_constraint'
 
 kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
 
-if node['openresty']['worker_auto_affinity']
+if node['openresty']['worker_auto_affinity'] && node['openresty']['worker_processes'] != 'auto'
 
   affinity_mask = Array.new
   cpupos = 0

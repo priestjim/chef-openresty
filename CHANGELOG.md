@@ -2,6 +2,7 @@
 
 * OpenResty major version bump to 1.4-based NGINX
 * Removed rate limit response code patch (since this is supported natively now)
+* Promoted IPv6 support to standard configure flags
 
 ## 0.2.0:
 

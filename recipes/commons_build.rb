@@ -87,7 +87,6 @@ end
 
 # System flags
 node.run_state['openresty_configure_flags'] |= [ '--with-file-aio', '--with-libatomic' ]  if kernel_supports_aio
-node.run_state['openresty_configure_flags'] |= [ '--with-ipv6' ]                          if node['openresty']['ipv6']
 
 # OpenResty extra modules
 node.run_state['openresty_configure_flags'] |= [ '--with-luajit' ]                        if node['openresty']['or_modules']['luajit']

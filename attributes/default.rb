@@ -51,6 +51,7 @@ default['openresty']['source']['default_configure_flags'] = [
   "--http-fastcgi-temp-path=#{node['openresty']['cache_dir']}/fastcgi_temp",
   "--http-uwsgi-temp-path=#{node['openresty']['cache_dir']}/uwsgi_temp",
   "--http-scgi-temp-path=#{node['openresty']['cache_dir']}/scgi_temp",
+  '--with-ipv6',
   '--with-md5-asm',
   '--with-sha1-asm',
   '--without-http_ssi_module',

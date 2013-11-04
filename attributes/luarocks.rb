@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-default['openresty']['luarocks']['version']       = '2.0.13'
+default['openresty']['luarocks']['version']       = '2.1.1'
 default['openresty']['luarocks']['url']           = "http://luarocks.org/releases/luarocks-#{node['openresty']['luarocks']['version']}.tar.gz"
-default['openresty']['luarocks']['checksum']      = '5eac098dcde65ca417930be42ccbd1a1cd151d5aebd8cc17898231de8289edb2'
+default['openresty']['luarocks']['checksum']      = '995ba1b9c982b503fd6fc61c905dc07c3a7533c06587616d9f00d9f62bd318ac'
 default['openresty']['luarocks']['default_rocks'] = Hash.new

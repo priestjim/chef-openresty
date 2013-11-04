@@ -20,6 +20,6 @@
 #
 
 # For more information check out https://github.com/FRiCKLE/ngx_cache_purge
-default['openresty']['cache_purge']['version']  = '2.0'
+default['openresty']['cache_purge']['version']  = '2.1'
 default['openresty']['cache_purge']['url']      = "https://github.com/FRiCKLE/ngx_cache_purge/archive/#{node['openresty']['cache_purge']['version']}.tar.gz"
-default['openresty']['cache_purge']['checksum'] = '81f5fd92823752b4037a309928506d426d11f0471f02ee6d6ea9a64f242ec06e'
+default['openresty']['cache_purge']['checksum'] = 'c8d67b9c0ed7ec23315071df352e95b69e9f14285cd7f8883d26a7fda237bd87'

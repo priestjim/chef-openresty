@@ -20,6 +20,6 @@
 # limitations under the License.
 #
 
-default['openresty']['pcre']['version']  = '8.32'
+default['openresty']['pcre']['version']  = '8.33'
 default['openresty']['pcre']['url']      = "http://sourceforge.net/projects/pcre/files/pcre/#{node['openresty']['pcre']['version']}/pcre-#{node['openresty']['pcre']['version']}.tar.bz2/download"
-default['openresty']['pcre']['checksum'] = 'a913fb9bd058ef380a2d91847c3c23fcf98e92dc3b47cd08a53c021c5cde0f55'
+default['openresty']['pcre']['checksum'] = 'c603957a4966811c04af5f6048c71cfb4966ec93312d7b3118116ed9f3bc0478'

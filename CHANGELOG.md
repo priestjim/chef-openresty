@@ -1,3 +1,7 @@
+## 0.3.2:
+
+* OpenResty version bump
+
 ## 0.3.1:
 
 * Version bumps to multiple addons and OpenResty

@@ -17,6 +17,7 @@ depends 'logrotate'
 depends 'ohai', '>= 1.1.4'
 depends 'yum'
 depends 'apt'
+depends 'git'
 
 recommends 'postgresql'
 recommends 'jemalloc'

@@ -128,7 +128,7 @@ ruby_block 'persist-openresty-configure-flags' do
     if Chef::Config[:solo]
       ::File.write(::File.join(::File.dirname(src_filepath), 'openresty.configure-opts'), configure_flags.sort.uniq.join("\n"))
     else
-      node.set['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq 
+      node.set['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq
     end
   end
   action :nothing

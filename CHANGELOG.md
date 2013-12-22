@@ -1,6 +1,6 @@
 ## 0.3.2:
 
-* OpenResty version bump
+* OpenResty version bump (LuaJIT 2.1!)
 
 ## 0.3.1:
 

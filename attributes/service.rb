@@ -28,3 +28,10 @@ default['openresty']['service']['resource']           = 'service[nginx]'
 default['openresty']['service']['restart_on_update']  = true
 # Start on system boot
 default['openresty']['service']['start_on_boot']      = true
+
+# init style, either init or upstart
+default['openresty']['service']['init_style']         = 'init'
+# upstart config
+default['openresty']['service']['upstart']['runlevels'] = '2345'
+default['openresty']['service']['upstart']['respawn_limit'] = nil
+default['openresty']['service']['upstart']['foreground'] = true

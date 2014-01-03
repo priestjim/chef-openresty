@@ -33,7 +33,7 @@ expect fork
 console output
 <% end %>
 
-exec ${DAEMON} -c "${CONFIG}"
+exec ${DAEMON} -c "${CONFIG}" -g "daemon off"
 
 <% if node.recipe?('nginx::passenger') and not node['nginx']['upstart']['foreground'] %>
 # classic example of why pidfiles should have gone away

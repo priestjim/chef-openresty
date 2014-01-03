@@ -3,7 +3,7 @@
 
 description "nginx http daemon"
 
-start on (local-filesystems and net-device-up IFACE=lo and runlevel [<%= node['nginx']['upstart']['runlevels'] %>])
+start on (local-filesystems and net-device-up IFACE=lo and runlevel [<%= node['openresty']['service']['upstart']['runlevels'] %>])
 stop on runlevel [!<%= node['openresty']['service']['upstart']['runlevels'] %>]
 
 env DAEMON=<%= node['openresty']['binary'] %>

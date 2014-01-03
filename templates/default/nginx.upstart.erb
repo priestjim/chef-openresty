@@ -10,6 +10,8 @@ env DAEMON=<%= node['openresty']['binary'] %>
 env PID=<%= node['openresty']['pid'] %>
 env CONFIG=<%= node['openresty']['source']['conf_path'] %>
 
+# set limit for upstart jobs
+limit nofile 1048576 1048576
 respawn
 <% if node['openresty']['service']['upstart']['respawn_limit'] %>
 respawn limit <%= node['openresty']['service']['upstart']['respawn_limit'] %>

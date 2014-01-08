@@ -1,6 +1,7 @@
 ## 0.3.2:
 
 * OpenResty version bump (LuaJIT 2.1!)
+* PCRE version bump
 
 ## 0.3.1:
 

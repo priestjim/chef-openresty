@@ -65,7 +65,7 @@ if node['openresty']['custom_pcre']
     mode 00644
     source node['openresty']['pcre']['url']
     checksum node['openresty']['pcre']['checksum']
-    action :create_if_missing
+    action :create
   end
   execute 'openresty-extract-pcre' do
     user 'root'

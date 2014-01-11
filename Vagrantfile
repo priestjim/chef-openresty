@@ -18,12 +18,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-  
+
 Vagrant.configure('2') do |config|
 
   config.berkshelf.enabled = true
-  config.ssh.max_tries = 40
-  config.ssh.timeout   = 120
 
   config.vm.provider :virtualbox do |v|
     v.gui = true
@@ -38,7 +36,7 @@ Vagrant.configure('2') do |config|
     chef.json = { 'openresty' => { 'link_to_jemalloc' => true, 'luarocks' => { 'default_rocks' => { 'md5' => '1.1.1' }}}}
     chef.run_list = [
       'recipe[jemalloc::default]',
-      'recipe[openresty::default]',
+      'recipe[openresty]',
       'recipe[openresty::luarocks]'
     ]
 

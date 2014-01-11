@@ -23,6 +23,11 @@
 node.override['openresty']['or_modules']['luajit'] = true
 include_recipe 'openresty'
 
+# Install needed packages
+%w{ zip unzip }.each do |pkg|
+  package pkg
+end
+
 src_basename  = ::File.basename(node['openresty']['luarocks']['url'])
 src_filepath  = Chef::Config['file_cache_path'] || '/tmp'
 src_filename  = ::File.basename(src_basename, '.tar.gz')

@@ -52,7 +52,7 @@ bash 'compile-openresty-luarocks' do
       --with-lua=#{node['openresty']['source']['prefix']}/luajit \\
       --lua-suffix=jit \\
       --with-lua-include=#{node['openresty']['source']['prefix']}/luajit/include/luajit-2.1 && \\
-      make
+      make build
   EOT
   creates "#{src_filepath}/#{src_filename}/built"
   action :run

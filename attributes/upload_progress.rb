@@ -21,5 +21,5 @@
 #
 
 # For more information check out https://github.com/masterzen/nginx-upload-progress-module
-default['openresty']['upload_progress']['url']      = 'https://github.com/masterzen/nginx-upload-progress-module/tarball/v0.8.4'
-default['openresty']['upload_progress']['checksum'] = '9a6acb984d81f5d7e04214d63ae94273'
+default['openresty']['upload_progress']['url']      = 'https://github.com/masterzen/nginx-upload-progress-module/archive/v0.9.0.tar.gz'
+default['openresty']['upload_progress']['checksum'] = '93e29b9b437a2e34713de54c2861ea51151624aca09f73f9f44d1caaff01a6b1'

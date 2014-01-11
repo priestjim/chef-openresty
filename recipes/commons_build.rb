@@ -150,7 +150,7 @@ bash 'compile_openresty_source' do
       openresty_force_recompile == false &&
         node.automatic_attrs['nginx'] &&
         node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
-        (::File.read(::File.join(:: File.dirname(src_filepath), 'openresty.configure-opts')) || '' rescue '') ==
+        (::File.read(::File.join(::File.dirname(src_filepath), 'openresty.configure-opts')) || '' rescue '') ==
         configure_flags.sort.uniq.join("\n")
     end
   else
@@ -166,6 +166,14 @@ bash 'compile_openresty_source' do
   notifies :create, 'ruby_block[persist-openresty-configure-flags]'
   if node['openresty']['restart_on_update']
     notifies :restart, node['openresty']['resource']
+  end
+end
+
+link ::File.join('/usr', 'share', 'luajit', 'bin', 'luajit') do
+  to ::File.join('/usr', 'share', 'luajit', 'bin', "luajit-#{node['openresty']['or_modules']['luajit_binary']}")
+  only_if do
+    node['openresty']['or_modules']['luajit'] &&
+    ::File.exists?(::File.join('/usr', 'share', 'luajit', 'bin', "luajit-#{node['openresty']['or_modules']['luajit_binary']}"))
   end
 end
 

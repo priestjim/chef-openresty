@@ -2,6 +2,8 @@
 
 * OpenResty version bump (LuaJIT 2.1!)
 * PCRE version bump
+* zip package fix (#11)
+* luarocks installation fix (#12)
 
 ## 0.3.1:
 

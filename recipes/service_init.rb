@@ -39,11 +39,11 @@ when "upstart"
     source 'nginx.upstart.erb'
     owner 'root'
     group 'root'
-    mode 00755
+    mode 00644
   end
   service "nginx" do
     provider Chef::Provider::Service::Upstart
-    supports :status => true, :restart => true, :reload => true
+    supports :status => true, :reload => true
     if node['openresty']['service']['start_on_boot']
       action [:enable, :start]
     end

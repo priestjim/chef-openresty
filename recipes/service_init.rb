@@ -43,7 +43,8 @@ when "upstart"
   end
   service "nginx" do
     provider Chef::Provider::Service::Upstart
-    supports :status => true, :reload => true
+    supports :status => true, :restart => true, :reload => true
+    restart_command "service nginx restart"
     if node['openresty']['service']['start_on_boot']
       action [:enable, :start]
     end

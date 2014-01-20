@@ -2,8 +2,9 @@
 
 * OpenResty version bump (LuaJIT 2.1!)
 * PCRE version bump
-* zip package fix (#11)
-* luarocks installation fix (#12)
+* FIX: zip package dependency installation (#11)
+* FIX: luarocks installation (#12)
+* FIX: onditionally notify service on service changes (#13)
 
 ## 0.3.1:
 

@@ -28,7 +28,9 @@ template 'openresty_status' do
   owner 'root'
   group 'root'
   mode 00644
-  notifies :reload, node['openresty']['service']['resource']
+  if node['openresty']['service']['start_on_boot']
+    notifies :reload, node['openresty']['service']['resource']
+  end
 end
 
 node.run_state['openresty_configure_flags'] |= ['--with-http_stub_status_module']

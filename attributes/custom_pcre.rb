@@ -21,5 +21,5 @@
 #
 
 default['openresty']['pcre']['version']  = '8.34'
-default['openresty']['pcre']['url']      = "http://downloads.sourceforge.net/project/pcre/pcre/#{node['openresty']['pcre']['version']}/pcre-#{node['openresty']['pcre']['version']}.tar.bz2/download"
+default['openresty']['pcre']['url']      = "http://downloads.sourceforge.net/project/pcre/pcre/#{node['openresty']['pcre']['version']}/pcre-#{node['openresty']['pcre']['version']}.tar.bz2"
 default['openresty']['pcre']['checksum'] = 'b6043ae1ff2720be665ffa28dc22b7c637cdde96f389a116c0c3020caeae583f'

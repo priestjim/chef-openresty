@@ -5,6 +5,7 @@
 * FIX: zip package dependency installation (#11)
 * FIX: luarocks installation (#12)
 * FIX: onditionally notify service on service changes (#13)
+* FIX: PCRE URL to fix Chef redirect limit
 
 ## 0.3.1:
 

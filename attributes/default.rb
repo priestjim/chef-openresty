@@ -21,9 +21,9 @@
 #
 
 # Download data
-default['openresty']['source']['version']   = '1.5.8.1'
+default['openresty']['source']['version']   = '1.5.11.1'
 default['openresty']['source']['url']       = "http://agentzh.org/misc/nginx/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
-default['openresty']['source']['checksum']  = '96ec68efb1ecd83a3b4871d1051505d858d13cb866f6be644b8f60ed9397fbc2'
+default['openresty']['source']['checksum']  = '975f7a104a055d689a69655d69d9ee7ef9a4700d8927e5d324c440ea71a66a3b'
 
 # Directories
 default['openresty']['dir']                 = '/etc/nginx'

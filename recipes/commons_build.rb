@@ -23,6 +23,13 @@
 
 require 'chef/version_constraint'
 
+case node['platform_family']
+when 'debian'
+  include_recipe 'apt'
+when 'rhel'
+  include_recipe 'yum'
+end
+
 kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
 restart_on_update = node['openresty']['service']['restart_on_update'] ? ' && $( kill -QUIT `pgrep -U root nginx` || true )' : ''
 
@@ -85,6 +92,13 @@ else
   node.run_state['openresty_configure_flags'] |= [ '--with-pcre' ]
 end
 
+# Custom subrequests
+if node['openresty']['max_subrequests'] != 200
+  subreq_opts = %Q{sed -ri 's/#define NGX_HTTP_MAX_SUBREQUESTS\\s+[0-9]+$/#define NGX_HTTP_MAX_SUBREQUESTS #{node['openresty']['max_subrequests']}/g' bundle/nginx-#{node['openresty']['source']['version'].split('.').first(3).join('.')}/src/http/ngx_http_request.h &&}
+else
+  subreq_opts = ''
+end
+
 # System flags
 node.run_state['openresty_configure_flags'] |= [ '--with-file-aio', '--with-libatomic' ]  if kernel_supports_aio
 
@@ -139,6 +153,7 @@ bash 'compile_openresty_source' do
   code <<-EOH
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)} &&
     cd ngx_openresty-#{node['openresty']['source']['version']} &&
+    #{subreq_opts}
     #{pcre_opts}
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&
     make -j#{node['cpu']['total']} && make install #{restart_on_update}

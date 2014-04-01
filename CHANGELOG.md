@@ -1,3 +1,8 @@
+## 0.3.3:
+
+* Added configurable maximum number of subrequests
+* Added apt/yum dependency fix
+
 ## 0.3.2:
 
 * OpenResty version bump (LuaJIT 2.1!)

@@ -27,7 +27,7 @@ Vagrant.configure('2') do |config|
     v.gui = true
   end
 
-  config.vm.box = 'ubuntu-new'
+  config.vm.box = 'ubuntu'
   config.vm.hostname = 'openresty'
   config.vm.network :private_network, ip: '172.16.6.2'
 

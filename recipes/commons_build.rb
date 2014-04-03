@@ -100,10 +100,12 @@ subrequests_file = ::File.join(
   "nginx-#{node['openresty']['source']['version'].split('.').first(3).join('.')}",
   'src', 'http', 'ngx_http_request.h')
 
-if ::File.exists?(subrequests_file) && ::File.read(subrequests_file).split("\n").grep(/NGX_HTTP_MAX_SUBREQUESTS/).first.split(/\s+/)[2] != node['openresty']['max_subrequests']
+if ::File.exists?(subrequests_file) && ::File.read(subrequests_file).split("\n").grep(/NGX_HTTP_MAX_SUBREQUESTS/).first.split(/\s+/)[2].to_i != node['openresty']['max_subrequests']
   subreq_opts = %Q{sed -ri 's/#define NGX_HTTP_MAX_SUBREQUESTS\\s+[0-9]+$/#define NGX_HTTP_MAX_SUBREQUESTS #{node['openresty']['max_subrequests']}/g' #{subrequests_file} &&}
   node.run_state['openresty_configure_flags'] |= [ "--with-max-subrequests=#{node['openresty']['max_subrequests']}" ]
   node.run_state['openresty_force_recompile'] = true
+else
+  subreq_opts = ''
 end
 
 # System flags

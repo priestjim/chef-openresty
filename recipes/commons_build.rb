@@ -106,12 +106,10 @@ else
   subrequests_configured = node['openresty']['max_subrequests']
 end
 
+subreq_opts = %Q{sed -ri 's/#define NGX_HTTP_MAX_SUBREQUESTS\\s+[0-9]+$/#define NGX_HTTP_MAX_SUBREQUESTS #{node['openresty']['max_subrequests']}/g' #{subrequests_file} &&}
 if subrequests_configured != node['openresty']['max_subrequests']
   Chef::Log.info("OpenResty will be reconfigured for #{node['openresty']['max_subrequests']} maximum subrequests (previously it was at #{subrequests_configured})")
-  subreq_opts = %Q{sed -ri 's/#define NGX_HTTP_MAX_SUBREQUESTS\\s+[0-9]+$/#define NGX_HTTP_MAX_SUBREQUESTS #{node['openresty']['max_subrequests']}/g' #{subrequests_file} &&}
   node.run_state['openresty_force_recompile'] = true
-else
-  subreq_opts = ''
 end
 
 # System flags

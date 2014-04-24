@@ -47,14 +47,12 @@ end
 
 bash 'compile-openresty-luarocks' do
   cwd "#{src_filepath}/#{src_filename}"
-  code <<-EOT
-  ./configure --prefix=#{node['openresty']['source']['prefix']}/luajit \\
+  code %Q{./configure --prefix=#{node['openresty']['source']['prefix']}/luajit \\
       --with-lua=#{node['openresty']['source']['prefix']}/luajit \\
       --lua-suffix=jit \\
       --with-lua-include=#{node['openresty']['source']['prefix']}/luajit/include/luajit-2.1 && \\
-      make build
-  EOT
-  creates "#{src_filepath}/#{src_filename}/src/bin/luarocks"
+      make build}
+  not_if { ::File.exists?("#{src_filepath}/#{src_filename}/config.unix") && ::File.exists?("#{src_filepath}/#{src_filename}/src/bin/luarocks") }
   action :run
 end
 

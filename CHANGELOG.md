@@ -2,6 +2,7 @@
 
 * Added configurable maximum number of subrequests
 * Added apt/yum dependency fix
+* Fixed luarocks build idempotency
 
 ## 0.3.2:
 

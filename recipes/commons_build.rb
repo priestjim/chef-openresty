@@ -65,7 +65,7 @@ node.run_state['openresty_configure_flags'] = node['openresty']['source']['defau
 # Custom PCRE
 if node['openresty']['custom_pcre']
   pcre_path = "#{Chef::Config['file_cache_path'] || '/tmp'}/pcre-#{node['openresty']['pcre']['version']}"
-  pcre_opts = 'export PCRE_CONF_OPT="--enable-utf8 --enable-unicode-properties" && '
+  pcre_opts = 'export PCRE_CONF_OPT="--enable-utf" && '
   remote_file "#{pcre_path}.tar.bz2" do
     owner 'root'
     group 'root'
@@ -80,7 +80,7 @@ if node['openresty']['custom_pcre']
     command "tar xjf #{pcre_path}.tar.bz2"
     not_if { ::File.directory?(pcre_path) }
   end
-  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}", "--with-pcre-conf-opt='--enable-utf8 --enable-unicode-properties'", '--with-pcre-jit' ]
+  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}", '--with-pcre-conf-opt=--enable-utf', '--with-pcre-jit' ]
 else
   pcre_opts = ''
   value_for_platform_family(

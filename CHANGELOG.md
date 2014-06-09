@@ -3,6 +3,8 @@
 * Added configurable maximum number of subrequests
 * Added apt/yum dependency fix
 * Fixed luarocks build idempotency
+* Fixed PCRE UTF-8 compilation
+* Version bumps for PCRE and OpenResty
 
 ## 0.3.2:
 

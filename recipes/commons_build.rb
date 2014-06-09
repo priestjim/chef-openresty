@@ -80,7 +80,7 @@ if node['openresty']['custom_pcre']
     command "tar xjf #{pcre_path}.tar.bz2"
     not_if { ::File.directory?(pcre_path) }
   end
-  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}", '--with-pcre-jit' ]
+  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}", "--with-pcre-conf-opt='--enable-utf8 --enable-unicode-properties'", '--with-pcre-jit' ]
 else
   pcre_opts = ''
   value_for_platform_family(

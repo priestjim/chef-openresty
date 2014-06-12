@@ -64,6 +64,7 @@ default['openresty']['source']['default_configure_flags'] = [
 default['openresty']['modules']         = [
   'http_ssl_module',
   'http_gzip_static_module',
+  'http_gunzip_module',
   'http_stub_status_module',
   'http_secure_link_module',
   'http_realip_module',

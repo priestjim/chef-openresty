@@ -4,6 +4,7 @@
 * Added apt/yum dependency fix
 * Fixed luarocks build idempotency
 * Fixed PCRE UTF-8 compilation
+* Added gunzip module support
 * Version bumps for PCRE and OpenResty
 
 ## 0.3.2:

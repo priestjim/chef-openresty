@@ -30,7 +30,7 @@ when 'rhel'
   include_recipe 'yum'
 end
 
-kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
+kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first.chomp('+'))
 restart_on_update = node['openresty']['service']['restart_on_update'] ? ' && $( kill -QUIT `pgrep -U root nginx` || true )' : ''
 
 include_recipe 'build-essential'

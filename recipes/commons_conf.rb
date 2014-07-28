@@ -22,7 +22,7 @@
 
 require 'chef/version_constraint'
 
-kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
+kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first.chomp('+'))
 
 if node['openresty']['worker_auto_affinity'] && node['openresty']['worker_processes'] != 'auto'
 

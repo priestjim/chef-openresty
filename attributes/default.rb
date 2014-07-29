@@ -91,7 +91,7 @@ end
 
 default['openresty']['group']         = node['openresty']['user']
 
-if node['network']['interfaces']['lo']['addresses'].include?('::1')
+if node['os'].eql?('linux') && node['network']['interfaces']['lo']['addresses'].include?('::1')
   default['openresty']['ipv6'] = true
 else
   default['openresty']['ipv6'] = false

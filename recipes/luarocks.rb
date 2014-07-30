@@ -38,11 +38,18 @@ remote_file "#{src_filepath}/#{src_basename}" do
   backup false
 end
 
+directory File.join(src_filepath, src_filename) do
+  owner 'root'
+  group 'root'
+  mode 00755
+  recursive true
+end
+
 execute 'extract-openresty-luarocks' do
-  command "tar xzf #{src_filepath}/#{src_basename}"
+  command "tar -C #{src_filepath}/#{src_filename} --strip-components=1 -xzf #{src_filepath}/#{src_basename}"
   cwd src_filepath
   action :run
-  not_if { ::File.directory?("#{src_filepath}/#{src_filename}") }
+  not_if { ::File.directory?("#{src_filepath}/#{src_filename}") && !Dir["#{src_filepath}/#{src_filename}/*"].empty? }
 end
 
 bash 'compile-openresty-luarocks' do

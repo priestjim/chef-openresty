@@ -96,6 +96,7 @@ end
 
 if node['openresty']['logrotate']
 
+  bucket = 'goboxer-nginx-logs'
   include_recipe 'logrotate'
 
   # Log rotation

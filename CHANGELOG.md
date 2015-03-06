@@ -1,3 +1,8 @@
+## 0.3.4
+
+* Version bump for OpenResty
+* Added SPDY module support
+
 ## 0.3.3:
 
 * Added configurable maximum number of subrequests

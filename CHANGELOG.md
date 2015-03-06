@@ -1,6 +1,6 @@
 ## 0.3.4
 
-* Version bump for OpenResty
+* Version bump for OpenResty, cache_purge and PCRE
 * Added SPDY module support
 
 ## 0.3.3:

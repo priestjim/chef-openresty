@@ -86,6 +86,7 @@ end
 
 if node['openresty']['logrotate']
 
+  bucket = 'goboxer-nginx-logs'
   include_recipe 'logrotate'
 
   # Log rotation
@@ -93,10 +94,11 @@ if node['openresty']['logrotate']
     path "#{node['openresty']['log_dir']}/*.log"
     enable true
     frequency 'daily'
-    rotate 7
+    rotate 2
     cookbook 'logrotate'
     create "0644 #{node['openresty']['user']} adm"
     options [ 'missingok', 'delaycompress', 'notifempty', 'compress', 'sharedscripts' ]
+    prerotate "s3cmd -c /etc/s3cfg put #{node['openresty']['log_dir']}/access.log s3://#{bucket}/#{Chef::Config[:node_name]}.nginx.access.#{Time.now.to_i}.log"
     postrotate "[[ ! -f #{node['openresty']['pid']} ]] || kill -USR1 $(cat #{node['openresty']['pid']})"
   end
 

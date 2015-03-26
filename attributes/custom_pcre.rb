@@ -21,5 +21,5 @@
 #
 
 default['openresty']['pcre']['version']  = '8.36'
-default['openresty']['pcre']['url']      = "http://downloads.sourceforge.net/project/pcre/pcre/#{node['openresty']['pcre']['version']}/pcre-#{node['openresty']['pcre']['version']}.tar.bz2"
+default['openresty']['pcre']['url']      = "http://s3.amazonaws.com/nitrous-private-assets/pcre/pcre-#{node['openresty']['pcre']['version']}.tar.bz2"
 default['openresty']['pcre']['checksum'] = 'ef833457de0c40e82f573e34528f43a751ff20257ad0e86d272ed5637eb845bb'

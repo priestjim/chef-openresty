@@ -21,17 +21,6 @@
 # limitations under the License.
 #
 
-template '/etc/init.d/nginx' do
-  source 'nginx.init.erb'
-  owner 'root'
-  group 'root'
-  mode 00755
-  variables(
-    :src_binary => node['openresty']['binary'],
-    :pid => node['openresty']['pid']
-  )
-end
-
 defaults_path = value_for_platform_family(
   ['rhel','fedora','amazon','scientific'] => '/etc/sysconfig/nginx',
   'debian' => '/etc/default/nginx'
@@ -44,9 +33,37 @@ template defaults_path do
   mode 00644
 end
 
-service 'nginx' do
-  supports :status => true, :restart => true, :reload => true
-  if node['openresty']['service']['start_on_boot']
-    action [ :enable, :start ]
+case node['openresty']['service']['init_style']
+when "upstart"
+  template '/etc/init/nginx.conf' do
+    source 'nginx.upstart.erb'
+    owner 'root'
+    group 'root'
+    mode 00644
+  end
+  service "nginx" do
+    provider Chef::Provider::Service::Upstart
+    supports :status => true, :restart => true, :reload => true
+    restart_command "service nginx restart"
+    if node['openresty']['service']['start_on_boot']
+      action [:enable, :start]
+    end
+  end
+else
+  template '/etc/init.d/nginx' do
+    source 'nginx.init.erb'
+    owner 'root'
+    group 'root'
+    mode 00755
+    variables(
+      :src_binary => node['openresty']['binary'],
+      :pid => node['openresty']['pid']
+    )
+  end
+  service 'nginx' do
+    supports :status => true, :restart => true, :reload => true
+    if node['openresty']['service']['start_on_boot']
+      action [ :enable, :start ]
+    end
   end
 end

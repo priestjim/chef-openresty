@@ -8,5 +8,6 @@ location = <%= node['openresty']['status']['url'] %> {
   allow <%= ip %>;
   <% end %>
   deny all;
+  auth_basic off;
   access_log off;
 }

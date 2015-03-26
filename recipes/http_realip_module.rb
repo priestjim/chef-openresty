@@ -32,7 +32,9 @@ template "#{node['openresty']['dir']}/conf.d/http_realip.conf" do
     :header => node['openresty']['realip']['header']
   )
 
-  notifies :reload, node['openresty']['service']['resource']
+  if node['openresty']['service']['start_on_boot']
+    notifies :reload, node['openresty']['service']['resource']
+  end
 end
 
 node.run_state['openresty_configure_flags'] |= ['--with-http_realip_module']

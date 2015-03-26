@@ -1,8 +1,8 @@
 Description
 ===========
 
-Installs the OpenResty NGINX bundle (http://www.openresty.org) from source and 
-sets up configuration handling similar to Debian's Apache2 scripts. It also 
+Installs the OpenResty NGINX bundle (http://www.openresty.org) from source and
+sets up configuration handling similar to Debian's Apache2 scripts. It also
 provides an OHAI plugin for configuration detection and an LWRP for easy site
 activation and deactivation.
 
@@ -24,7 +24,7 @@ for common "default" functionality.
 * apt
 * yum
 
-In order to install the OpenResty `postgresql` module you'll also need 
+In order to install the OpenResty `postgresql` module you'll also need
 the `postgresql` cookbook.
 
 If you want to link NGINX to the very performant jemalloc library, you'll
@@ -33,7 +33,7 @@ need the `jemalloc` cookbook.
 Platform
 --------
 
-The following platforms are supported and tested using Vagrant 1.2: 
+The following platforms are supported and tested using Vagrant 1.2:
 
 * Ubuntu 12.04
 * CentOS 6.3
@@ -152,7 +152,7 @@ Generally used attributes. Some have platform specific values. See
   `worker_processes`.
 
 * `node['openresty']['worker_connections']` - used for config value of
-  `events { worker_connections }`  
+  `events { worker_connections }`
 
 * `node['openresty']['worker_rlimit_nofile']` - used for config value of
   `worker_rlimit_nofile`. Can replace any "ulimit -n" command. The
@@ -160,8 +160,8 @@ Generally used attributes. Some have platform specific values. See
   superior than worker_connections.
 
 * `node['openresty']['worker_auto_affinity']` - Automatically computes and creates
-  CPU affinity assignments (config value `worker_cpu_affinity`) based on the 
-  total number of workers and CPU cores. Can show a nice performance boost when 
+  CPU affinity assignments (config value `worker_cpu_affinity`) based on the
+  total number of workers and CPU cores. Can show a nice performance boost when
   used in high request volume scenarios.
 
 * `node['openresty']['multi_accept']` - used for config value of `events {
@@ -191,7 +191,7 @@ Generally used attributes. Some have platform specific values. See
   value of `types_hash_bucket_size`.
 
 * `node['openresty']['open_file_cache']` - used for config
-  value of `open_file_cache`. Must be an array with values used in the 
+  value of `open_file_cache`. Must be an array with values used in the
   `open_file_cache` directive of NGINX.
 
 * `node['openresty']['logrotate']` - set to true to use the `logrotate_app` of the
@@ -252,7 +252,7 @@ From: http://wiki.nginx.org/HttpUploadProgressModule
 * `node['openresty']['upload_progress']['url']` - GitHub URL to checkout the upload_progress
   module from
 
-* `node['openresty']['upload_progress']['name']` - Directory name to checkout the 
+* `node['openresty']['upload_progress']['name']` - Directory name to checkout the
   module to
 
 ## status.rb
@@ -267,6 +267,7 @@ From: http://wiki.nginx.org/HttpUploadProgressModule
 Explicitely activate not-automatically-activated OpenResty modules
 
 * `node['openresty']['or_modules']['luajit']` - Enables LUAJIT module compilation
+* `node['openresty']['or_modules']['luajit_binary']` - Defines the bundled `luajit` binary version
 * `node['openresty']['or_modules']['iconv']` - Enables iconv module compilation
 * `node['openresty']['or_modules']['postgres']` - Enables PostgreSQL module compilation
 * `node['openresty']['or_modules']['drizzle']` - Enables Drizzle module compilation
@@ -294,9 +295,9 @@ Recipes
 
 The default recipe will install the OpenResty NGINX bundle from source,
 automatically including your selected set of modules, extra-cookbook modules and
-set up the configuration according to the Debian site enable/disable style with 
+set up the configuration according to the Debian site enable/disable style with
 `sites-enabled` using the `nxensite` and `nxdissite` scripts provided by the
-`openresty_site` LWRP. 
+`openresty_site` LWRP.
 
 The recipe ensures that the required packages to build NGINX are installed (pcre,
 openssl, compile tools). The source will be downloaded from the
@@ -340,15 +341,15 @@ for more information.
 ## http_stub_status_module.rb
 
 Special mention needs to be made for the stub status module. The approach followed
-here is to create an _include_ file with proper directives (set in the 
-`status_module.rb` attribute file) that can be included in any NGINX configuration 
+here is to create an _include_ file with proper directives (set in the
+`status_module.rb` attribute file) that can be included in any NGINX configuration
 virtual host via the include directive:
 
     include /etc/nginx/conf.d/nginx_status.conf.inc;
 
 ## luarocks.rb
 
-The `luarocks` recipe installs the LUA rocks package management system for the 
+The `luarocks` recipe installs the LUA rocks package management system for the
 LUAJIT bundle that comes with OpenResty. You can define a set of rocks to install by
 default using the `node['openresty']['luarocks']['default_rocks']` hash.
 
@@ -370,13 +371,13 @@ adding the configure flags. Add any other configuration templates or
 other resources as required. See the recipes described above for
 examples.
 
-In order to include extra-cookbook modules (most probably via an _application_ 
-cookbook), you can use the `node['openresty']['extra_modules']` array, 
+In order to include extra-cookbook modules (most probably via an _application_
+cookbook), you can use the `node['openresty']['extra_modules']` array,
 which takes as elements full recipe references like
-    
+
     'recipe[my_openresty::module_42istheanswerforeveryhing]'
 
-The extra-cookbook modules will be included in the same manner as the standard 
+The extra-cookbook modules will be included in the same manner as the standard
 intra-cookbook modules.
 
 LWRP

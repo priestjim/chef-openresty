@@ -1,3 +1,30 @@
+## 0.3.4
+
+* Version bump for OpenResty, cache_purge and PCRE
+* Added SPDY module support
+
+## 0.3.3:
+
+* Added configurable maximum number of subrequests
+* Added apt/yum dependency fix
+* Fixed luarocks build idempotency
+* Fixed PCRE UTF-8 compilation
+* Added gunzip module support
+* Version bumps for PCRE and OpenResty
+
+## 0.3.2:
+
+* OpenResty version bump (LuaJIT 2.1!)
+* PCRE version bump
+* FIX: zip package dependency installation (#11)
+* FIX: luarocks installation (#12)
+* FIX: onditionally notify service on service changes (#13)
+* FIX: PCRE URL to fix Chef redirect limit
+
+## 0.3.1:
+
+* Version bumps to multiple addons and OpenResty
+
 ## 0.3.0:
 
 * OpenResty major version bump to 1.4-based NGINX
@@ -17,7 +44,7 @@
 * Fixed a bug in service restart
 * Added flag for the control of the automatic activation of the bundled init script
 * Refactored the build+install recipes (thanks @sdelano!)
-* Altered the configure flags detection algorithm from consulting the OHAI plugin to 
+* Altered the configure flags detection algorithm from consulting the OHAI plugin to
   consulting a set node attribute, which is more consistent and less error prone (thanks @sdelano!)
 * Various fixes to the nxensite/nxdissite scripts (thanks @sdelano!)
 * Fixed a bug where disabling the default site would not skip installing the `default` file in sites-enabled

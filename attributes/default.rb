@@ -21,9 +21,9 @@
 #
 
 # Download data
-default['openresty']['source']['version']   = '1.4.2.9'
+default['openresty']['source']['version']   = '1.7.10.1'
 default['openresty']['source']['url']       = "http://agentzh.org/misc/nginx/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
-default['openresty']['source']['checksum']  = '968a55e159023623960aa9ce278f5982e190bc002a542d0160bccd762ecfaf06'
+default['openresty']['source']['checksum']  = '4fd0d73e5955319cee51c6fa574e254be4538a63ae3e673c35eacdf9d4bce679'
 
 # Directories
 default['openresty']['dir']                 = '/etc/nginx'
@@ -63,7 +63,9 @@ default['openresty']['source']['default_configure_flags'] = [
 # Default compile-in modules
 default['openresty']['modules']         = [
   'http_ssl_module',
+  'http_spdy_module',
   'http_gzip_static_module',
+  'http_gunzip_module',
   'http_stub_status_module',
   'http_secure_link_module',
   'http_realip_module',
@@ -90,7 +92,7 @@ end
 
 default['openresty']['group']         = node['openresty']['user']
 
-if node['network']['interfaces']['lo']['addresses'].include?('::1')
+if node['os'].eql?('linux') && node['network']['interfaces']['lo']['addresses'].include?('::1')
   default['openresty']['ipv6'] = true
 else
   default['openresty']['ipv6'] = false
@@ -160,3 +162,7 @@ default['openresty']['default_site_enabled']          = false
 default['openresty']['custom_pcre']                   = true
 # Enable jemalloc linking
 default['openresty']['link_to_jemalloc']              = false
+# Modify the maximum number of subrequests
+# If you don't modify it from the default 200
+# no source patching will occur
+default['openresty']['max_subrequests']              = 201

@@ -23,7 +23,14 @@
 
 require 'chef/version_constraint'
 
-kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first)
+case node['platform_family']
+when 'debian'
+  include_recipe 'apt'
+when 'rhel'
+  include_recipe 'yum'
+end
+
+kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first.chomp('+'))
 restart_on_update = node['openresty']['service']['restart_on_update'] ? ' && $( kill -QUIT `pgrep -U root nginx` || true )' : ''
 
 include_recipe 'build-essential'
@@ -58,14 +65,14 @@ node.run_state['openresty_configure_flags'] = node['openresty']['source']['defau
 # Custom PCRE
 if node['openresty']['custom_pcre']
   pcre_path = "#{Chef::Config['file_cache_path'] || '/tmp'}/pcre-#{node['openresty']['pcre']['version']}"
-  pcre_opts = 'export PCRE_CONF_OPT="--enable-utf8 --enable-unicode-properties" && '
+  pcre_opts = 'export PCRE_CONF_OPT="--enable-utf" && '
   remote_file "#{pcre_path}.tar.bz2" do
     owner 'root'
     group 'root'
     mode 00644
     source node['openresty']['pcre']['url']
     checksum node['openresty']['pcre']['checksum']
-    action :create_if_missing
+    action :create
   end
   execute 'openresty-extract-pcre' do
     user 'root'
@@ -73,7 +80,7 @@ if node['openresty']['custom_pcre']
     command "tar xjf #{pcre_path}.tar.bz2"
     not_if { ::File.directory?(pcre_path) }
   end
-  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}", '--with-pcre-jit' ]
+  node.run_state['openresty_configure_flags'] |= [ "--with-pcre=#{pcre_path}", '--with-pcre-conf-opt=--enable-utf', '--with-pcre-jit' ]
 else
   pcre_opts = ''
   value_for_platform_family(
@@ -83,6 +90,26 @@ else
     package pkg
   end
   node.run_state['openresty_configure_flags'] |= [ '--with-pcre' ]
+end
+
+# Custom subrequests
+subrequests_file = ::File.join(
+  ::File.dirname(src_filepath),
+  "ngx_openresty-#{node['openresty']['source']['version']}",
+  'bundle',
+  "nginx-#{node['openresty']['source']['version'].split('.').first(3).join('.')}",
+  'src', 'http', 'ngx_http_request.h')
+
+if ::File.exists?(subrequests_file)
+  subrequests_configured = ::File.read(subrequests_file).split("\n").grep(/NGX_HTTP_MAX_SUBREQUESTS/).first.split(/\s+/)[2].to_i
+else
+  subrequests_configured = node['openresty']['max_subrequests']
+end
+
+subreq_opts = %Q{sed -ri 's/#define NGX_HTTP_MAX_SUBREQUESTS\\s+[0-9]+$/#define NGX_HTTP_MAX_SUBREQUESTS #{node['openresty']['max_subrequests']}/g' #{subrequests_file} &&}
+if subrequests_configured != node['openresty']['max_subrequests']
+  Chef::Log.info("OpenResty will be reconfigured for #{node['openresty']['max_subrequests']} maximum subrequests (previously it was at #{subrequests_configured})")
+  node.run_state['openresty_force_recompile'] = true
 end
 
 # System flags
@@ -128,7 +155,7 @@ ruby_block 'persist-openresty-configure-flags' do
     if Chef::Config[:solo]
       ::File.write(::File.join(::File.dirname(src_filepath), 'openresty.configure-opts'), configure_flags.sort.uniq.join("\n"))
     else
-      node.set['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq 
+      node.set['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq
     end
   end
   action :nothing
@@ -139,6 +166,7 @@ bash 'compile_openresty_source' do
   code <<-EOH
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)} &&
     cd ngx_openresty-#{node['openresty']['source']['version']} &&
+    #{subreq_opts}
     #{pcre_opts}
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&
     make -j#{node['cpu']['total']} && make install #{restart_on_update}
@@ -150,7 +178,7 @@ bash 'compile_openresty_source' do
       openresty_force_recompile == false &&
         node.automatic_attrs['nginx'] &&
         node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
-        (::File.read(::File.join(:: File.dirname(src_filepath), 'openresty.configure-opts')) || '' rescue '') ==
+        (::File.read(::File.join(::File.dirname(src_filepath), 'openresty.configure-opts')) || '' rescue '') ==
         configure_flags.sort.uniq.join("\n")
     end
   else
@@ -166,6 +194,14 @@ bash 'compile_openresty_source' do
   notifies :create, 'ruby_block[persist-openresty-configure-flags]'
   if node['openresty']['restart_on_update']
     notifies :restart, node['openresty']['resource']
+  end
+end
+
+link ::File.join('/usr', 'share', 'luajit', 'bin', 'luajit') do
+  to ::File.join('/usr', 'share', 'luajit', 'bin', "luajit-#{node['openresty']['or_modules']['luajit_binary']}")
+  only_if do
+    node['openresty']['or_modules']['luajit'] &&
+    ::File.exists?(::File.join('/usr', 'share', 'luajit', 'bin', "luajit-#{node['openresty']['or_modules']['luajit_binary']}"))
   end
 end
 

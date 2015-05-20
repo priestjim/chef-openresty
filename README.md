@@ -208,6 +208,9 @@ Generally used attributes. Some have platform specific values. See
 * `node['openresty']['link_to_jemalloc']` - Se to true to link the NGINX executable to the
   jemalloc library. Requires the `jemalloc` cookbook.
 
+* `node['openresty']['generate_dhparams']` - Se to true to generate a 2048-bit Diffie-Helman parameter file
+  for increased security.
+
 ## service.rb
 
 Define service-specific attributes

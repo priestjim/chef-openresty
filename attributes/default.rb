@@ -166,3 +166,5 @@ default['openresty']['link_to_jemalloc']              = false
 # If you don't modify it from the default 200
 # no source patching will occur
 default['openresty']['max_subrequests']              = 201
+# Generate and include 2048-bit Diffie-Helman parameters by default
+default['openresty']['generate_dhparams']            = true

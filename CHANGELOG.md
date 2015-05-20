@@ -1,3 +1,8 @@
+## 0.3.5
+
+* Made EC2 detection stricter
+* Added support for 2048 bit DH param file per https://weakdh.org/
+
 ## 0.3.4
 
 * Version bump for OpenResty, cache_purge and PCRE

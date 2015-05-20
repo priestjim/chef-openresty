@@ -39,6 +39,13 @@ if node['openresty']['worker_auto_affinity'] && node['openresty']['worker_proces
   node.default['openresty']['worker_cpu_affinity'] = affinity_mask.join(' ')
 end
 
+execute 'openresty generate dhparams' do
+  command "openssl dhparam -out #{node['openresty']['dir']}/dhparams.pem 2048"
+  creates "#{node['openresty']['dir']}/dhparams.pem"
+  action :run
+  only_if { node['openresty']['generate_dhparams'] }
+end
+
 template 'nginx.conf' do
   path "#{node['openresty']['dir']}/nginx.conf"
   source 'nginx.conf.erb'

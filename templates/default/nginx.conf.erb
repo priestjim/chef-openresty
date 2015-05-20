@@ -40,7 +40,7 @@ http {
 
   # PCI compliance
   server_tokens off;
-  
+
   tcp_nopush on;
   tcp_nodelay on;
 
@@ -66,7 +66,7 @@ http {
   gzip_disable     "MSIE [1-6]\.";
   <% end %>
 
-  <% if node['ec2'] %>
+  <% if node['ec2'] && node['ec2']['network_interfaces_macs'] && !(node['ec2']['network_interfaces_macs'].select{ |k,v| v.keys.include?('vpc_id') }.size > 0) %>
   # Set the resolver for upstream proxies to the internal AWS Services offer
   resolver 172.16.0.23 valid=10s;
   <% end %>
@@ -83,6 +83,10 @@ http {
   server_names_hash_bucket_size <%= node['openresty']['server_names_hash_bucket_size'] %>;
   types_hash_max_size <%= node['openresty']['types_hash_max_size'] %>;
   types_hash_bucket_size <%= node['openresty']['types_hash_bucket_size'] %>;
+
+  <% if node['openresty']['generate_dhparams'] %>
+  ssl_dhparam  <%= node['openresty']['dir'] %>/dhparams.pem;
+  <% end %>
 
   include <%= node['openresty']['dir'] %>/conf.d/*.conf;
   include <%= node['openresty']['dir'] %>/sites-enabled/*;

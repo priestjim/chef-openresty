@@ -44,6 +44,9 @@ execute 'openresty generate dhparams' do
   creates "#{node['openresty']['dir']}/dhparams.pem"
   action :run
   only_if { node['openresty']['generate_dhparams'] }
+  if node['openresty']['service']['start_on_boot']
+    notifies :reload, node['openresty']['service']['resource']
+  end
 end
 
 template 'nginx.conf' do

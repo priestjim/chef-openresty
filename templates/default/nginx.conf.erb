@@ -66,7 +66,9 @@ http {
   gzip_disable     "MSIE [1-6]\.";
   <% end %>
 
-  <% if node['ec2'] && node['ec2']['network_interfaces_macs'] && !(node['ec2']['network_interfaces_macs'].select{ |k,v| v.keys.include?('vpc_id') }.size > 0) %>
+  <% if node['openresty']['resolver'] && node['openresty']['resolver_ttl'] %>
+  resolver <%= node['openresty']['resolver'] %> valid=<%= node['openresty']['resolver_ttl'] %>;
+  <% elsif node['ec2'] && node['ec2']['network_interfaces_macs'] && !(node['ec2']['network_interfaces_macs'].select{ |k,v| v.keys.include?('vpc_id') }.size > 0) %>
   # Set the resolver for upstream proxies to the internal AWS Services offer
   resolver 172.16.0.23 valid=10s;
   <% end %>

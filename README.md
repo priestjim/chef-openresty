@@ -208,8 +208,12 @@ Generally used attributes. Some have platform specific values. See
 * `node['openresty']['link_to_jemalloc']` - Se to true to link the NGINX executable to the
   jemalloc library. Requires the `jemalloc` cookbook.
 
-* `node['openresty']['generate_dhparams']` - Se to true to generate a 2048-bit Diffie-Helman parameter file
+* `node['openresty']['generate_dhparams']` - Set to true to generate a 2048-bit Diffie-Helman parameter file
   for increased security.
+
+* `node['openresty']['resolver']` - Set a customer DNS resolver IP address for internal domain name resolution.
+
+* `node['openresty']['resolver_ttl']` - Set the cache time to live for the resolved domains by the resolver.
 
 ## service.rb
 

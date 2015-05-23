@@ -2,6 +2,7 @@
 
 * Made EC2 detection stricter
 * Added support for 2048 bit DH param file per https://weakdh.org/
+* Added custom resolver support
 
 ## 0.3.4
 

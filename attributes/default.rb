@@ -168,3 +168,6 @@ default['openresty']['link_to_jemalloc']              = false
 default['openresty']['max_subrequests']              = 201
 # Generate and include 2048-bit Diffie-Helman parameters by default
 default['openresty']['generate_dhparams']            = true
+# Enable a custom resolver in the main nginx configuration file
+default['openresty']['resolver']                     = nil
+default['openresty']['resolver_ttl']                 = '10s'

@@ -215,6 +215,10 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['resolver_ttl']` - Set the cache time to live for the resolved domains by the resolver.
 
+* `node['openresty']['lua_package_path']` - The default LUA package path
+
+* `node['openresty']['lua_package_cpath']` - The default LUA package path for C libraries
+
 ## service.rb
 
 Define service-specific attributes

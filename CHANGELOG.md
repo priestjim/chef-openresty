@@ -3,6 +3,7 @@
 * Made EC2 detection stricter
 * Added support for 2048 bit DH param file per https://weakdh.org/
 * Added custom resolver support
+* Added support for custom LUA package paths
 
 ## 0.3.4
 

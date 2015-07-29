@@ -86,6 +86,13 @@ http {
   types_hash_max_size <%= node['openresty']['types_hash_max_size'] %>;
   types_hash_bucket_size <%= node['openresty']['types_hash_bucket_size'] %>;
 
+  <% if node['openresty']['lua_package_path'] %>
+  lua_package_path <%= node['openresty']['lua_package_path'] %>;
+  <% end %>
+  <% if node['openresty']['lua_package_cpath'] %>
+  lua_package_cpath <%= node['openresty']['lua_package_cpath'] %>;
+  <% end %>
+
   <% if node['openresty']['generate_dhparams'] %>
   ssl_dhparam  <%= node['openresty']['dir'] %>/dhparams.pem;
   <% end %>

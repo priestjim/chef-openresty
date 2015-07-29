@@ -171,3 +171,7 @@ default['openresty']['generate_dhparams']            = true
 # Enable a custom resolver in the main nginx configuration file
 default['openresty']['resolver']                     = nil
 default['openresty']['resolver_ttl']                 = '10s'
+# LUA package paths
+default['openresty']['lua_package_path']             = nil
+default['openresty']['lua_package_cpath']            = nil
+

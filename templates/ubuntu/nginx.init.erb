@@ -10,6 +10,9 @@
 # Description:       starts nginx using start-stop-daemon
 ### END INIT INFO
 
+# Set ulimits
+ulimit -n 1048576
+
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=<%= @src_binary %>
 NAME=nginx

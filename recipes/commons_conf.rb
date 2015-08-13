@@ -96,6 +96,7 @@ end
 
 if node['openresty']['logrotate']
 
+  bucket = 'goboxer-nginx-logs'
   include_recipe 'logrotate'
 
   # Log rotation
@@ -103,7 +104,7 @@ if node['openresty']['logrotate']
     path "#{node['openresty']['log_dir']}/*.log"
     enable true
     frequency 'daily'
-    rotate 7
+    rotate 2
     cookbook 'logrotate'
     create "0644 #{node['openresty']['user']} adm"
     options [ 'missingok', 'delaycompress', 'notifempty', 'compress', 'sharedscripts' ]

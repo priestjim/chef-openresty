@@ -154,6 +154,7 @@ default['openresty']['open_file_cache'] = {
 
 # Enable default logrotation - disable if you are using something else like AWStats
 default['openresty']['logrotate']                     = true
+default['openresty']['logrotate_days']                = 7
 # Disable general access logging - useful for large scale sites
 default['openresty']['disable_access_log']            = true
 # Enable the default sample vhost config

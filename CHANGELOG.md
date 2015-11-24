@@ -1,3 +1,7 @@
+## 0.3.6
+
+* Changed custom_pcre.rb to point to Artifactory instead of SourceForge for pcre 8.37
+
 ## 0.3.5
 
 * Made EC2 detection stricter

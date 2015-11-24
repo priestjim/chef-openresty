@@ -21,5 +21,5 @@
 #
 
 default['openresty']['pcre']['version']  = '8.37'
-default['openresty']['pcre']['url']      = "http://downloads.sourceforge.net/project/pcre/pcre/#{node['openresty']['pcre']['version']}/pcre-#{node['openresty']['pcre']['version']}.tar.bz2"
-default['openresty']['pcre']['checksum'] = '51679ea8006ce31379fb0860e46dd86665d864b5020fc9cd19e71260eef4789d'
+default['openresty']['pcre']['url']      = "http://artifactory-scalr.tools.gannettdigital.com/artifactory/binaries/pcre/pcre-#{node['openresty']['pcre']['version']}.tar.bz2"
+default['openresty']['pcre']['checksum'] = '4c629b3f582366fae4e8912f0d9fa3140347d6e7'

@@ -63,7 +63,6 @@ default['openresty']['source']['default_configure_flags'] = [
 # Default compile-in modules
 default['openresty']['modules']         = [
   'http_ssl_module',
-  'http_spdy_module',
   'http_gzip_static_module',
   'http_gunzip_module',
   'http_stub_status_module',

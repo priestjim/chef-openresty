@@ -197,11 +197,11 @@ bash 'compile_openresty_source' do
   end
 end
 
-link ::File.join("#{node['openresty']['source']['prefix']}", 'bin', 'luajit') do
-  to ::File.join("#{node['openresty']['source']['prefix']}", "luajit-#{node['openresty']['or_modules']['luajit_binary']}")
+link ::File.join("#{node['openresty']['source']['prefix']}", 'luajit', 'bin', 'luajit') do
+  to ::File.join("#{node['openresty']['source']['prefix']}", 'luajit', 'bin', "luajit-#{node['openresty']['or_modules']['luajit_binary']}")
   only_if do
     node['openresty']['or_modules']['luajit'] &&
-    ::File.exists?(::File.join("#{node['openresty']['source']['prefix']}", 'bin', "luajit-#{node['openresty']['or_modules']['luajit_binary']}"))
+    ::File.exists?(::File.join("#{node['openresty']['source']['prefix']}", 'luajit', 'bin', "luajit-#{node['openresty']['or_modules']['luajit_binary']}"))
   end
 end
 

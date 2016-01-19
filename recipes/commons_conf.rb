@@ -103,10 +103,10 @@ if node['openresty']['logrotate']
     path "#{node['openresty']['log_dir']}/*.log"
     enable true
     frequency 'daily'
-    rotate 7
+    rotate node['openresty']['logrotate_days']
     cookbook 'logrotate'
     create "0644 #{node['openresty']['user']} adm"
-    options [ 'missingok', 'delaycompress', 'notifempty', 'compress', 'sharedscripts' ]
+    options node['openresty']['logrotate_options']
     postrotate "test -f #{node['openresty']['pid']} && kill -USR1 $(cat #{node['openresty']['pid']})"
   end
 

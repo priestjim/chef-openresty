@@ -35,7 +35,13 @@ restart_on_update = node['openresty']['service']['restart_on_update'] ? ' && $( 
 
 include_recipe 'build-essential'
 
+directory node['openresty']['source']['path'] do
+  action :create
+  recursive true
+end
+
 src_filepath = "#{node['openresty']['source']['path']}/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
+
 
 packages = value_for_platform_family(
   ['rhel','fedora','amazon','scientific'] => [ 'openssl-devel', 'readline-devel', 'ncurses-devel' ],

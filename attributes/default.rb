@@ -39,8 +39,7 @@ default['openresty']['source']['prefix']    = '/usr/share'
 
 ## extract our source here and compile from this location.
 ## by default we use #{Chef::Config['file_cache_path']
-## this allows something more specific since those may be transient
-## if you overide this, YOU MUST CREATE THE DIRECTORY FIRST.
+## this allows something more specific since those may be transient and cause recompiles
 default['openresty']['source']['path']    = Chef::Config['file_cache_path']||'/tmp'
 
 

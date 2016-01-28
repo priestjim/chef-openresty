@@ -20,8 +20,8 @@
 #
 
 cpm_src_filename = "ngx_cache_purge-#{::File.basename(node['openresty']['cache_purge']['url'])}"
-cpm_src_filepath = "#{Chef::Config['file_cache_path']}/#{cpm_src_filename}"
-cpm_extract_path = "#{Chef::Config['file_cache_path']}/ngx_cache_purge/#{node['openresty']['cache_purge']['checksum']}"
+cpm_src_filepath = "#{node['openresty']['source']['path']}/#{cpm_src_filename}"
+cpm_extract_path = "#{node['openresty']['source']['path']}/ngx_cache_purge/#{node['openresty']['cache_purge']['checksum']}"
 
 remote_file cpm_src_filepath do
   source node['openresty']['cache_purge']['url']

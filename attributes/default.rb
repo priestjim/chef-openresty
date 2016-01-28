@@ -37,6 +37,13 @@ default['openresty']['pid']                 = "#{node['openresty']['run_dir']}/n
 default['openresty']['source']['conf_path'] = "#{node['openresty']['dir']}/nginx.conf"
 default['openresty']['source']['prefix']    = '/usr/share'
 
+## extract our source here and compile from this location.
+## by default we use #{Chef::Config['file_cache_path']
+## this allows something more specific since those may be transient
+## if you overide this, YOU MUST CREATE THE DIRECTORY FIRST.
+default['openresty']['source']['path']    = Chef::Config['file_cache_path']||'/tmp'
+
+
 # Configure flags
 default['openresty']['source']['default_configure_flags'] = [
   "--prefix=#{node['openresty']['source']['prefix']}",

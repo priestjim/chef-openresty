@@ -35,7 +35,7 @@ restart_on_update = node['openresty']['service']['restart_on_update'] ? ' && $( 
 
 include_recipe 'build-essential'
 
-src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/ngx_openresty-#{node['openresty']['source']['version']}.tar.gz"
+src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/#{node['openresty']['source']['name']}.tar.gz"
 
 packages = value_for_platform_family(
   ['rhel','fedora','amazon','scientific'] => [ 'openssl-devel', 'readline-devel', 'ncurses-devel' ],
@@ -95,7 +95,7 @@ end
 # Custom subrequests
 subrequests_file = ::File.join(
   ::File.dirname(src_filepath),
-  "ngx_openresty-#{node['openresty']['source']['version']}",
+  node['openresty']['source']['name'],
   'bundle',
   "nginx-#{node['openresty']['source']['version'].split('.').first(3).join('.')}",
   'src', 'http', 'ngx_http_request.h')
@@ -165,7 +165,7 @@ bash 'compile_openresty_source' do
   cwd ::File.dirname(src_filepath)
   code <<-EOH
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)} &&
-    cd ngx_openresty-#{node['openresty']['source']['version']} &&
+    cd #{node['openresty']['source']['name']} &&
     #{subreq_opts}
     #{pcre_opts}
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&

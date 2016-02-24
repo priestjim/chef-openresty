@@ -21,8 +21,8 @@
 #
 
 upm_src_filename = ::File.basename(node['openresty']['upload_progress']['url'])
-upm_src_filepath = "#{Chef::Config['file_cache_path']}/#{upm_src_filename}"
-upm_extract_path = "#{Chef::Config['file_cache_path']}/nginx_upload_progress/#{node['openresty']['upload_progress']['checksum']}"
+upm_src_filepath = "#{node['openresty']['source']['path']}/#{upm_src_filename}"
+upm_extract_path = "#{node['openresty']['source']['path']}/nginx_upload_progress/#{node['openresty']['upload_progress']['checksum']}"
 
 remote_file upm_src_filepath do
   source node['openresty']['upload_progress']['url']

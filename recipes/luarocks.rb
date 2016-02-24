@@ -29,7 +29,7 @@ include_recipe 'openresty'
 end
 
 src_basename  = ::File.basename(node['openresty']['luarocks']['url'])
-src_filepath  = Chef::Config['file_cache_path'] || '/tmp'
+src_filepath  = node['openresty']['source']['path']
 src_filename  = ::File.basename(src_basename, '.tar.gz')
 
 remote_file "#{src_filepath}/#{src_basename}" do

@@ -35,7 +35,12 @@ restart_on_update = node['openresty']['service']['restart_on_update'] ? ' && $( 
 
 include_recipe 'build-essential'
 
-src_filepath  = "#{Chef::Config['file_cache_path'] || '/tmp'}/#{node['openresty']['source']['name']}.tar.gz"
+directory node['openresty']['source']['path'] do
+  action :create
+  recursive true
+end
+
+src_filepath  = "#{node['openresty']['source']['path']}/#{node['openresty']['source']['name']}.tar.gz"
 
 packages = value_for_platform_family(
   ['rhel','fedora','amazon','scientific'] => [ 'openssl-devel', 'readline-devel', 'ncurses-devel' ],
@@ -64,7 +69,7 @@ node.run_state['openresty_configure_flags'] = node['openresty']['source']['defau
 
 # Custom PCRE
 if node['openresty']['custom_pcre']
-  pcre_path = "#{Chef::Config['file_cache_path'] || '/tmp'}/pcre-#{node['openresty']['pcre']['version']}"
+  pcre_path = "#{node['openresty']['source']['path'] }/pcre-#{node['openresty']['pcre']['version']}"
   pcre_opts = 'export PCRE_CONF_OPT="--enable-utf" && '
   remote_file "#{pcre_path}.tar.bz2" do
     owner 'root'
@@ -76,7 +81,7 @@ if node['openresty']['custom_pcre']
   end
   execute 'openresty-extract-pcre' do
     user 'root'
-    cwd(Chef::Config['file_cache_path'] || '/tmp')
+    cwd(node['openresty']['source']['path'] )
     command "tar xjf #{pcre_path}.tar.bz2"
     not_if { ::File.directory?(pcre_path) }
   end

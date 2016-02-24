@@ -5,6 +5,9 @@ license           'Apache 2.0'
 description       'Installs and configures the OpenResty NGINX bundle'
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md')).chomp
 version           IO.read(File.join(File.dirname(__FILE__), 'VERSION')).chomp rescue '0.1.0'
+chef_version      '>= 11.0'
+issues_url        'https://github.com/priestjim/chef-openresty/issues'
+source_url        'https://github.com/priestjim/chef-openresty'
 
 recipe 'openresty', 'Installs the OpenResty NGINX bundle and sets up configuration with Debian apache style sites-enabled/sites-available'
 
@@ -18,6 +21,5 @@ depends 'ohai', '>= 1.1.4'
 depends 'yum'
 depends 'apt'
 depends 'git'
-
-recommends 'postgresql'
-recommends 'jemalloc'
+depends 'postgresql'
+depends 'jemalloc'

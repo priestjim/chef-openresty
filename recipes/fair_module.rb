@@ -21,7 +21,7 @@
 
 include_recipe 'git'
 
-module_path = "#{Chef::Config['file_cache_path']}/#{node['openresty']['fair']['name']}"
+module_path = "#{node['openresty']['source']['path']}/#{node['openresty']['fair']['name']}"
 
 git module_path do
   repository node['openresty']['fair']['url']

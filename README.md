@@ -93,6 +93,9 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['source']['checksum']` - The SHA-256 checksum for the selected version.
 
+* `node['openresty']['source']['file_prefix']` - The main source directory name.
+  `ngx_` got dropped in newer OpenResty versions.
+
 * `node['openresty']['dir']` - Location for NGINX configuration.
 
 * `node['openresty']['log_dir']` - Location for NGINX logs.
@@ -105,9 +108,11 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['pid']` - The exact NGINX pid filename.
 
-* `node['openresty']['source']['conf_path']` - Exact filename for the NGINX configuration file
+* `node['openresty']['source']['conf_path']` - Exact filename for the NGINX configuration file.
 
-* `node['openresty']['source']['prefix']` - Installation prefix for miscellaneous data
+* `node['openresty']['source']['prefix']` - Installation prefix for miscellaneous data.
+
+* `node['openresty']['source']['path']` - Download and compilation temporary path.
 
 * `node['openresty']['source']['default_configure_flags']` - A set of default configuration
   flags for the source compilation, generally best left untouched unless you

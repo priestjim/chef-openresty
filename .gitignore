@@ -22,3 +22,4 @@ Berksfile.lock
 .vagrant
 .idea
 metadata.json
+.DS_Store

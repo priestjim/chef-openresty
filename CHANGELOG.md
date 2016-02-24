@@ -1,3 +1,12 @@
+## 0.4.0
+
+* Support for dynamic temporary path location
+* Added option to change the source tree name from **ngx_openresty** to **openresty**
+* Change fetch URLs from git to HTTPS to easily traverse firewalls
+* OpenResty version bump
+* Fixed a couple of foodcritic warnings
+* Fixed a problematic LUAJIT link
+
 ## 0.3.5
 
 * Made EC2 detection stricter

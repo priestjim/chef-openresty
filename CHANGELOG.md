@@ -1,3 +1,7 @@
+## 0.4.1
+
+* Fix metadata.rb DSL for older Chef versions
+
 ## 0.4.0
 
 * Support for dynamic temporary path location

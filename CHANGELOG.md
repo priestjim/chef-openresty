@@ -1,3 +1,7 @@
+## 0.4.2
+
+* Add bzip2 as a dependency. Resolves #45
+
 ## 0.4.1
 
 * Fix metadata.rb DSL for older Chef versions

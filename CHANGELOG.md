@@ -1,6 +1,7 @@
 ## 0.4.2
 
 * Add bzip2 as a dependency. Resolves #45
+* Switch custom PCRE to Sourceforge
 
 ## 0.4.1
 

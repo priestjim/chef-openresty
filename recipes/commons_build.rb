@@ -40,7 +40,11 @@ directory node['openresty']['source']['path'] do
   recursive true
 end
 
-src_filepath  = "#{node['openresty']['source']['path']}/#{node['openresty']['source']['name']}.tar.gz"
+# use vars for these for delayed interpolation
+src_file_name=node['openresty']['source']['name'] % { file_prefix: node['openresty']['source']['file_prefix'], version: node['openresty']['source']['version'] }
+src_file_url=node['openresty']['source']['url'] % { name: src_file_name }
+src_filepath  = "#{node['openresty']['source']['path']}/#{src_file_name}.tar.gz"
+
 
 packages = value_for_platform_family(
   ['rhel','fedora','amazon','scientific'] => ['openssl-devel', 'readline-devel', 'ncurses-devel', 'bzip2'],
@@ -57,8 +61,8 @@ packages.each do |devpkg|
   package devpkg
 end
 
-remote_file node['openresty']['source']['url'] do
-  source node['openresty']['source']['url']
+remote_file src_file_url do
+  source src_file_url
   checksum node['openresty']['source']['checksum']
   path src_filepath
   backup false
@@ -100,7 +104,7 @@ end
 # Custom subrequests
 subrequests_file = ::File.join(
   ::File.dirname(src_filepath),
-  node['openresty']['source']['name'],
+  src_file_name,
   'bundle',
   "nginx-#{node['openresty']['source']['version'].split('.').first(3).join('.')}",
   'src', 'http', 'ngx_http_request.h')
@@ -170,7 +174,7 @@ bash 'compile_openresty_source' do
   cwd ::File.dirname(src_filepath)
   code <<-EOH
     tar zxf #{::File.basename(src_filepath)} -C #{::File.dirname(src_filepath)} &&
-    cd #{node['openresty']['source']['name']} &&
+    cd #{src_file_name} &&
     #{subreq_opts}
     #{pcre_opts}
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&

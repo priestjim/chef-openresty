@@ -21,9 +21,9 @@
 #
 
 # Download data
-default['openresty']['source']['version']     = '1.9.7.3'
+default['openresty']['source']['version']     = '1.9.7.4'
 default['openresty']['source']['file_prefix'] = 'openresty'
-default['openresty']['source']['checksum']    = '3e4422576d11773a03264021ff7985cd2eeac3382b511ae3052e835210a9a69a'
+default['openresty']['source']['checksum']    = 'aa5dcae035dda6e483bc1bd3d969d7113205dc2d0a3702ece0ad496c88a653c5'
 #use %{} for delayed interpolation
 default['openresty']['source']['name']        = "%{file_prefix}-%{version}"
 default['openresty']['source']['url']         = "http://agentzh.org/misc/nginx/%{name}.tar.gz"
@@ -40,7 +40,7 @@ default['openresty']['pid']                 = "#{node['openresty']['run_dir']}/n
 default['openresty']['source']['conf_path'] = "#{node['openresty']['dir']}/nginx.conf"
 default['openresty']['source']['prefix']    = '/usr/share'
 
-## extract our source here and compile from this location.
+## Extract our source here and compile from this location.
 ## by default we use #{Chef::Config['file_cache_path']
 ## this allows something more specific since those may be transient and cause recompiles
 default['openresty']['source']['path']    = Chef::Config['file_cache_path']||'/tmp'
@@ -100,7 +100,7 @@ end
 
 default['openresty']['group']         = node['openresty']['user']
 
-if node['os'].eql?('linux') && node['network']['interfaces']['lo']['addresses'].include?('::1')
+if node['os'].eql?('linux') && (node['network']['interfaces']['lo']['addresses'].include?('::1') rescue false)
   default['openresty']['ipv6'] = true
 else
   default['openresty']['ipv6'] = false

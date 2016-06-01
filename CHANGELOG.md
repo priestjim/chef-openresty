@@ -1,3 +1,10 @@
+## 0.5.0
+
+* Convert from Vagrant to test-kitchen
+* Fix compatibility with Ohai cookbook > 4.0.0
+* Upgrade Ohai plugin to version 7
+* Bump OpenResty version
+
 ## 0.4.2
 
 * Add bzip2 as a dependency. Resolves #45

@@ -1,0 +1,23 @@
+---
+driver:
+  name: docker
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-16.04
+  - name: centos-7.2
+
+suites:
+  - name: default
+    run_list:
+      - recipe[jemalloc::default]
+      - recipe[openresty::default]
+      - recipe[openresty::luarocks]
+    attributes:
+      openresty:
+          link_to_jemalloc: true
+          luarocks:
+              default_rocks:
+                  md5: '1.1.1'

@@ -23,3 +23,5 @@ Berksfile.lock
 .idea
 metadata.json
 .DS_Store
+.kitchen/
+.kitchen.local.yml

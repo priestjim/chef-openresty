@@ -1,3 +1,7 @@
+## 0.5.1
+
+* Add template support for nginx_site
+
 ## 0.5.0
 
 * Convert from Vagrant to test-kitchen

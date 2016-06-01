@@ -33,10 +33,10 @@ need the `jemalloc` cookbook.
 Platform
 --------
 
-The following platforms are supported and tested using Vagrant 1.2:
+The following platforms are supported and tested using test-kitchen:
 
-* Ubuntu 12.04
-* CentOS 6.3
+* Ubuntu 16.04
+* CentOS 7.2
 
 Other Debian and RHEL family distributions are assumed to work.
 
@@ -406,11 +406,16 @@ The cookbook includes the `openresty_site` LWRP (in contrast to the original
 as `nginx_site` and offers resource notifications (an advantage LWRPs
 offer over simpler definitions). It also includes a `timing` parameter that can
 be used to notify the `nginx` process to restart immediately based on configuration
-file changes. The LWRP can be used like
+file changes. It can also deploy your website's configuration in the appropriate place
+if you define the `template` parameter with the filename of your website's configuration template
+(variables for this template can be defined with `variables`) in the cookbook where you've also
+defined the `openresty_site` resource. The LWRP can be used such as:
 
     openresty_site 'site.example.com' do
-        action :enable
-        timing :immediately
+      template 'site.example.com.conf.erb'
+      variables hostname: 'site.example.com'
+      action :enable
+      timing :immediately
     end
 
 ## luarock
@@ -420,12 +425,12 @@ available to use with the LUAJIT system bundled with OpenResty. You can install 
 LUA rocks using the `install` and `remove` actions of the LWRP. A sample follows:
 
     openresty_luarock 'md5' do
-        action :install
-        version '1.1.2'
+      action :install
+      version '1.1.2'
     end
 
     openresty_luarock 'luafilesystem' do
-        action :remove # Removes all versions installed
+      action :remove # Removes all versions installed
     end
 
 Ohai Plugin

@@ -20,25 +20,32 @@
 #
 
 action :enable do
-  timing = [:delayed, :immediately].include?(new_resource.timing) ? new_resource.timing : :delayed
   link_name = (new_resource.name == 'default') ? '000-default' : new_resource.name
-  a = execute "nxensite #{new_resource.name}" do
+  tpl = if new_resource.template
+    template "#{node['openresty']['dir']}/sites-available/#{link_name}" do
+      source new_resource.template
+      owner 'root'
+      group 'root'
+      mode 00644
+      variables new_resource.variables
+      notifies :reload, node['openresty']['service']['resource'], new_resource.timing
+    end
+  end
+  site = execute "nxensite #{new_resource.name}" do
     command "/usr/sbin/nxensite #{new_resource.name}"
-    notifies :reload, node['openresty']['service']['resource'], timing
+    notifies :reload, node['openresty']['service']['resource'], new_resource.timing
     not_if { ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/#{link_name}") }
   end
-
-  new_resource.updated_by_last_action(a.updated_by_last_action?)
+  new_resource.updated_by_last_action(site.updated_by_last_action? ||
+                                      (tpl.updated_by_last_action? rescue false))
 end
 
 action :disable do
-  timing = [:delayed, :immediately].include?(new_resource.timing) ? new_resource.timing : :delayed
   link_name = (new_resource.name == 'default') ? '000-default' : new_resource.name
-  a = execute "nxdissite #{new_resource.name}" do
+  site = execute "nxdissite #{new_resource.name}" do
     command "/usr/sbin/nxdissite #{new_resource.name}"
-    notifies :reload, node['openresty']['service']['resource'], timing
+    notifies :reload, node['openresty']['service']['resource'], new_resource.timing
     only_if { ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/#{link_name}") }
   end
-
-  new_resource.updated_by_last_action(a.updated_by_last_action?)    
+  new_resource.updated_by_last_action(site.updated_by_last_action?)
 end

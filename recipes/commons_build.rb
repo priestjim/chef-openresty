@@ -31,7 +31,6 @@ when 'rhel'
 end
 
 kernel_supports_aio = Chef::VersionConstraint.new('>= 2.6.22').include?(node['kernel']['release'].split('-').first.chomp('+'))
-restart_on_update = node['openresty']['service']['restart_on_update'] ? ' && $( kill -QUIT `pgrep -U root nginx` || true )' : ''
 
 include_recipe 'build-essential'
 
@@ -178,7 +177,7 @@ bash 'compile_openresty_source' do
     #{subreq_opts}
     #{pcre_opts}
     ./configure #{node.run_state['openresty_configure_flags'].join(' ')} &&
-    make -j#{node['cpu']['total']} && make install #{restart_on_update}
+    make -j#{node['cpu']['total']} && make install
   EOH
 
   # OpenResty configure args massaging due to the configure script adding its own arguments along our custom ones
@@ -201,8 +200,8 @@ bash 'compile_openresty_source' do
   end
 
   notifies :create, 'ruby_block[persist-openresty-configure-flags]'
-  if node['openresty']['restart_on_update']
-    notifies :restart, node['openresty']['resource']
+  if node['openresty']['service']['restart_on_update']
+    notifies :restart, node['openresty']['service']['resource']
   end
 end
 

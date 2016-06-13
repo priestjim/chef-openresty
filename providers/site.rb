@@ -28,11 +28,13 @@ action :enable do
       group 'root'
       mode 00644
       variables new_resource.variables
-      notifies :reload, node['openresty']['service']['resource'], new_resource.timing
+      if node['openresty']['service']['start_on_boot']
+        notifies :reload, node['openresty']['service']['resource'], new_resource.timing
+      end
     end
   end
-  site = execute "nxensite #{new_resource.name}" do
-    command "/usr/sbin/nxensite #{new_resource.name}"
+  site = execute "nxensite #{link_name}" do
+    command "/usr/sbin/nxensite #{link_name}"
     notifies :reload, node['openresty']['service']['resource'], new_resource.timing
     not_if { ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/#{link_name}") }
   end
@@ -42,9 +44,11 @@ end
 
 action :disable do
   link_name = (new_resource.name == 'default') ? '000-default' : new_resource.name
-  site = execute "nxdissite #{new_resource.name}" do
-    command "/usr/sbin/nxdissite #{new_resource.name}"
-    notifies :reload, node['openresty']['service']['resource'], new_resource.timing
+  site = execute "nxdissite #{link_name}" do
+    command "/usr/sbin/nxdissite #{link_name}"
+    if node['openresty']['service']['start_on_boot']
+      notifies :reload, node['openresty']['service']['resource'], new_resource.timing
+    end
     only_if { ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/#{link_name}") }
   end
   new_resource.updated_by_last_action(site.updated_by_last_action?)

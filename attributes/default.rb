@@ -21,29 +21,29 @@
 #
 
 # Download data
-default['openresty']['source']['version']     = '1.9.7.4'
+default['openresty']['source']['version']     = '1.9.15.1'
 default['openresty']['source']['file_prefix'] = 'openresty'
-default['openresty']['source']['checksum']    = 'aa5dcae035dda6e483bc1bd3d969d7113205dc2d0a3702ece0ad496c88a653c5'
+default['openresty']['source']['checksum']    = '75cf020144048c9013ee487cb48107a5b99de04a5a8fa83839c8b4c3aa4eb0db'
 #use %{} for delayed interpolation
 default['openresty']['source']['name']        = "%{file_prefix}-%{version}"
 default['openresty']['source']['url']         = "http://agentzh.org/misc/nginx/%{name}.tar.gz"
 
 # Directories
-default['openresty']['dir']                 = '/etc/nginx'
-default['openresty']['log_dir']             = '/var/log/nginx'
-default['openresty']['cache_dir']           = '/var/cache/nginx'
-default['openresty']['run_dir']             = '/var/run'
-default['openresty']['binary']              = '/usr/sbin/nginx'
-default['openresty']['pid']                 = "#{node['openresty']['run_dir']}/nginx.pid"
+default['openresty']['dir']                   = '/etc/nginx'
+default['openresty']['log_dir']               = '/var/log/nginx'
+default['openresty']['cache_dir']             = '/var/cache/nginx'
+default['openresty']['run_dir']               = '/var/run'
+default['openresty']['binary']                = '/usr/sbin/nginx'
+default['openresty']['pid']                   = "#{node['openresty']['run_dir']}/nginx.pid"
 
 # Namespaced attributes in order not to clash with the OHAI plugin
-default['openresty']['source']['conf_path'] = "#{node['openresty']['dir']}/nginx.conf"
-default['openresty']['source']['prefix']    = '/usr/share'
+default['openresty']['source']['conf_path']   = "#{node['openresty']['dir']}/nginx.conf"
+default['openresty']['source']['prefix']      = '/usr/share'
 
 ## Extract our source here and compile from this location.
 ## by default we use #{Chef::Config['file_cache_path']
 ## this allows something more specific since those may be transient and cause recompiles
-default['openresty']['source']['path']    = Chef::Config['file_cache_path']||'/tmp'
+default['openresty']['source']['path']        = Chef::Config['file_cache_path'] || '/tmp'
 
 
 # Configure flags

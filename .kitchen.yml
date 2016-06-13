@@ -17,6 +17,7 @@ suites:
       - recipe[openresty::luarocks]
     attributes:
       openresty:
+          default_site_enabled: true
           link_to_jemalloc: true
           luarocks:
               default_rocks:

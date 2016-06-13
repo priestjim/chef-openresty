@@ -78,20 +78,10 @@ cookbook_file "#{node['openresty']['dir']}/conf.d/general_security.conf.inc" do
   mode 00644
 end
 
-if node['openresty']['default_site_enabled']
-  template "#{node['openresty']['dir']}/sites-available/default" do
-    source 'default-site.erb'
-    owner 'root'
-    group 'root'
-    mode 00644
-    if node['openresty']['service']['start_on_boot'] && ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/000-default")
-      notifies :reload, node['openresty']['service']['resource']
-    end
-  end
-
-  openresty_site 'default' do
-    action :enable
-  end
+openresty_site 'default' do
+  action :enable
+  template 'default-site.erb'
+  only_if { node['openresty']['default_site_enabled'] }
 end
 
 if node['openresty']['logrotate']

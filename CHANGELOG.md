@@ -1,3 +1,10 @@
+## 0.5.2
+
+* Properly restart OpenResty (#52)
+* Fix `site` resource link name (#53)
+* Bump OpenResty version
+* Version bump of OpenResty fixes chef-solo idempotence as well
+
 ## 0.5.1
 
 * Add template support for nginx_site

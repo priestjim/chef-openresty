@@ -199,6 +199,9 @@ Generally used attributes. Some have platform specific values. See
   value of `open_file_cache`. Must be an array with values used in the
   `open_file_cache` directive of NGINX.
 
+* `node['openresty']['log_formats']` - hash of `log_format`s you want to use in
+  `nginx.conf` http context
+
 * `node['openresty']['logrotate']` - set to true to use the `logrotate_app` of the
   `logrotate` cookbook to enable automatic log rotation of NGINX logs.
 

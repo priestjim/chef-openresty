@@ -44,9 +44,11 @@ http {
   tcp_nopush on;
   tcp_nodelay on;
 
-  log_format main '$remote_addr - $remote_user [$time_local] "$request" '
-                  '$status $body_bytes_sent "$http_referer" '
-                  '"$http_user_agent" "$http_x_forwarded_for"';
+  <% if node['openresty']['log_formats'] %>
+    <% node['openresty']['log_formats'].each do |name, string| %>
+  log_format <%= name %> '<%= string %>';
+    <% end %>
+  <% end %>
 
   <% if node['openresty']['keepalive'] == "on" %>
   keepalive_timeout  <%= node['openresty']['keepalive_timeout'] %>;

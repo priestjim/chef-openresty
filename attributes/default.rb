@@ -160,6 +160,10 @@ default['openresty']['open_file_cache'] = {
   'errors'    => 'on'
 }
 
+default['openresty']['log_formats'] = { main: '$remote_addr - $remote_user [$time_local] "$request" ' \
+                                              '$status $body_bytes_sent "$http_referer" ' \
+                                              '"$http_user_agent" "$http_x_forwarded_for"' }
+
 # Enable default logrotation - disable if you are using something else like AWStats
 default['openresty']['logrotate']                     = true
 default['openresty']['logrotate_days']                = 7

@@ -94,7 +94,6 @@ if node['openresty']['logrotate']
     enable true
     frequency 'daily'
     rotate node['openresty']['logrotate_days']
-    cookbook 'logrotate'
     create "0644 #{node['openresty']['user']} adm"
     options node['openresty']['logrotate_options']
     postrotate "test -f #{node['openresty']['pid']} && kill -USR1 $(cat #{node['openresty']['pid']})"

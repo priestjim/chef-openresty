@@ -28,3 +28,6 @@ default['openresty']['service']['resource']           = 'service[nginx]'
 default['openresty']['service']['restart_on_update']  = true
 # Start on system boot
 default['openresty']['service']['start_on_boot']      = true
+
+default['openresty']['service']['defaults_file_template'] = 'nginx.sysconfig.erb'
+default['openresty']['service']['defaults_file_cookbook'] = 'openresty'

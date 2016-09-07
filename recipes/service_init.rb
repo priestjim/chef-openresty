@@ -38,7 +38,8 @@ defaults_path = value_for_platform_family(
 )
 
 template defaults_path do
-  source 'nginx.sysconfig.erb'
+  source node['openresty']['service']['defaults_file_template']
+  cookbook node['openresty']['service']['defaults_file_cookbook']
   owner 'root'
   group 'root'
   mode 00644

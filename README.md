@@ -245,6 +245,12 @@ Define service-specific attributes
   activation and startup via the selected init service. Currently used by the default `init`
   service handler.
 
+* `node['openresty']['service']['defaults_file_cookbook']` - Optionally specify a cookbook location 
+  for a custom defaults file that contains exported environment variables for Nginx
+
+* `node['openresty']['service']['defaults_file_template']` - Optionally specify the template name, 
+  if the previous `defaults_file_cookbook` attribute is not set to the current cookbook.
+
 
 ## realip.rb
 

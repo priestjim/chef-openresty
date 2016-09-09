@@ -1,3 +1,9 @@
+## 0.5.3
+
+* Bump OpenResty version
+* Allow custom nginx defaults template
+* Allow custom log formats
+
 ## 0.5.2
 
 * Properly restart OpenResty (#52)

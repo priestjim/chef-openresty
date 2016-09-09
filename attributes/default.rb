@@ -21,9 +21,9 @@
 #
 
 # Download data
-default['openresty']['source']['version']     = '1.9.15.1'
+default['openresty']['source']['version']     = '1.11.2.1'
 default['openresty']['source']['file_prefix'] = 'openresty'
-default['openresty']['source']['checksum']    = '75cf020144048c9013ee487cb48107a5b99de04a5a8fa83839c8b4c3aa4eb0db'
+default['openresty']['source']['checksum']    = '0e55b52bf6d77ac2d499ae2b05055f421acde6bb937e650ed8f482d11cbeeb5c'
 #use %{} for delayed interpolation
 default['openresty']['source']['name']        = "%{file_prefix}-%{version}"
 default['openresty']['source']['url']         = "http://agentzh.org/misc/nginx/%{name}.tar.gz"

@@ -52,7 +52,7 @@ Ohai.plugin(:Nginx) do
     create_objects
 
     begin
-      so = shell_out("<%= @nginx_bin -%> -V", cwd: "<%= @nginx_prefix -%>")
+      so = shell_out("<%= @nginx_bin -%> -V")
       status = so.exitstatus
       stderr = so.stderr
     rescue Ohai::Exceptions::Exec => e

@@ -1,3 +1,7 @@
+## 0.5.4
+
+* Fix source recompilation on every run (#15)
+
 ## 0.5.3
 
 * Bump OpenResty version

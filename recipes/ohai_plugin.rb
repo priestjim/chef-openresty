@@ -26,7 +26,6 @@ ohai_plugin 'nginx' do
   source_file 'nginx.rb.erb'
   resource :template
   variables(
-    :nginx_prefix => node['openresty']['source']['prefix'],
     :nginx_bin    => node['openresty']['binary']
   )
 end

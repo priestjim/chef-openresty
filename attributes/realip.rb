@@ -23,3 +23,4 @@
 # Currently only accepts X-Forwarded-For or X-Real-IP
 node.default['openresty']['realip']['header']    = 'X-Forwarded-For'
 node.default['openresty']['realip']['addresses'] = ['127.0.0.1']
+node.default['openresty']['realip']['recursive'] = false

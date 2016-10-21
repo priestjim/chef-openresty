@@ -29,7 +29,8 @@ template "#{node['openresty']['dir']}/conf.d/http_realip.conf" do
   mode 00644
   variables(
     :addresses => node['openresty']['realip']['addresses'],
-    :header => node['openresty']['realip']['header']
+    :header => node['openresty']['realip']['header'],
+    :recursive => node['openresty']['realip']['recursive']
   )
 
   if node['openresty']['service']['start_on_boot']

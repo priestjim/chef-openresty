@@ -262,6 +262,10 @@ From: http://wiki.nginx.org/HttpRealIpModule
 * `node['openresty']['realip']['addresses']` - Addresses to use for the
   `http_realip` configuration.
 
+* `node['openresty']['realip']['recursive']` - If recursive search is enabled, the original client
+  address that matches one of the trusted addresses is replaced by the last non-trusted address sent in the
+  request header field. Can be true or false (default).
+
 ## fair.rb
 
 From: http://wiki.nginx.org/HttpUpstreamFairModule

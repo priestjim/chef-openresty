@@ -23,5 +23,6 @@ actions :install, :remove
 
 default_action :install
 
-attribute :name,      :kind_of => String, :name_attribute => true
-attribute :version,   :kind_of => String, :default => nil
+attribute :name,        :kind_of => String, :name_attribute => true
+attribute :environment, :kind_of => Hash,   :default => {}
+attribute :version,     :kind_of => String, :default => nil

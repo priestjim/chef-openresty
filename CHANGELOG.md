@@ -1,3 +1,8 @@
+## 0.5.5
+
+* Support environment variables to rocks installation
+* Bump OpenResty version
+
 ## 0.5.4
 
 * Fix source recompilation on every run (#15)

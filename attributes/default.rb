@@ -130,6 +130,7 @@ default['openresty']['gzip_types']        = [
 
 default['openresty']['keepalive']                     = 'on'
 default['openresty']['keepalive_timeout']             = 5
+default['openresty']['keepalive_requests']            = 100
 default['openresty']['worker_processes']              = node['cpu'] && node['cpu']['total'] ? node['cpu']['total'] : 1
 default['openresty']['worker_auto_affinity']          = true
 default['openresty']['worker_connections']            = 4096

@@ -147,11 +147,13 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['gzip_types']` - used for config value of `gzip_types` - must be an Array.
 
-* `node['openresty']['keepalive']` - Whether to use `keepalive_timeout`,
+* `node['openresty']['keepalive']` - Whether to use `keepalive_timeout` and `keepalive_requests`,
   any value besides "on" will leave that option out of the config.
 
 * `node['openresty']['keepalive_timeout']` - used for config value of
   `keepalive_timeout`.
+  
+* `node['openresty']['keepalive_requests']` - used for config value of keepalive_requests.
 
 * `node['openresty']['worker_processes']` - used for config value of
   `worker_processes`.

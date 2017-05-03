@@ -51,6 +51,7 @@ http {
   <% end %>
 
   <% if node['openresty']['keepalive'] == "on" %>
+  keepalive_requests <%= node['openresty']['keepalive_requests'] %>;
   keepalive_timeout  <%= node['openresty']['keepalive_timeout'] %>;
   <% end %>
 

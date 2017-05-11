@@ -21,8 +21,13 @@
 # limitations under the License.
 #
 
+group node['openresty']['group'] do
+  action :create
+end
+
 user node['openresty']['user'] do
   system true
   shell '/bin/false'
   home '/var/www'
+  gid node['openresty']['group']
 end

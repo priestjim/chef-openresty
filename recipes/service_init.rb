@@ -33,7 +33,7 @@ template '/etc/init.d/nginx' do
 end
 
 defaults_path = value_for_platform_family(
-  ['rhel','fedora','amazon','scientific'] => '/etc/sysconfig/nginx',
+  ['rhel','fedora','amazon','scientific','suse'] => '/etc/sysconfig/nginx',
   'debian' => '/etc/default/nginx'
 )
 

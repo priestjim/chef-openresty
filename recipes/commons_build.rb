@@ -47,12 +47,13 @@ src_filepath  = "#{node['openresty']['source']['path']}/#{src_file_name}.tar.gz"
 
 packages = value_for_platform_family(
   ['rhel','fedora','amazon','scientific'] => ['openssl-devel', 'readline-devel', 'ncurses-devel', 'bzip2'],
+  'suse' => ['libopenssl-devel', 'readline-devel', 'ncurses-devel', 'bzip2'],
   'debian' => ['libperl-dev', 'libssl-dev', 'libreadline-dev', 'libncurses5-dev', 'bzip2']
 )
 
 # Enable AIO for newer kernels
 packages |= value_for_platform_family(
-    ['rhel','fedora','amazon','scientific'] => [ 'libatomic_ops-devel' ],
+    ['rhel','fedora','amazon','scientific','suse'] => [ 'libatomic_ops-devel' ],
     'debian' => [ 'libatomic-ops-dev', 'libaio1', 'libaio-dev' ]
 ) if kernel_supports_aio
 
@@ -92,7 +93,7 @@ if node['openresty']['custom_pcre']
 else
   pcre_opts = ''
   value_for_platform_family(
-    ['rhel','fedora','amazon','scientific'] => [ 'pcre', 'pcre-devel' ],
+    ['rhel','fedora','amazon','scientific','suse'] => [ 'pcre', 'pcre-devel' ],
     'debian' => ['libpcre3', 'libpcre3-dev' ]
   ).each do |pkg|
     package pkg
@@ -140,7 +141,7 @@ end
 
 if node['openresty']['or_modules']['drizzle']
   drizzle = value_for_platform_family(
-    ['rhel','fedora','amazon','scientific'] => 'libdrizzle-devel',
+    ['rhel','fedora','amazon','scientific','suse'] => 'libdrizzle-devel',
     'debian' => 'libdrizzle-dev'
   )
   package drizzle

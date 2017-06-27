@@ -31,7 +31,8 @@ def get_installed_rock_version(rock, version = nil)
   if (cmd.exitstatus != 0) || (! cmd.exitstatus)
     nil
   else
-    cmd.stdout.strip.split("\n").fetch(0).split.fetch(1).split('-').first rescue nil
+    res = cmd.stdout.strip.split("\n").fetch(0).split.fetch(1) rescue nil
+    ((version && version.include?('-')) ? res : res.split('-').first) rescue nil
   end
 end
 

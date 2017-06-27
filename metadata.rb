@@ -17,7 +17,7 @@ end
 
 depends 'build-essential'
 depends 'logrotate'
-depends 'ohai', '~> 4.1'
+depends 'ohai', '~> 5.0'
 depends 'yum'
 depends 'apt'
 depends 'git'

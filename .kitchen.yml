@@ -4,6 +4,7 @@ driver:
 
 provisioner:
   name: chef_solo
+  log_level: info
 
 platforms:
   - name: ubuntu-16.04
@@ -21,4 +22,4 @@ suites:
           link_to_jemalloc: true
           luarocks:
               default_rocks:
-                  md5: '1.1.1'
+                  luaproc: '1.0-3'

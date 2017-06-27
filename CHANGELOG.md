@@ -1,3 +1,9 @@
+## 0.5.6
+
+* Update ohai cookbook version (fixes #66)
+* Consider revision number on LUA rock installation (fixes #63)
+* Bump OpenResty version and download URL
+
 ## 0.5.5
 
 * Support environment variables to rocks installation

@@ -1,19 +1,23 @@
-Description
-===========
+# Overview
 
-Installs the OpenResty NGINX bundle (http://www.openresty.org) from source and
-sets up configuration handling similar to Debian's Apache2 scripts. It also
-provides an OHAI plugin for configuration detection and an LWRP for easy site
+- Latest release: ![Tag Version](https://img.shields.io/github/tag/priestjim/chef-openresty.svg)
+- Branch status (`master`): [![Build Status](https://travis-ci.org/priestjim/chef-openresty.svg?branch=master)](https://travis-ci.org/priestjim/chef-openresty)
+- Issues: [![GitHub issues](https://img.shields.io/github/issues/priestjim/chef-openresty.svg)](https://github.com/priestjim/chef-openresty/issues)
+- License: [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/priestjim/chef-openresty/master/LICENSE)
+
+# Description
+
+This cookbook installs the OpenResty NGINX bundle (http://www.openresty.org)
+from source and sets up configuration handling similar to Debian's Apache2 scripts.
+It also provides an OHAI plugin for configuration detection and an LWRP for easy site
 activation and deactivation.
 
 The latest and greatest revision of this cookbook will always be available
 at https://github.com/priestjim/chef-openresty
 
-Requirements
-============
+# Requirements
 
-Cookbooks
----------
+## Cookbooks
 
 The following cookbooks are direct dependencies because they're used
 for common "default" functionality.
@@ -30,8 +34,7 @@ the `postgresql` cookbook.
 If you want to link NGINX to the very performant jemalloc library, you'll
 need the `jemalloc` cookbook.
 
-Platform
---------
+## Platform
 
 The following platforms are supported and tested using test-kitchen:
 
@@ -40,13 +43,11 @@ The following platforms are supported and tested using test-kitchen:
 
 Other Debian and RHEL family distributions are assumed to work.
 
-Chef Server
------------
+## Chef Server
 
 The cookbook converges best on Chef installations >= 10.16.2
 
-Awesome stuff
-=============
+# Awesome stuff
 
 This cookbook includes automatic activation of some nice NGINX features such as:
 
@@ -77,8 +78,7 @@ This cookbook includes automatic activation of some nice NGINX features such as:
   installation, allowing you to install any rock you want, right from the official Rocks site. It
   also provides an LWRP for installing rocks via your recipes.
 
-Attributes
-==========
+# Attributes
 
 Node attributes for this cookbook are logically separated into different files.
 
@@ -152,7 +152,7 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['keepalive_timeout']` - used for config value of
   `keepalive_timeout`.
-  
+
 * `node['openresty']['keepalive_requests']` - used for config value of keepalive_requests.
 
 * `node['openresty']['worker_processes']` - used for config value of
@@ -319,8 +319,7 @@ From: https://github.com/FRiCKLE/ngx_cache_purge and http://labs.frickle.com/ngi
 * `node['openresty']['luarocks']['default_rocks']` - A hash with the names and versions of Lua rocks
   to install by default.
 
-Recipes
-=======
+# Recipes
 
 ## default.rb
 
@@ -386,8 +385,7 @@ default using the `node['openresty']['luarocks']['default_rocks']` hash.
 
 For more information on using LUA rocks with OpenResty check out http://openresty.org/#UsingLuaRocks
 
-Adding New Modules
-------------------
+## Adding New Modules
 
 To add a new module to be compiled into NGINX in the source recipe,
 the node's run state is manipulated in a recipe, and the module as a
@@ -411,8 +409,7 @@ which takes as elements full recipe references like
 The extra-cookbook modules will be included in the same manner as the standard
 intra-cookbook modules.
 
-LWRP
-====
+# LWRP
 
 ## site
 
@@ -455,8 +452,7 @@ LUA rocks using the `install` and `remove` actions of the LWRP. A sample follows
       action :remove # Removes all versions installed
     end
 
-Ohai Plugin
-===========
+# Ohai Plugin
 
 The `ohai_plugin` recipe includes an Ohai plugin. It will be
 automatically installed and activated, providing the following
@@ -472,8 +468,7 @@ package):
 The Ohai plugin is generally used to determine whether control
 attributes for building NGINX have changed.
 
-Usage
-=====
+# Usage
 
 Include the recipe on your node or role. Modify the
 attributes as required in a role cookbook to change how various
@@ -482,8 +477,7 @@ configuration is applied per the attributes section above.
 If you need to alter the location of various cookbook_file
 directives, use `chef_rewind`.
 
-License and Author
-==================
+# License and Author
 
 - Author:: Panagiotis Papadomitsos (<pj@ezgr.net>)
 

@@ -57,9 +57,9 @@ packages |= value_for_platform_family(
     'debian' => [ 'libatomic-ops-dev', 'libaio1', 'libaio-dev' ]
 ) if kernel_supports_aio
 
-packages.each do |devpkg|
-  package devpkg
-end
+package packages do
+  action :nothing
+end.run_action(:install)
 
 remote_file src_file_url do
   source src_file_url
@@ -161,10 +161,10 @@ openresty_force_recompile = node.run_state['openresty_force_recompile']
 
 ruby_block 'persist-openresty-configure-flags' do
   block do
-    if Chef::Config[:solo]
+    if not Chef::Config[:chef_server_url]
       ::File.write(::File.join(::File.dirname(src_filepath), 'openresty.configure-opts'), configure_flags.sort.uniq.join("\n"))
     else
-      node.set['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq
+      node.normal['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq
     end
   end
   action :nothing

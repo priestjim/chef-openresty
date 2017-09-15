@@ -19,6 +19,8 @@
 # limitations under the License.
 #
 
+use_inline_resources
+
 action :enable do
   link_name = (new_resource.name == 'default') ? '000-default' : new_resource.name
   tpl = if new_resource.template
@@ -38,8 +40,9 @@ action :enable do
     notifies :reload, node['openresty']['service']['resource'], new_resource.timing
     not_if { ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/#{link_name}") }
   end
-  new_resource.updated_by_last_action(site.updated_by_last_action? ||
-                                      (tpl.updated_by_last_action? rescue false))
+  if site.updated_by_last_action? || (tpl.updated_by_last_action? rescue false)
+    converge_by "enable site"
+  end
 end
 
 action :disable do
@@ -51,5 +54,7 @@ action :disable do
     end
     only_if { ::File.symlink?("#{node['openresty']['dir']}/sites-enabled/#{link_name}") }
   end
-  new_resource.updated_by_last_action(site.updated_by_last_action?)
+  if site.updated_by_last_action?
+    converge_by "disable site"
+  end
 end

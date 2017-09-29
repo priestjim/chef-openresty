@@ -1,3 +1,9 @@
+## 0.5.7
+
+* Bump OpenResty version
+* Change solo run detection method to include cases such as OpsWorks runs (resolves #15)
+* Add Travis CI support
+
 ## 0.5.6
 
 * Update ohai cookbook version (fixes #66)

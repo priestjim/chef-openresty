@@ -7,8 +7,30 @@ provisioner:
   log_level: info
 
 platforms:
-  - name: ubuntu-16.04
+  - name: ubuntu-16.04-chef-12
+    provisioner:
+      require_chef_omnibus: 12
+      hostname: chef12.local
+      run_options:
+        e:
+          - LANGUAGE=en_US.UTF-8
+          - LC_ALL=en_US.UTF-8
+  - name: ubuntu-16.04-chef-13
+    provisioner:
+      require_chef_omnibus: 13
+      hostname: chef13.local
+      run_options:
+        e:
+          - LANGUAGE=en_US.UTF-8
+          - LC_ALL=en_US.UTF-8
   - name: centos-7.2
+    provisioner:
+      require_chef_omnibus: 13
+      hostname: chef13centos.local
+      run_options:
+        e:
+          - LANGUAGE=en_US.UTF-8
+          - LC_ALL=en_US.UTF-8
 
 suites:
   - name: default
@@ -18,8 +40,8 @@ suites:
       - recipe[openresty::luarocks]
     attributes:
       openresty:
-          default_site_enabled: true
-          link_to_jemalloc: true
-          luarocks:
-              default_rocks:
-                  luaproc: '1.0-3'
+        default_site_enabled: true
+        link_to_jemalloc: true
+        luarocks:
+          default_rocks:
+            luaproc: '1.0-3'

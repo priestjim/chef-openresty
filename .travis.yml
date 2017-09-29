@@ -1,0 +1,15 @@
+language: ruby
+sudo: required
+dist: trusty
+services: docker
+install: bundle install
+cache: bundler
+before_script: sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
+script: kitchen converge -c2 --color -l warn ubuntu
+branches:
+  only:
+    - master
+    - develop
+notifications:
+  email:
+    - pj@ezgr.net

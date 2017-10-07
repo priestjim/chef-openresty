@@ -1,3 +1,8 @@
+## 0.5.8
+
+* Fix Amazon Linux + Chef 13 incompatibilities (fix #69)
+* Add config test to nginx init script
+
 ## 0.5.7
 
 * Bump OpenResty version

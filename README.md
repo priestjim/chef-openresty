@@ -1,11 +1,6 @@
-# Overview
+# OpenResty Chef Cookbook
 
-- Latest release: ![Tag Version](https://img.shields.io/github/tag/priestjim/chef-openresty.svg)
-- Branch status (`master`): [![Build Status](https://travis-ci.org/priestjim/chef-openresty.svg?branch=master)](https://travis-ci.org/priestjim/chef-openresty)
-- Issues: [![GitHub issues](https://img.shields.io/github/issues/priestjim/chef-openresty.svg)](https://github.com/priestjim/chef-openresty/issues)
-- License: [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/priestjim/chef-openresty/master/LICENSE)
-
-# Description
+![Tag Version](https://img.shields.io/github/tag/priestjim/chef-openresty.svg) [![Cookbook Version](https://img.shields.io/cookbook/v/openresty.svg)](https://supermarket.chef.io/cookbooks/openresty) [![Build Status](https://travis-ci.org/priestjim/chef-openresty.svg?branch=master)](https://travis-ci.org/priestjim/chef-openresty) [![GitHub issues](https://img.shields.io/github/issues/priestjim/chef-openresty.svg)](https://github.com/priestjim/chef-openresty/issues) [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/priestjim/chef-openresty/master/LICENSE)
 
 This cookbook installs the OpenResty NGINX bundle (http://www.openresty.org)
 from source and sets up configuration handling similar to Debian's Apache2 scripts.

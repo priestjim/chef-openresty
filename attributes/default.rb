@@ -92,7 +92,7 @@ default['openresty']['configure_flags'] = Array.new
 case node['platform_family']
 when 'debian'
   default['openresty']['user']        = 'www-data'
-when 'rhel', 'fedora'
+when 'rhel', 'fedora', 'amazon'
   default['openresty']['user']        = 'nginx'
 else
   default['openresty']['user']        = 'www-data'

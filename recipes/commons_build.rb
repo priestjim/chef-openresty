@@ -26,7 +26,7 @@ require 'chef/version_constraint'
 case node['platform_family']
 when 'debian'
   include_recipe 'apt'
-when 'rhel'
+when 'rhel', 'amazon'
   include_recipe 'yum'
 end
 

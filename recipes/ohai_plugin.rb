@@ -20,8 +20,6 @@
 # limitations under the License.
 #
 
-include_recipe 'ohai'
-
 ohai_plugin 'nginx' do
   source_file 'nginx.rb.erb'
   resource :template

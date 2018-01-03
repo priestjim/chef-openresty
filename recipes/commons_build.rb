@@ -39,6 +39,14 @@ directory node['openresty']['source']['path'] do
   recursive true
 end
 
+directory node['openresty']['source']['state'] do
+  owner 'root'
+  group 'root'
+  mode 00755
+  action :nothing
+  only_if { (! Chef::Config[:chef_server_url]) || (Chef::Config[:chef_server_url].include?('chefzero')) }
+end.run_action(:create)
+
 # use vars for these for delayed interpolation
 src_file_name=node['openresty']['source']['name'] % { file_prefix: node['openresty']['source']['file_prefix'], version: node['openresty']['source']['version'] }
 src_file_url=node['openresty']['source']['url'] % { name: src_file_name }
@@ -161,8 +169,10 @@ openresty_force_recompile = node.run_state['openresty_force_recompile']
 
 ruby_block 'persist-openresty-configure-flags' do
   block do
-    if not Chef::Config[:chef_server_url]
-      ::File.write(::File.join(::File.dirname(src_filepath), 'openresty.configure-opts'), configure_flags.sort.uniq.join("\n"))
+    if (! Chef::Config[:chef_server_url]) || (Chef::Config[:chef_server_url].include?('chefzero')) then
+      require 'fileutils'
+      ::FileUtils.mkdir_p(node['openresty']['source']['state'])
+      ::File.write(::File.join(node['openresty']['source']['state'], 'openresty.configure-opts'), configure_flags.sort.uniq.join("\n"))
     else
       node.normal['openresty']['persisted_configure_flags'] = configure_flags.sort.uniq
     end
@@ -187,7 +197,7 @@ bash 'compile_openresty_source' do
       openresty_force_recompile == false &&
         node.automatic_attrs['nginx'] &&
         node.automatic_attrs['nginx']['version'] == node['openresty']['source']['version'] &&
-        (::File.read(::File.join(::File.dirname(src_filepath), 'openresty.configure-opts')) || '' rescue '') ==
+        (::File.read(::File.join(node['openresty']['source']['state'], 'openresty.configure-opts')) || '' rescue '') ==
         configure_flags.sort.uniq.join("\n")
     end
   else

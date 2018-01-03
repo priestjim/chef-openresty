@@ -1,3 +1,10 @@
+## 0.6.0
+
+* Bump OpenResty version
+* Bump PCRE library version
+* Remove `fair` plugin as it's not compatible with the latest version of OR
+* Improve compatibility with AWS Opsworks and Chef Zero runs (resolves #15)
+
 ## 0.5.8
 
 * Fix Amazon Linux + Chef 13 incompatibilities (fix #69)

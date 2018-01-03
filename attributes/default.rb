@@ -21,9 +21,9 @@
 #
 
 # Download data
-default['openresty']['source']['version']     = '1.11.2.5'
+default['openresty']['source']['version']     = '1.13.6.1'
 default['openresty']['source']['file_prefix'] = 'openresty'
-default['openresty']['source']['checksum']    = 'f8cc203e8c0fcd69676f65506a3417097fc445f57820aa8e92d7888d8ad657b9'
+default['openresty']['source']['checksum']    = 'd1246e6cfa81098eea56fb88693e980d3e6b8752afae686fab271519b81d696b'
 #use %{} for delayed interpolation
 default['openresty']['source']['name']        = "%{file_prefix}-%{version}"
 default['openresty']['source']['url']         = "https://openresty.org/download/%{name}.tar.gz"
@@ -39,6 +39,7 @@ default['openresty']['pid']                   = "#{node['openresty']['run_dir']}
 # Namespaced attributes in order not to clash with the OHAI plugin
 default['openresty']['source']['conf_path']   = "#{node['openresty']['dir']}/nginx.conf"
 default['openresty']['source']['prefix']      = '/usr/share'
+default['openresty']['source']['state']       = '/etc/chef_state.d'
 
 ## Extract our source here and compile from this location.
 ## by default we use #{Chef::Config['file_cache_path']
@@ -79,8 +80,7 @@ default['openresty']['modules']         = [
   'http_realip_module',
   'http_flv_module',
   'http_mp4_module',
-  'cache_purge_module',
-  'fair_module'
+  'cache_purge_module'
 ]
 
 # If you want to include extra-cookbook modules, just override this array, the will be included in the form

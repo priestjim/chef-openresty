@@ -20,10 +20,24 @@
 # limitations under the License.
 #
 
+plugin_path = nil
+if node.attribute?('opsworks') then
+    plugin_path = node['openresty']['source']['state']
+
+    directory plugin_path do
+      owner 'root'
+      group 'root'
+      mode 00755
+      action :nothing
+    end.run_action(:create)
+end
+
 ohai_plugin 'nginx' do
   source_file 'nginx.rb.erb'
+  path(plugin_path) if plugin_path
+  compile_time true
   resource :template
   variables(
-    :nginx_bin    => node['openresty']['binary']
+    :nginx_bin => node['openresty']['binary']
   )
 end

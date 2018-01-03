@@ -109,6 +109,9 @@ Generally used attributes. Some have platform specific values. See
 
 * `node['openresty']['source']['path']` - Download and compilation temporary path.
 
+* `node['openresty']['source']['state']` - The state directory where Chef will keep state in a serverless
+  environment like Chef Solo, Zero or OpsWorks.
+
 * `node['openresty']['source']['default_configure_flags']` - A set of default configuration
   flags for the source compilation, generally best left untouched unless you
   *really* know what you're doing.
@@ -263,14 +266,6 @@ From: http://wiki.nginx.org/HttpRealIpModule
   address that matches one of the trusted addresses is replaced by the last non-trusted address sent in the
   request header field. Can be true or false (default).
 
-## fair.rb
-
-From: http://wiki.nginx.org/HttpUpstreamFairModule
-
-* `node['openresty']['fair']['url']` - GitHub URL to checkout the fair module from
-
-* `node['openresty']['fair']['name']` - Directory name to checkout the module to
-
 ## upload_progress.rb
 
 From: http://wiki.nginx.org/HttpUploadProgressModule
@@ -356,7 +351,7 @@ Includes the `ohai_plugin` recipe so the plugin is available.
 This recipe provides an Ohai plugin as a template. It is automatically included
 by the `default.rb` recipe.
 
-## http_*_module.rb, fair_module.rb, upload_progress_module.rb, cache_purge_module.rb
+## http_*_module.rb, upload_progress_module.rb, cache_purge_module.rb
 
 These recipes are automatically included by the `default.rb` recipe according to
 the `node['openresty']['modules']` array and provide compiled-in additional

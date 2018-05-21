@@ -1,3 +1,8 @@
+## 0.6.1
+
+* Bump OpenResty version
+* Resolve #74
+
 ## 0.6.0
 
 * Bump OpenResty version

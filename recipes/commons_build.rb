@@ -192,7 +192,7 @@ bash 'compile_openresty_source' do
   EOH
 
   # OpenResty configure args massaging due to the configure script adding its own arguments along our custom ones
-  if Chef::Config[:solo]
+  if (! Chef::Config[:chef_server_url]) || (Chef::Config[:chef_server_url].include?('chefzero'))
     not_if do
       openresty_force_recompile == false &&
         node.automatic_attrs['nginx'] &&

@@ -21,9 +21,9 @@
 #
 
 # Download data
-default['openresty']['source']['version']     = '1.13.6.1'
+default['openresty']['source']['version']     = '1.13.6.2'
 default['openresty']['source']['file_prefix'] = 'openresty'
-default['openresty']['source']['checksum']    = 'd1246e6cfa81098eea56fb88693e980d3e6b8752afae686fab271519b81d696b'
+default['openresty']['source']['checksum']    = '946e1958273032db43833982e2cec0766154a9b5cb8e67868944113208ff2942'
 #use %{} for delayed interpolation
 default['openresty']['source']['name']        = "%{file_prefix}-%{version}"
 default['openresty']['source']['url']         = "https://openresty.org/download/%{name}.tar.gz"

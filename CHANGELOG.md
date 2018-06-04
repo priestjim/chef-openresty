@@ -1,3 +1,8 @@
+## 0.6.2
+
+* Fix zlib dependency
+* Update kitchen configuration
+
 ## 0.6.1
 
 * Bump OpenResty version

@@ -161,6 +161,9 @@ default['openresty']['open_file_cache'] = {
   'errors'    => 'on'
 }
 
+default['openresty']['error_log'] = [
+  "#{node['openresty']['log_dir']}/error.log"
+]
 default['openresty']['log_formats'] = { main: '$remote_addr - $remote_user [$time_local] "$request" ' \
                                               '$status $body_bytes_sent "$http_referer" ' \
                                               '"$http_user_agent" "$http_x_forwarded_for"' }

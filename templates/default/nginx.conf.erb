@@ -8,7 +8,9 @@ worker_cpu_affinity <%= node['openresty']['worker_cpu_affinity'] %>;
 worker_rlimit_nofile <%= node['openresty']['worker_rlimit_nofile'] %>;
 <% end -%>
 
-error_log  <%= node['openresty']['log_dir'] %>/error.log;
+<% node['openresty']['error_log'].each do |path| %>
+error_log <%= path %>;
+<% end %>
 pid        <%= node['openresty']['pid'] %>;
 
 events {

@@ -30,6 +30,7 @@ action :enable do
       group 'root'
       mode 00644
       variables new_resource.variables
+      cookbook new_resource.cookbook
       if node['openresty']['service']['start_on_boot']
         notifies :reload, node['openresty']['service']['resource'], new_resource.timing
       end

@@ -99,6 +99,9 @@ else
 end
 
 default['openresty']['group']         = node['openresty']['user']
+default['openresty']['user_system']   = true
+default['openresty']['user_shell']    = '/bin/false'
+default['openresty']['user_home']     = '/var/www'
 
 if node['os'].eql?('linux') && (node['network']['interfaces']['lo']['addresses'].include?('::1') rescue false)
   default['openresty']['ipv6'] = true
@@ -136,6 +139,8 @@ default['openresty']['worker_auto_affinity']          = true
 default['openresty']['worker_connections']            = 4096
 default['openresty']['worker_rlimit_nofile']          = nil
 default['openresty']['multi_accept']                  = false
+
+default['openresty']['try_aio']                       = true
 
 # epoll is available only on Linux kernels >= 2.6
 if node['os'].eql?('linux') && node['kernel']['release'].to_f >= 2.6

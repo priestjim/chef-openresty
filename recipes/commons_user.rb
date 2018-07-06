@@ -26,8 +26,8 @@ group node['openresty']['group'] do
 end
 
 user node['openresty']['user'] do
-  system true
-  shell '/bin/false'
-  home '/var/www'
+  system node['openresty']['user_system']
+  shell node['openresty']['user_shell']
+  home node['openresty']['user_home']
   gid node['openresty']['group']
 end

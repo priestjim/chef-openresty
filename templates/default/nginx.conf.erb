@@ -29,7 +29,7 @@ http {
   access_log	<%= node['openresty']['log_dir'] %>/access.log;
   <% end %>
 
-  <% if @kernel_supports_aio %>
+  <% if @kernel_supports_aio  && node['openresty']['try_aio'] %>
   sendfile off;
   aio on;
   directio 512;

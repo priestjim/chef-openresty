@@ -1,9 +1,9 @@
-
 ## 0.6.2
 
 * Fix zlib dependency
 * Update kitchen configuration
-* Fix systemd installation and CentOS interoperation (#78)
+* Fix systemd installation and CentOS interoperation (fixes #78)
+* Add more configurability to use this cookbook with vagrant
 
 ## 0.6.1
 

@@ -1,7 +1,9 @@
+
 ## 0.6.2
 
 * Fix zlib dependency
 * Update kitchen configuration
+* Fix systemd installation and CentOS interoperation (#78)
 
 ## 0.6.1
 

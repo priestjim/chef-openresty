@@ -54,9 +54,9 @@ src_filepath  = "#{node['openresty']['source']['path']}/#{src_file_name}.tar.gz"
 
 
 packages = value_for_platform_family(
-  ['rhel','fedora','amazon','scientific'] => ['openssl-devel', 'readline-devel', 'ncurses-devel', 'bzip2'],
-  'suse' => ['libopenssl-devel', 'readline-devel', 'ncurses-devel', 'bzip2'],
-  'debian' => ['libperl-dev', 'libssl-dev', 'libreadline-dev', 'libncurses5-dev', 'bzip2', 'zlib1g-dev']
+  ['rhel','fedora','amazon','scientific'] => ['openssl-devel', 'readline-devel', 'ncurses-devel', 'bzip2', 'gcc-c++'],
+  'suse' => ['libopenssl-devel', 'readline-devel', 'ncurses-devel', 'bzip2', 'gcc-c++'],
+  'debian' => ['libperl-dev', 'libssl-dev', 'libreadline-dev', 'libncurses5-dev', 'bzip2', 'zlib1g-dev', 'g++']
 )
 
 # Enable AIO for newer kernels

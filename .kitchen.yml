@@ -27,7 +27,14 @@ platforms:
         e:
           - LANGUAGE=en_US.UTF-8
           - LC_ALL=en_US.UTF-8
-  - name: centos-7.2
+  - name: centos-7.5-chef-latest
+    driver_config:
+      image: centos/systemd
+      run_command: /usr/sbin/init
+      privileged: true
+      provision_command:
+        - sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+        - systemctl enable sshd.service
     provisioner:
       product_name: chef
       install_strategy: once

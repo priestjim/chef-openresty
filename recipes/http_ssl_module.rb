@@ -20,4 +20,11 @@
 # limitations under the License.
 #
 
+packages = value_for_platform_family(
+    ['rhel','fedora','amazon','scientific','suse'] => [ 'openssl', 'openssl-devel' ],
+    'debian' => [ 'openssl', 'libssl-dev' ]
+)
+
+package packages
+
 node.run_state['openresty_configure_flags'] |= ['--with-http_ssl_module']

@@ -5,7 +5,7 @@ services: docker
 install: bundle install
 cache: bundler
 before_script: sudo iptables -L DOCKER || ( echo "DOCKER iptables chain missing" ; sudo iptables -N DOCKER )
-script: kitchen converge -c2 --color -l warn ubuntu
+script: kitchen converge -c2 --color -l warn
 branches:
   only:
     - master

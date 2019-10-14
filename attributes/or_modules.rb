@@ -22,7 +22,7 @@
 
 # LUAJIT Module
 default['openresty']['or_modules']['luajit']             = true
-default['openresty']['or_modules']['luajit_binary']      = '2.1.0-beta1'
+default['openresty']['or_modules']['luajit_binary']      = '2.1.0-beta3'
 # Iconv Module
 default['openresty']['or_modules']['iconv']              = true
 # Drizzle module

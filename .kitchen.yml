@@ -5,6 +5,7 @@ driver:
 provisioner:
   name: chef_solo
   log_level: info
+  chef_license: accept
 
 platforms:
   - name: ubuntu-16.04-chef-12
